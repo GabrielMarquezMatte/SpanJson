@@ -4,12 +4,9 @@
     {
         public string site { get; set; }
 
-
         public int? amount { get; set; }
 
-
         public int? group_id { get; set; }
-
 
         public long? added_date { get; set; }
 
@@ -19,7 +16,7 @@
                 added_date == obj.added_date &&
                 amount == obj.amount &&
                 group_id == obj.group_id &&
-                site == obj.site;
+string.Equals(site, obj.site, System.StringComparison.Ordinal);
         }
 
         public bool EqualsDynamic(dynamic obj)
@@ -28,7 +25,7 @@
                 added_date == (long?) obj.added_date &&
                 amount == (int?) obj.amount &&
                 group_id == (int?) obj.group_id &&
-                site == (string) obj.site;
+string.Equals(site, (string)obj.site, System.StringComparison.Ordinal);
         }
     }
 }

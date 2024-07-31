@@ -6,11 +6,10 @@ namespace SpanJson.Tests
 {
     public class ArrayTests
     {
-
         [Fact]
         public void JaggedArrayUtf16()
         {
-            var input = new int[5][] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6, 7}, new[] {7, 8}, new[] {9, 10}};
+            var input = new int[5][] {[1, 2], [3, 4], [5, 6, 7], [7, 8], [9, 10]};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<int[][]>(serialized);
@@ -21,7 +20,7 @@ namespace SpanJson.Tests
         [Fact]
         public void JaggedArrayUtf8()
         {
-            var input = new int[5][] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6, 7}, new[] {7, 8}, new[] {9, 10}};
+            var input = new int[5][] {[1, 2], [3, 4], [5, 6, 7], [7, 8], [9, 10]};
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<int[][]>(serialized);
@@ -53,7 +52,6 @@ namespace SpanJson.Tests
             Assert.Equal(input, deserialized);
         }
 
-
         [Fact]
         public void Nested2DArrayUtf8()
         {
@@ -76,8 +74,6 @@ namespace SpanJson.Tests
             Assert.ThrowsAny<Exception>(() => JsonSerializer.Generic.Utf16.Serialize(input));
         }
 
-
-
         [Fact]
         public void Nested3DArrayUtf8()
         {
@@ -89,11 +85,10 @@ namespace SpanJson.Tests
             Assert.ThrowsAny<Exception>(() => JsonSerializer.Generic.Utf8.Serialize(input));
         }
 
-
         [Fact]
         public void JaggedAsNestedArrayUtf16()
         {
-            var input = new int[5][] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6, 7}, new[] {7, 8}, new[] {9, 10}};
+            var input = new int[5][] {[1, 2], [3, 4], [5, 6, 7], [7, 8], [9, 10]};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
             var ex = Assert.Throws<JsonParserException>(() => JsonSerializer.Generic.Utf16.Deserialize<int[,]>(serialized));
             Assert.Equal(JsonParserException.ParserError.InvalidArrayFormat, ex.Error);
@@ -151,7 +146,7 @@ namespace SpanJson.Tests
 
         public class NullObject
         {
-            public string Value => null;
+            public static string Value => null;
         }
     }
 }

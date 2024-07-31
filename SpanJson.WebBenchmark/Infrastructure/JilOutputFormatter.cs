@@ -15,18 +15,17 @@ namespace SpanJson.WebBenchmark.Infrastructure
             SupportedEncodings.Add(new UTF8Encoding(false, true));
         }
 
-
-        public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            if (context.Object != null)
+            if (context.Object == null)
             {
-                using (var textWriter = context.WriterFactory(context.HttpContext.Response.Body, selectedEncoding))
-                {
-                    JSON.SerializeDynamic(context.Object, textWriter, Options.ISO8601ExcludeNullsIncludeInherited);
-                }
+                return;
             }
-
-            return Task.CompletedTask;
+            var textWriter = context.WriterFactory(context.HttpContext.Response.Body, selectedEncoding);
+            await using (textWriter.ConfigureAwait(false))
+            {
+                JSON.SerializeDynamic(context.Object, textWriter, Options.ISO8601ExcludeNullsIncludeInherited);
+            }
         }
     }
 }

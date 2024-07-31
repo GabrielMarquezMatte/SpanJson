@@ -36,7 +36,7 @@ namespace SpanJson
             }
         }
 
-        public int Position => _pos;
+        public readonly int Position => _pos;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void ThrowJsonParserException(JsonParserException.ParserError error, JsonParserException.ValueType type)
@@ -116,7 +116,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -150,7 +150,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -311,7 +311,7 @@ namespace SpanJson
                 ThrowNotSupportedException();
             }
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public JsonToken ReadNextToken()
         {
@@ -376,8 +376,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return [];
         }
-
     }
 }

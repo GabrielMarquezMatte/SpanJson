@@ -4,9 +4,7 @@
     {
         public ShallowUser user { get; set; }
 
-
         public int? score { get; set; }
-
 
         public int? post_count { get; set; }
 

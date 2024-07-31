@@ -18,7 +18,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Text, other.Text);
+                return string.Equals(Text, other.Text, StringComparison.Ordinal);
             }
 
             public override bool Equals(object obj)
@@ -73,21 +73,18 @@ namespace SpanJson.Tests
             Assert.Equal(input, deserialized);
         }
 
-
         [Fact]
         public async Task SerializeDeserializeGenericUtf8MemoryStream()
         {
             var input = Enumerable.Repeat(new AsyncTestObject {Text = "Hello World"}, 10000).ToList();
 
-            using (var ms = new MemoryStream())
-            {
-                await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
+            using var ms = new MemoryStream();
+            await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
 
-                ms.Position = 0;
+            ms.Position = 0;
 
-                var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
-                Assert.Equal(input, deserialized);
-            }
+            var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
+            Assert.Equal(input, deserialized);
         }
 
         [Fact]
@@ -95,15 +92,13 @@ namespace SpanJson.Tests
         {
             var input = Enumerable.Repeat(new AsyncTestObject {Text = "Hello World"}, 10000).ToList();
 
-            using (var ms = new MemoryStream())
-            {
-                await JsonSerializer.NonGeneric.Utf8.SerializeAsync(input, ms);
+            using var ms = new MemoryStream();
+            await JsonSerializer.NonGeneric.Utf8.SerializeAsync(input, ms);
 
-                ms.Position = 0;
+            ms.Position = 0;
 
-                var deserialized = await JsonSerializer.NonGeneric.Utf8.DeserializeAsync(ms, typeof(List<AsyncTestObject>));
-                Assert.Equal(input, deserialized);
-            }
+            var deserialized = await JsonSerializer.NonGeneric.Utf8.DeserializeAsync(ms, typeof(List<AsyncTestObject>));
+            Assert.Equal(input, deserialized);
         }
 
         [Fact]
@@ -111,15 +106,13 @@ namespace SpanJson.Tests
         {
             var input = Enumerable.Repeat(new AsyncTestObject {Text = "Hello World"}, 10000).ToList();
 
-            using (var ms = new WrappedMemoryStream(true))
-            {
-                await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
+            using var ms = new WrappedMemoryStream(true);
+            await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
 
-                ms.Position = 0;
+            ms.Position = 0;
 
-                var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
-                Assert.Equal(input, deserialized);
-            }
+            var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
+            Assert.Equal(input, deserialized);
         }
 
         [Fact]
@@ -127,25 +120,18 @@ namespace SpanJson.Tests
         {
             var input = Enumerable.Repeat(new AsyncTestObject {Text = "Hello World"}, 10000).ToList();
 
-            using (var ms = new WrappedMemoryStream(false))
-            {
-                await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
+            using var ms = new WrappedMemoryStream(false);
+            await JsonSerializer.Generic.Utf8.SerializeAsync(input, ms);
 
-                ms.Position = 0;
+            ms.Position = 0;
 
-                var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
-                Assert.Equal(input, deserialized);
-            }
+            var deserialized = await JsonSerializer.Generic.Utf8.DeserializeAsync<List<AsyncTestObject>>(ms);
+            Assert.Equal(input, deserialized);
         }
 
-        public class WrappedMemoryStream : Stream
+        public class WrappedMemoryStream(bool canSeek) : Stream
         {
-            private readonly MemoryStream _stream = new MemoryStream();
-
-            public WrappedMemoryStream(bool canSeek)
-            {
-                CanSeek = canSeek;
-            }
+            private readonly MemoryStream _stream = new();
 
             public override void Flush()
             {
@@ -173,7 +159,7 @@ namespace SpanJson.Tests
             }
 
             public override bool CanRead => _stream.CanRead;
-            public override bool CanSeek { get; }
+            public override bool CanSeek { get; } = canSeek;
             public override bool CanWrite => _stream.CanWrite;
             public override long Length => _stream.Length;
 

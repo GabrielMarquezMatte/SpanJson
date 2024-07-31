@@ -14,7 +14,7 @@ namespace SpanJson.AspNetCore.Formatter.Tests
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(Hello, other.Hello) && string.Equals(World, other.World) && Enum == other.Enum;
+            return string.Equals(Hello, other.Hello, StringComparison.Ordinal) && string.Equals(World, other.World, StringComparison.Ordinal) && Enum == other.Enum;
         }
 
         public override bool Equals(object obj)
@@ -29,8 +29,8 @@ namespace SpanJson.AspNetCore.Formatter.Tests
         {
             unchecked
             {
-                var hashCode = Hello != null ? Hello.GetHashCode() : 0;
-                hashCode = (hashCode * 397) ^ (World != null ? World.GetHashCode() : 0);
+                var hashCode = Hello != null ? Hello.GetHashCode(StringComparison.Ordinal) : 0;
+                hashCode = (hashCode * 397) ^ (World != null ? World.GetHashCode(StringComparison.Ordinal) : 0);
                 hashCode = (hashCode * 397) ^ (int) Enum;
                 return hashCode;
             }

@@ -6,30 +6,21 @@ namespace SpanJson.Shared.Models
     {
         public InboxItemType? item_type { get; set; }
 
-
         public int? question_id { get; set; }
-
 
         public int? answer_id { get; set; }
 
-
         public int? comment_id { get; set; }
-
 
         public string title { get; set; }
 
-
         public DateTime? creation_date { get; set; }
-
 
         public bool? is_unread { get; set; }
 
-
         public Info.Site site { get; set; }
 
-
         public string body { get; set; }
-
 
         public string link { get; set; }
 

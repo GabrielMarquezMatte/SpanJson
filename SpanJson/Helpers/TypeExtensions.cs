@@ -15,7 +15,7 @@ namespace SpanJson.Helpers
                 return underlingType != null;
             }
 
-            underlingType = default;
+            underlingType = null;
             return false;
         }
 
@@ -45,7 +45,7 @@ namespace SpanJson.Helpers
                 return true;
             }
 
-            argumentTypes = default;
+            argumentTypes = null;
             return false;
         }
         // https://stackoverflow.com/questions/358835/getproperties-to-return-all-properties-for-an-interface-inheritance-hierarchy
@@ -81,7 +81,7 @@ namespace SpanJson.Helpers
                     propertyInfos.InsertRange(0, newPropertyInfos);
                 }
 
-                return propertyInfos.ToArray();
+                return [.. propertyInfos];
             }
 
             return type.GetProperties(BindingFlags.FlattenHierarchy
@@ -102,20 +102,11 @@ namespace SpanJson.Helpers
             {
                 return false;
             }
-            switch (Type.GetTypeCode(type))
+            return Type.GetTypeCode(type) switch
             {
-                case TypeCode.Byte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.SByte:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                    return true;
-                default:
-                    return false;
-            }
+                TypeCode.Byte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.SByte or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 => true,
+                _ => false,
+            };
         }
     }
 }

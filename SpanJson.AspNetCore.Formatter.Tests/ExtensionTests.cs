@@ -63,8 +63,7 @@ namespace SpanJson.AspNetCore.Formatter.Tests
 
             action?.Invoke(serviceCollection);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            return serviceProvider;
+            return serviceCollection.BuildServiceProvider();
         }
 
         [Fact]

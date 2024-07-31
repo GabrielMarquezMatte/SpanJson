@@ -6,7 +6,7 @@ namespace SpanJson.Tests
 {
     public partial class JsonWriterPropertyNameLengthTests
     {
-        private static readonly ExpressionTreeFixture Fixture = new ExpressionTreeFixture();
+        private static readonly ExpressionTreeFixture Fixture = new();
 
         [Fact]
         public void SerializeDeserializeUtf8()

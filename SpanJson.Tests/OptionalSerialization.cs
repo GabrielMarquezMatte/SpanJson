@@ -18,10 +18,9 @@ namespace SpanJson.Tests
 
             public bool ShouldSerializeOnlyIfHelloWorld()
             {
-                return OnlyIfHelloWorld == "Hello World";
+                return string.Equals(OnlyIfHelloWorld, "Hello World", System.StringComparison.Ordinal);
             }
         }
-
 
         public class ShouldSerializeDO
         {
@@ -31,12 +30,12 @@ namespace SpanJson.Tests
 
             public bool ShouldSerializeFirst()
             {
-                return First == "Hello World";
+                return string.Equals(First, "Hello World", System.StringComparison.Ordinal);
             }
 
             public bool ShouldSerializeSecond()
             {
-                return Second == "Hello World";
+                return string.Equals(Second, "Hello World", System.StringComparison.Ordinal);
             }
         }
 
@@ -51,8 +50,8 @@ namespace SpanJson.Tests
         {
             var optional = new Optional {DifferentName = "Hello World"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(optional);
-            Assert.Contains("\"AnotherName\":\"Hello World\"", serialized);
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.Contains("\"AnotherName\":\"Hello World\"", serialized, System.StringComparison.Ordinal);
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
 
             var deserialized =
                 JsonSerializer.Generic.Utf16.Deserialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(
@@ -65,7 +64,7 @@ namespace SpanJson.Tests
         {
             var optional = new Optional {Excluded = 5};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(optional);
-            Assert.DoesNotContain("\"Excluded\":", serialized);
+            Assert.DoesNotContain("\"Excluded\":", serialized, System.StringComparison.Ordinal);
         }
 
         [Fact]
@@ -73,7 +72,7 @@ namespace SpanJson.Tests
         {
             var optional = new Optional {ExcludeNull = null};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(optional);
-            Assert.DoesNotContain("\"ExcludeNull\":", serialized);
+            Assert.DoesNotContain("\"ExcludeNull\":", serialized, System.StringComparison.Ordinal);
 
             var deserialized =
                 JsonSerializer.Generic.Utf16.Deserialize<Optional, ExcludeNullsOriginalCaseResolver<char>>("{\"Excluded\": 1}");
@@ -85,11 +84,11 @@ namespace SpanJson.Tests
         {
             var optional = new Optional {OnlyIfHelloWorld = "Hello Universe"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(optional);
-            Assert.DoesNotContain("\"OnlyIfHelloWorld\":", serialized);
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.DoesNotContain("\"OnlyIfHelloWorld\":", serialized, System.StringComparison.Ordinal);
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
             optional.OnlyIfHelloWorld = "Hello World";
             serialized = JsonSerializer.Generic.Utf16.Serialize<Optional, ExcludeNullsOriginalCaseResolver<char>>(optional);
-            Assert.Contains("\"OnlyIfHelloWorld\":\"Hello World\"", serialized);
+            Assert.Contains("\"OnlyIfHelloWorld\":\"Hello World\"", serialized, System.StringComparison.Ordinal);
         }
 
         [Fact]
@@ -97,7 +96,7 @@ namespace SpanJson.Tests
         {
             var everything = new EverythingNonOptional {First = 5, Second = 10};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(everything);
-            Assert.Contains(",", serialized);
+            Assert.Contains(",", serialized, System.StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<EverythingNonOptional>(serialized);
             Assert.NotNull(deserialized);
         }
@@ -108,8 +107,8 @@ namespace SpanJson.Tests
             var shouldSerializeAll = new ShouldSerializeDO {First = "Hello World", Second = "Hello World"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(shouldSerializeAll);
             Assert.NotNull(serialized);
-            Assert.False(serialized.StartsWith("{,"));
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.False(serialized.StartsWith("{,", System.StringComparison.Ordinal));
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ShouldSerializeDO>(serialized);
             Assert.NotNull(deserialized);
         }
@@ -120,8 +119,8 @@ namespace SpanJson.Tests
             var shouldSerializeAll = new ShouldSerializeDO {First = "Hello World", Second = "Hello Universe"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(shouldSerializeAll);
             Assert.NotNull(serialized);
-            Assert.False(serialized.StartsWith("{,"));
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.False(serialized.StartsWith("{,", System.StringComparison.Ordinal));
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ShouldSerializeDO>(serialized);
             Assert.NotNull(deserialized);
         }
@@ -132,8 +131,8 @@ namespace SpanJson.Tests
             var shouldSerializeAll = new ShouldSerializeDO {First = "Hello Universe", Second = "Hello Universe"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(shouldSerializeAll);
             Assert.NotNull(serialized);
-            Assert.False(serialized.StartsWith("{,"));
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.False(serialized.StartsWith("{,", System.StringComparison.Ordinal));
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ShouldSerializeDO>(serialized);
             Assert.NotNull(deserialized);
         }
@@ -144,8 +143,8 @@ namespace SpanJson.Tests
             var shouldSerializeAll = new ShouldSerializeDO {First = "Hello Universe", Second = "Hello World"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(shouldSerializeAll);
             Assert.NotNull(serialized);
-            Assert.False(serialized.StartsWith("{,"));
-            Assert.False(serialized.EndsWith(",}"));
+            Assert.False(serialized.StartsWith("{,", System.StringComparison.Ordinal));
+            Assert.False(serialized.EndsWith(",}", System.StringComparison.Ordinal));
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ShouldSerializeDO>(serialized);
             Assert.NotNull(deserialized);
         }

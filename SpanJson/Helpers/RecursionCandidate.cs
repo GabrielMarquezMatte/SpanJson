@@ -10,12 +10,12 @@ namespace SpanJson.Helpers
 {
     public abstract class RecursionCandidate
     {
-        protected static readonly ConcurrentDictionary<Type, bool> RuntimeLookup = new ConcurrentDictionary<Type, bool>();
+        protected static readonly ConcurrentDictionary<Type, bool> RuntimeLookup = new();
 
         public static bool LookupRecursionCandidate(Type type)
         {
             // ReSharper disable ConvertClosureToMethodGroup
-            return RuntimeLookup.GetOrAdd(type, t => BuildLookupFunctor(t));
+            return RuntimeLookup.GetOrAdd(type, BuildLookupFunctor);
             // ReSharper restore ConvertClosureToMethodGroup
         }
 

@@ -11,9 +11,9 @@ namespace SpanJson.Shared.Fixture
     {
         private readonly int? _seed;
 
-        private readonly ConcurrentDictionary<Type, Func<int, int, object>> _functorCache = new ConcurrentDictionary<Type, Func<int, int, object>>();
+        private readonly ConcurrentDictionary<Type, Func<int, int, object>> _functorCache = new();
 
-        private readonly Dictionary<Type, IValueFixture> _valueFixtures = new Dictionary<Type, IValueFixture>();
+        private readonly Dictionary<Type, IValueFixture> _valueFixtures = new();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddValueFixture<T>(T valueFixture) where T : IValueFixture
         {

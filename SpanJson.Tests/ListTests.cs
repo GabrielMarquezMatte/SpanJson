@@ -25,7 +25,7 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeCollection()
         {
-            var list = new LinkedList<string>(new[] {"Hello", "World", "Universe"});
+            var list = new LinkedList<string>(["Hello", "World", "Universe"]);
             var serialized = JsonSerializer.Generic.Utf16.Serialize(list);
             Assert.Equal("[\"Hello\",\"World\",\"Universe\"]", serialized);
         }
@@ -44,14 +44,14 @@ namespace SpanJson.Tests
         public void SerializeLinq()
         {
             var list = new List<string> {"Hello", "World", "Universe"};
-            var serialized = JsonSerializer.Generic.Utf16.Serialize(list.Where(a => a != "Universe"));
+            var serialized = JsonSerializer.Generic.Utf16.Serialize(list.Where(a => !string.Equals(a, "Universe", System.StringComparison.Ordinal)));
             Assert.Equal("[\"Hello\",\"World\"]", serialized);
         }
 
         [Fact]
         public void MultiDimArray()
         {
-            var jaggedArray = new int[][] {new[] {1, 2, 3}, new[] {4, 5, 6}};
+            var jaggedArray = new int[][] {[1, 2, 3], [4, 5, 6]};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(jaggedArray);
             Assert.Equal("[[1,2,3],[4,5,6]]", serialized);
         }

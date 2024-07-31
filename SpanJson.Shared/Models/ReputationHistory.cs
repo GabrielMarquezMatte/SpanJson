@@ -41,18 +41,13 @@ namespace SpanJson.Shared.Models
             user_deleted = 23
         }
 
-
         public int? user_id { get; set; }
-
 
         public DateTime? creation_date { get; set; }
 
-
         public int? post_id { get; set; }
 
-
         public int? reputation_change { get; set; }
-
 
         public ReputationHistoryType? reputation_history_type { get; set; }
 

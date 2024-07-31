@@ -7,7 +7,7 @@ namespace SpanJson.AspNetCore.Formatter.Tests
     {
         [HttpPost]
         [Route("PingPong")]
-        public ActionResult<TestObject> PingPong([FromBody] TestObject to)
+        public static ActionResult<TestObject> PingPong([FromBody] TestObject to)
         {
             return to;
         }

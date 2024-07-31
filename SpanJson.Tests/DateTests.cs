@@ -234,7 +234,6 @@ namespace SpanJson.Tests
             Assert.Equal(toValue, utf8ToValue);
         }
 
-
         /// <summary>
         ///     To make sure the fractions are properly parsed
         /// </summary>
@@ -313,26 +312,25 @@ namespace SpanJson.Tests
 
             var dateOnly = new DateOnly(dto.Year, dto.Month, dto.Day);
             Assert.True(DateTimeFormatter.TryFormat(dateOnly, outputChars, out written));
-            Assert.True(DateTimeParser.TryParseDateOnly(outputChars.Slice(0, written), out var outputDateOnly, out consumed));
+            Assert.True(DateTimeParser.TryParseDateOnly(outputChars[..written], out var outputDateOnly, out consumed));
             Assert.Equal(dateOnly, outputDateOnly);
             Assert.Equal(written, consumed);
 
             var timeOnly = new TimeOnly(dto.Hour, dto.Minute, dto.Second, dto.Millisecond);
             Assert.True(DateTimeFormatter.TryFormat(timeOnly, outputChars, out written));
-            Assert.True(DateTimeParser.TryParseTimeOnly(outputChars.Slice(0, written), out var outputTimeOnly, out consumed));
+            Assert.True(DateTimeParser.TryParseTimeOnly(outputChars[..written], out var outputTimeOnly, out consumed));
             Assert.Equal(timeOnly, outputTimeOnly);
             Assert.Equal(written, consumed);
         }
 
-
-        private void AssertDateTime(DateTime dateTime, int year, int month, int day, int hour, int minute,
+        private static void AssertDateTime(DateTime dateTime, int year, int month, int day, int hour, int minute,
             int second, int fraction)
         {
             var comparison = new DateTime(year, month, day, hour, minute, second).AddTicks(fraction);
             Assert.Equal(comparison, dateTime);
         }
 
-        private void AssertTimeOnly(TimeOnly timeOnly, int hour, int minute, int second, int fraction)
+        private static void AssertTimeOnly(TimeOnly timeOnly, int hour, int minute, int second, int fraction)
         {
             Assert.Equal(timeOnly.Hour, hour);
             Assert.Equal(timeOnly.Minute, minute);
@@ -379,12 +377,11 @@ namespace SpanJson.Tests
             var value = new DateTime(year, month, day, hour, minute, second, kind).AddTicks(fraction);
             Span<char> charSpan = stackalloc char[35];
             Assert.True(DateTimeFormatter.TryFormat(value, charSpan, out var symbolsWritten));
-            Assert.Equal(comparison, charSpan.Slice(0, symbolsWritten).ToString());
-
+            Assert.Equal(comparison, charSpan[..symbolsWritten].ToString());
 
             Span<byte> byteSpan = stackalloc byte[35];
             Assert.True(DateTimeFormatter.TryFormat(value, byteSpan, out symbolsWritten));
-            Assert.Equal(comparison, Encoding.UTF8.GetString(byteSpan.Slice(0, symbolsWritten)));
+            Assert.Equal(comparison, Encoding.UTF8.GetString(byteSpan[..symbolsWritten]));
         }
 
         [Theory]
@@ -414,11 +411,11 @@ namespace SpanJson.Tests
 
             Span<char> charSpan = stackalloc char[35];
             Assert.True(DateTimeFormatter.TryFormat(value, charSpan, out var symbolsWritten));
-            Assert.Equal(comparison, charSpan.Slice(0, symbolsWritten).ToString());
+            Assert.Equal(comparison, charSpan[..symbolsWritten].ToString());
 
             Span<byte> byteSpan = stackalloc byte[35];
             Assert.True(DateTimeFormatter.TryFormat(value, byteSpan, out symbolsWritten));
-            Assert.Equal(comparison, Encoding.UTF8.GetString(byteSpan.Slice(0, symbolsWritten)));
+            Assert.Equal(comparison, Encoding.UTF8.GetString(byteSpan[..symbolsWritten]));
         }
 
         [Fact]
@@ -432,11 +429,11 @@ namespace SpanJson.Tests
             output = output + sign + $"{offset.Hours:D2}:{offset.Minutes:D2}";
             Span<char> charSpan = stackalloc char[35];
             Assert.True(DateTimeFormatter.TryFormat(value, charSpan, out var symbolsWritten));
-            Assert.Equal(output, charSpan.Slice(0, symbolsWritten).ToString());
+            Assert.Equal(output, charSpan[..symbolsWritten].ToString());
 
             Span<byte> byteSpan = stackalloc byte[35];
             Assert.True(DateTimeFormatter.TryFormat(value, byteSpan, out symbolsWritten));
-            Assert.Equal(output, Encoding.UTF8.GetString(byteSpan.Slice(0, symbolsWritten)));
+            Assert.Equal(output, Encoding.UTF8.GetString(byteSpan[..symbolsWritten]));
         }
     }
 }

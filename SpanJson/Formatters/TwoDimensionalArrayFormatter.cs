@@ -7,7 +7,7 @@ namespace SpanJson.Formatters
     public sealed class TwoDimensionalArrayFormatter<T, TSymbol, TResolver> : BaseFormatter, IJsonFormatter<T[,], TSymbol>
         where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        public static readonly TwoDimensionalArrayFormatter<T, TSymbol, TResolver> Default = new TwoDimensionalArrayFormatter<T, TSymbol, TResolver>();
+        public static readonly TwoDimensionalArrayFormatter<T, TSymbol, TResolver> Default = new();
 
         private static readonly IJsonFormatter<T, TSymbol> ElementFormatter =
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();

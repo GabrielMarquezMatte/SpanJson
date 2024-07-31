@@ -15,7 +15,7 @@ namespace SpanJson.Formatters.Dynamic
 
         public override string ToString()
         {
-            return $"{{{string.Join(",", _dictionary.Select(a => $"\"{a.Key}\":{a.Value.ToJsonValue()}"))}}}";
+            return $"{{{string.Join(',', _dictionary.Select(a => $"\"{a.Key}\":{a.Value.ToJsonValue()}"))}}}";
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -34,7 +34,7 @@ namespace SpanJson.Formatters.Dynamic
             return base.TryConvert(binder, out result);
         }
 
-        public override IEnumerable<string> GetDynamicMemberNames()
+        public override IReadOnlyCollection<string> GetDynamicMemberNames()
         {
             return _dictionary.Keys;
         }

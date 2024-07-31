@@ -18,17 +18,15 @@ namespace SpanJson.WebBenchmark.Infrastructure
 
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
         {
-            using (var reader = context.ReaderFactory(context.HttpContext.Request.Body, encoding))
+            using var reader = context.ReaderFactory(context.HttpContext.Request.Body, encoding);
+            try
             {
-                try
-                {
-                    return await InputFormatterResult.SuccessAsync(JSON.Deserialize(reader, context.ModelType, Options.ISO8601ExcludeNullsIncludeInherited));
-                }
-                catch (Exception ex)
-                {
-                    context.ModelState.AddModelError("JSON", ex.Message);
-                    return await InputFormatterResult.FailureAsync();
-                }
+                return await InputFormatterResult.SuccessAsync(JSON.Deserialize(reader, context.ModelType, Options.ISO8601ExcludeNullsIncludeInherited));
+            }
+            catch (Exception ex)
+            {
+                context.ModelState.AddModelError("JSON", ex.Message);
+                return await InputFormatterResult.FailureAsync();
             }
         }
     }

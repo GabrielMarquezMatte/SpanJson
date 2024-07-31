@@ -9,7 +9,7 @@ namespace SpanJson.Tests
 {
     public class ArrayPoolSerializerTests
     {
-        private static readonly ExpressionTreeFixture Fixture = new ExpressionTreeFixture();
+        private static readonly ExpressionTreeFixture Fixture = new();
 
         [Fact]
         public void SerializeToArrayPoolUtf16()

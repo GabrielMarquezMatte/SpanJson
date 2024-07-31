@@ -6,18 +6,13 @@ namespace SpanJson.Shared.Models
     {
         public NotificationType? notification_type { get; set; }
 
-
         public Info.Site site { get; set; }
-
 
         public DateTime? creation_date { get; set; }
 
-
         public string body { get; set; }
 
-
         public int? post_id { get; set; }
-
 
         public bool? is_unread { get; set; }
 

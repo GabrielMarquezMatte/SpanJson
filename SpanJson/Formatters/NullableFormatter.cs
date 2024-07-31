@@ -8,7 +8,7 @@ namespace SpanJson.Formatters
     public sealed class NullableFormatter<T, TSymbol, TResolver> : BaseFormatter, IJsonFormatter<T?, TSymbol>
         where T : struct where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        public static readonly NullableFormatter<T, TSymbol, TResolver> Default = new NullableFormatter<T, TSymbol, TResolver>();
+        public static readonly NullableFormatter<T, TSymbol, TResolver> Default = new();
 
         private static readonly IJsonFormatter<T, TSymbol> ElementFormatter =
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();

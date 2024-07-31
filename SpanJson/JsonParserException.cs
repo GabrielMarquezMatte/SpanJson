@@ -44,6 +44,18 @@ namespace SpanJson
             Type = type;
         }
 
+        public JsonParserException()
+        {
+        }
+
+        public JsonParserException(string message) : base(message)
+        {
+        }
+
+        public JsonParserException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
         public ValueType Type { get; }
         public ParserError Error { get; }
         public int Position { get; }

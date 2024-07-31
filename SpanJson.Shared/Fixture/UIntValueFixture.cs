@@ -12,7 +12,6 @@ namespace SpanJson.Shared.Fixture
             _prng = seed != null ? new Random(seed.Value) : new Random();
         }
 
-
         public object Generate()
         {
             return (uint) _prng.Next();

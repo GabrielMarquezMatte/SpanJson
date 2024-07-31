@@ -5,91 +5,91 @@ namespace SpanJson.Formatters.Dynamic
 {
     public partial class SpanJsonDynamicNumber<TSymbol> : SpanJsonDynamic<TSymbol> where TSymbol : struct
     {
-        public static explicit operator SByte(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator sbyte(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(SByte), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(sbyte), input.Symbols, out var value))
             {
-                return (SByte) value;
+                return (sbyte) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Int16(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator short(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Int16), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(short), input.Symbols, out var value))
             {
-                return (Int16) value;
+                return (short) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Int32(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator int(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Int32), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(int), input.Symbols, out var value))
             {
-                return (Int32) value;
+                return (int) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Int64(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator long(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Int64), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(long), input.Symbols, out var value))
             {
-                return (Int64) value;
+                return (long) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Byte(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator byte(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Byte), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(byte), input.Symbols, out var value))
             {
-                return (Byte) value;
+                return (byte) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator UInt16(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator ushort(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(UInt16), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(ushort), input.Symbols, out var value))
             {
-                return (UInt16) value;
+                return (ushort) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator UInt32(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator uint(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(UInt32), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(uint), input.Symbols, out var value))
             {
-                return (UInt32) value;
+                return (uint) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator UInt64(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator ulong(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(UInt64), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(ulong), input.Symbols, out var value))
             {
-                return (UInt64) value;
+                return (ulong) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Single(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator float(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Single), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(float), input.Symbols, out var value))
             {
-                return (Single) value;
+                return (float) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Double(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator double(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Double), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(double), input.Symbols, out var value))
             {
-                return (Double) value;
+                return (double) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Decimal(SpanJsonDynamicNumber<TSymbol> input)
+        public static explicit operator decimal(SpanJsonDynamicNumber<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Decimal), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(decimal), input.Symbols, out var value))
             {
-                return (Decimal) value;
+                return (decimal) value;
             }
             throw new InvalidCastException();
         }

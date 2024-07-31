@@ -8,34 +8,19 @@ namespace SpanJson.Tests
         public int InnerValue { get; set; }
     }
 
-    public class NoDefaultConstructorClass
+    public class NoDefaultConstructorClass(int value, int renamedValue, NestedClass nested)
     {
-        public NoDefaultConstructorClass(int value, int renamedValue, NestedClass nested)
-        {
-            Value = value;
-            OtherNamedValue = renamedValue;
-            Nested = nested;
-        }
-
-        public int Value { get; set; }
-        public int OtherNamedValue { get; set; }
-        public NestedClass Nested { get; set; }
+        public int Value { get; set; } = value;
+        public int OtherNamedValue { get; set; } = renamedValue;
+        public NestedClass Nested { get; set; } = nested;
     }
 
-    public struct NoDefaultConstructorStruct
+    public struct NoDefaultConstructorStruct(int value, int renamedValue, NestedClass nested)
     {
-        public NoDefaultConstructorStruct(int value, int renamedValue, NestedClass nested)
-        {
-            Value = value;
-            OtherNamedValue = renamedValue;
-            Nested = nested;
-        }
-
-        public int Value { get; set; }
-        public int OtherNamedValue { get; set; }
-        public NestedClass Nested { get; set; }
+        public int Value { get; set; } = value;
+        public int OtherNamedValue { get; set; } = renamedValue;
+        public NestedClass Nested { get; set; } = nested;
     }
-
 
     public class OptionalDeserializer
     {

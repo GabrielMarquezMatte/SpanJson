@@ -13,9 +13,7 @@
 
             private static TResolver CreateResolver()
             {
-                var result = new TResolver();
-
-                return result;
+                return new TResolver();
             }
         }
     }

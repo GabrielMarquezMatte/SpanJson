@@ -32,14 +32,14 @@ namespace SpanJson.Tests
             var family = new Family {Child = new Daughter {DaughterSpecific = "Hello World", Name = "Daughter", Age = 5}};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(family);
             Assert.NotNull(serialized);
-            Assert.Contains(nameof(Child.Age), serialized);
-            Assert.Contains(nameof(Daughter.DaughterSpecific), serialized);
+            Assert.Contains(nameof(Child.Age), serialized, StringComparison.Ordinal);
+            Assert.Contains(nameof(Daughter.DaughterSpecific), serialized, StringComparison.Ordinal);
 
             var anotherFamily = new Family {Child = new Son {SonSpecific = "Hello World", Name = "Son", Age = 5}};
             serialized = JsonSerializer.Generic.Utf16.Serialize(anotherFamily);
             Assert.NotNull(serialized);
-            Assert.Contains(nameof(Child.Age), serialized);
-            Assert.Contains(nameof(Son.SonSpecific), serialized);
+            Assert.Contains(nameof(Child.Age), serialized, StringComparison.Ordinal);
+            Assert.Contains(nameof(Son.SonSpecific), serialized, StringComparison.Ordinal);
 
             var ex = Assert.Throws<NotSupportedException>(() => JsonSerializer.Generic.Utf16.Deserialize<Family>(serialized));
             Assert.NotEmpty(ex.Message);

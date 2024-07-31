@@ -3,13 +3,9 @@ using System.Collections.Generic;
 
 namespace SpanJson.Formatters.Dynamic
 {
-    public abstract partial class SpanJsonDynamicNumber<TSymbol> : SpanJsonDynamic<TSymbol> where TSymbol : struct
+    public abstract partial class SpanJsonDynamicNumber<TSymbol>(in ReadOnlySpan<TSymbol> span) : SpanJsonDynamic<TSymbol>(span) where TSymbol : struct
     {
-        private static readonly DynamicTypeConverter DynamicConverter = new DynamicTypeConverter();
-
-        protected SpanJsonDynamicNumber(in ReadOnlySpan<TSymbol> span) : base(span)
-        {
-        }
+        private static readonly DynamicTypeConverter DynamicConverter = new();
 
         protected override BaseDynamicTypeConverter<TSymbol> Converter => DynamicConverter;
 
@@ -17,32 +13,24 @@ namespace SpanJson.Formatters.Dynamic
         {
             private static readonly Dictionary<Type, ConvertDelegate> Converters = BuildDelegates();
 
-
             public override bool TryConvertTo(Type destinationType, ReadOnlySpan<TSymbol> span, out object value)
             {
-                try
+                if (Converters.TryGetValue(destinationType, out var del))
                 {
-                    if (Converters.TryGetValue(destinationType, out var del))
-                    {
-                        var reader = new JsonReader<TSymbol>(span);
-                        value = del(ref reader);
-                        return true;
-                    }
+                    var reader = new JsonReader<TSymbol>(span);
+                    value = del(ref reader);
+                    return true;
                 }
-                catch
-                {
-                }
-
-                value = default;
+                value = null;
                 return false;
             }
 
-            public override bool IsSupported(Type type)
+            public override bool IsSupported(Type destinationType)
             {
-                var fix = Converters.ContainsKey(type);
+                var fix = Converters.ContainsKey(destinationType);
                 if (!fix)
                 {
-                    var nullable = Nullable.GetUnderlyingType(type);
+                    var nullable = Nullable.GetUnderlyingType(destinationType);
                     if (nullable != null)
                     {
                         fix |= IsSupported(nullable);
@@ -54,8 +42,8 @@ namespace SpanJson.Formatters.Dynamic
 
             private static Dictionary<Type, ConvertDelegate> BuildDelegates()
             {
-                var allowedTypes = new[]
-                {
+                Span<Type> allowedTypes =
+                [
                     typeof(sbyte),
                     typeof(short),
                     typeof(int),
@@ -67,7 +55,7 @@ namespace SpanJson.Formatters.Dynamic
                     typeof(float),
                     typeof(double),
                     typeof(decimal)
-                };
+                ];
                 return BuildDelegates(allowedTypes);
             }
         }

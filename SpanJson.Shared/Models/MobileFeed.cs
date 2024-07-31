@@ -6,48 +6,33 @@ namespace SpanJson.Shared.Models
     {
         public List<MobileQuestion> hot_questions { get; set; }
 
-
         public List<MobileInboxItem> inbox_items { get; set; }
-
 
         public List<MobileQuestion> likely_to_answer_questions { get; set; }
 
-
         public List<MobileRepChange> reputation_events { get; set; }
-
 
         public List<MobileQuestion> cross_site_interesting_questions { get; set; }
 
-
         public List<MobileBadgeAward> badges { get; set; }
-
 
         public List<MobilePrivilege> earned_privileges { get; set; }
 
-
         public List<MobilePrivilege> upcoming_privileges { get; set; }
-
 
         public List<MobileCommunityBulletin> community_bulletins { get; set; }
 
-
         public List<MobileAssociationBonus> association_bonuses { get; set; }
-
 
         public List<MobileCareersJobAd> careers_job_ads { get; set; }
 
-
         public List<MobileBannerAd> banner_ads { get; set; }
-
 
         public long? before { get; set; }
 
-
         public long? since { get; set; }
 
-
         public int? account_id { get; set; }
-
 
         public MobileUpdateNotice update_notice { get; set; }
 

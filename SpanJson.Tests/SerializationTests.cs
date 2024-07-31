@@ -44,7 +44,6 @@ namespace SpanJson.Tests
             public List<Node> Children { get; set; } = new List<Node>();
         }
 
-
         public class OneChinesePropertyName
         {
             public string 你好 { get; set; }
@@ -59,11 +58,11 @@ namespace SpanJson.Tests
         [Fact]
         public void NoNameMatches()
         {
-            var parent = new AnotherParent {Age = 30, Name = "Adam", Children = new List<Child> {new Child {Name = "Cain", Age = 5}}};
+            var parent = new AnotherParent {Age = 30, Name = "Adam", Children = new List<Child> {new() { Name = "Cain", Age = 5}}};
             var serializedWithCamelCase =
                 JsonSerializer.Generic.Utf16.Serialize<AnotherParent, ExcludeNullsOriginalCaseResolver<char>>(parent);
             serializedWithCamelCase = serializedWithCamelCase.ToLowerInvariant();
-            Assert.Contains("age", serializedWithCamelCase);
+            Assert.Contains("age", serializedWithCamelCase, StringComparison.Ordinal);
             var deserialized =
                 JsonSerializer.Generic.Utf16.Deserialize<AnotherParent, ExcludeNullsOriginalCaseResolver<char>>(serializedWithCamelCase);
             Assert.NotNull(deserialized);
@@ -78,9 +77,8 @@ namespace SpanJson.Tests
             var node = new Node {Id = Guid.NewGuid()};
             node.Children.Add(node);
             var ex = Assert.Throws<InvalidOperationException>(() => JsonSerializer.Generic.Utf16.Serialize(node));
-            Assert.Contains("Nesting Limit", ex.Message);
+            Assert.Contains("Nesting Limit", ex.Message, StringComparison.Ordinal);
         }
-
 
         [Fact]
         public void SerializeDeserializeOneChinesePropertyNameUtf16()
@@ -88,7 +86,7 @@ namespace SpanJson.Tests
             var wpn = new OneChinesePropertyName {你好 = "Hello"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(wpn);
             Assert.NotNull(serialized);
-            Assert.Contains("\"你好\":", serialized);
+            Assert.Contains("\"你好\":", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<OneChinesePropertyName>(serialized);
             Assert.NotNull(deserialized);
             Assert.Equal(wpn.你好, deserialized.你好);
@@ -105,14 +103,13 @@ namespace SpanJson.Tests
             Assert.Equal(wpn.你好, deserialized.你好);
         }
 
-
         [Fact]
         public void SerializeDeserializePartialChinesePropertyNameUtf16()
         {
             var wpn = new PartialChinesePropertyName {你好 = "Hello", 你好你好 = "World"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(wpn);
             Assert.NotNull(serialized);
-            Assert.Contains("\"你好\":", serialized);
+            Assert.Contains("\"你好\":", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<OneChinesePropertyName>(serialized);
             Assert.NotNull(deserialized);
             Assert.Equal(wpn.你好, deserialized.你好);
@@ -139,7 +136,7 @@ namespace SpanJson.Tests
         {
             var ocm = new ObjectChildModel {Object = new object()};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ocm);
-            Assert.Contains("\"Object\":{}", serialized);
+            Assert.Contains("\"Object\":{}", serialized, StringComparison.Ordinal);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ObjectChildModel>(serialized);
             Assert.NotNull(deserialized);
@@ -170,9 +167,9 @@ namespace SpanJson.Tests
                 }
             };
             var serialized = JsonSerializer.Generic.Utf16.Serialize(parent);
-            Assert.Contains("\"Name\":\"Eve\"", serialized);
-            Assert.Contains("\"SonSpecific\":true", serialized);
-            Assert.Contains("\"DaughterSpecific\":true", serialized);
+            Assert.Contains("\"Name\":\"Eve\"", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"SonSpecific\":true", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"DaughterSpecific\":true", serialized, StringComparison.Ordinal);
         }
 
         [Theory]
@@ -204,10 +201,8 @@ namespace SpanJson.Tests
         }
 #pragma warning disable 649
         struct A
-        { 
+        {
             public string X;
-
-            public ReadOnlySpan<char> SubX => X.Substring(2);
         }
 #pragma warning restore 649
         [Fact]
@@ -216,7 +211,6 @@ namespace SpanJson.Tests
             var result = JsonSerializer.Generic.Utf8.Deserialize<A>(System.Text.Encoding.UTF8.GetBytes(@"{""X"":""001"", ""SubX"":""2""}"));
             Assert.Equal("001", result.X);
         }
-
 
         public class ByRefTestObject
         {
@@ -232,23 +226,16 @@ namespace SpanJson.Tests
                 set => throw new NotImplementedException();
             }
 
-
-            public MyRefStruct Second
+            public static MyRefStruct Second
             {
                 get => default;
             }
 
-            public ref struct MyRefStruct
+            public ref struct MyRefStruct(string value)
             {
-                public MyRefStruct(string value)
-                {
-                    Value = value;
-                }
-
-                public string Value { get; set; }
+                public string Value { get; set; } = value;
             }
         }
-
 
         [Fact]
         public void SerializeDeserializeByRefUtf16()
@@ -270,5 +257,4 @@ namespace SpanJson.Tests
             Assert.NotNull(deserialized);
         }
     }
-
 }

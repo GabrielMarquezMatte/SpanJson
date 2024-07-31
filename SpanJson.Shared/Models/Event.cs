@@ -6,15 +6,11 @@ namespace SpanJson.Shared.Models
     {
         public EventType? event_type { get; set; }
 
-
         public int? event_id { get; set; }
-
 
         public DateTime? creation_date { get; set; }
 
-
         public string link { get; set; }
-
 
         public string excerpt { get; set; }
 

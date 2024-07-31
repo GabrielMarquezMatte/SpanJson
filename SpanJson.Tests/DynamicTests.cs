@@ -29,7 +29,6 @@ namespace SpanJson.Tests
             Assert.Equal(model, deserialized, DynamicEqualityComparer.Default);
         }
 
-
         [Theory]
         [MemberData(nameof(GetModels))]
         public void CanDeserializeAllDynamicUtf8(Type modelType)
@@ -43,10 +42,9 @@ namespace SpanJson.Tests
             Assert.Equal(model, deserialized, DynamicEqualityComparer.Default);
         }
 
-
         public class MyDynamicObject : DynamicObject
         {
-            private readonly Dictionary<string, object> _dictionary = new Dictionary<string, object>();
+            private readonly Dictionary<string, object> _dictionary = new(StringComparer.Ordinal);
 
             public override IEnumerable<string> GetDynamicMemberNames()
             {
@@ -72,17 +70,15 @@ namespace SpanJson.Tests
 
         public abstract class AbstractMember
         {
-
         }
 
         public class ConcreteMember : AbstractMember
         {
-
         }
 
         public class DynamicObjectWithKnownMembers : DynamicObject
         {
-            private readonly Dictionary<string, object> _dictionary = new Dictionary<string, object>();
+            private readonly Dictionary<string, object> _dictionary = new(StringComparer.Ordinal);
 
             public override IEnumerable<string> GetDynamicMemberNames()
             {
@@ -159,7 +155,6 @@ namespace SpanJson.Tests
             Assert.Equal(list, supported);
         }
 
-
         [Fact]
         public void DynamicObjectWithKnownMembersNoDynamicUtf8()
         {
@@ -197,7 +192,6 @@ namespace SpanJson.Tests
             Assert.Equal(list, supported);
             Assert.Equal("Hello World", (string)deserialized.Text);
         }
-
 
         [Fact]
         public void DynamicObjectWithKnownMembersUtf8()
@@ -245,7 +239,6 @@ namespace SpanJson.Tests
             Assert.Equal("Hello Universe", (string)deserialized.dynamicValue);
         }
 
-
         [Fact]
         public void DynamicObjectWithKnownMembersUtf8CamelCase()
         {
@@ -285,7 +278,6 @@ namespace SpanJson.Tests
             Assert.Throws<NotSupportedException>(() => JsonSerializer.Generic.Utf16.Deserialize<DynamicObjectWithKnownMembers>(serialized));
         }
 
-
         [Fact]
         public void DynamicObjectWithKnownMembersNotSupportedUtf8()
         {
@@ -298,7 +290,6 @@ namespace SpanJson.Tests
             Assert.NotNull(serialized);
             Assert.Throws<NotSupportedException>(() => JsonSerializer.Generic.Utf8.Deserialize<DynamicObjectWithKnownMembers>(serialized));
         }
-
 
         [Fact]
         public void DynamicObjectTestOnePropertyUtf16()
@@ -313,7 +304,6 @@ namespace SpanJson.Tests
             Assert.Equal("Hello World", (string)deserialized.Text);
         }
 
-
         [Fact]
         public void DynamicObjectTestOnePropertyUtf8()
         {
@@ -326,7 +316,6 @@ namespace SpanJson.Tests
             Assert.NotNull(deserialized);
             Assert.Equal("Hello World", (string)deserialized.Text);
         }
-
 
         [Fact]
         public void DynamicObjectTestOnePropertyMultipleTimes()
@@ -373,7 +362,6 @@ namespace SpanJson.Tests
             Assert.Equal(5, (int)deserialized.Value);
         }
 
-
         [Fact]
         public void ExpandoUtf16()
         {
@@ -387,7 +375,6 @@ namespace SpanJson.Tests
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<dynamic>(serialized);
             var serialized2 = JsonSerializer.Generic.Utf16.Serialize(deserialized);
             Assert.Equal(serialized, serialized2);
-
         }
 
         [Fact]
@@ -514,7 +501,6 @@ namespace SpanJson.Tests
             Assert.Equal(dynamicChild2.Name, (string) deserializedDynamic.Children[1].Name);
         }
 
-
         [Fact]
         public void SerializeDeserializeDynamicChildUtf8()
         {
@@ -620,8 +606,8 @@ namespace SpanJson.Tests
             {
                 public Guid Fixed { get; set; }
                 public string Name { get; } = "Hello World";
-                private static readonly string[] extraFields = new string[] {nameof(Fixed), nameof(Name)};
-                private readonly Dictionary<string, object> _extra = new Dictionary<string, object>();
+                private static readonly string[] extraFields = [nameof(Fixed), nameof(Name)];
+                private readonly Dictionary<string, object> _extra = new(StringComparer.Ordinal);
 
                 public override IEnumerable<string> GetDynamicMemberNames()
                 {

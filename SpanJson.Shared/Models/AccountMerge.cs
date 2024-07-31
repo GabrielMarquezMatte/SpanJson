@@ -6,9 +6,7 @@ namespace SpanJson.Shared.Models
     {
         public int? old_account_id { get; set; }
 
-
         public int? new_account_id { get; set; }
-
 
         public DateTime? merge_date { get; set; }
 

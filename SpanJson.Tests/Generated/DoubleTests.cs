@@ -15,10 +15,9 @@ namespace SpanJson.Tests.Generated
         {
             var doubleValue = double.Parse(input, CultureInfo.InvariantCulture);
             var serialized = JsonSerializer.Generic.Utf8.Serialize(doubleValue);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Double>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<double>(serialized);
             Assert.Equal(input.ToString(CultureInfo.InvariantCulture), deserialized.ToString(CultureInfo.InvariantCulture));
         }
-
 
         [Theory]
         [InlineData("-1.79769313486231E+308")]
@@ -27,7 +26,7 @@ namespace SpanJson.Tests.Generated
         {
             var doubleValue = double.Parse(input, CultureInfo.InvariantCulture);
             var serialized = JsonSerializer.Generic.Utf16.Serialize(doubleValue);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Double>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<double>(serialized);
             Assert.Equal(input.ToString(CultureInfo.InvariantCulture), deserialized.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -36,7 +35,7 @@ namespace SpanJson.Tests.Generated
         {
             var doubleValue = 0.0d;
             var serialized = JsonSerializer.Generic.Utf8.Serialize(doubleValue);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Double>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<double>(serialized);
             Assert.Equal(doubleValue, deserialized);
         }
 
@@ -45,10 +44,9 @@ namespace SpanJson.Tests.Generated
         {
             var doubleValue = 0.0d;
             var serialized = JsonSerializer.Generic.Utf8.Serialize(doubleValue);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Double>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<double>(serialized);
             Assert.Equal(doubleValue, deserialized);
         }
-
 
         [Theory]
         [InlineData(double.NaN)]
@@ -58,7 +56,6 @@ namespace SpanJson.Tests.Generated
         {
             Assert.Throws<ArgumentException>(() => JsonSerializer.Generic.Utf8.Serialize(input));
         }
-
 
         [Theory]
         [InlineData(double.NaN)]

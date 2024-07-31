@@ -18,7 +18,7 @@ namespace SpanJson.AspNetCore.Formatter.Tests
     /// </summary>
     public class OutputFormatterTests : TestBase
     {
-        private readonly ExpressionTreeFixture _fixture = new ExpressionTreeFixture();
+        private readonly ExpressionTreeFixture _fixture = new();
 
         [Theory]
         [MemberData(nameof(GetModels))]
@@ -63,16 +63,14 @@ namespace SpanJson.AspNetCore.Formatter.Tests
 
             await jsonFormatter.WriteAsync(outputFormatterContext).ConfigureAwait(false);
 
-            using (var body = outputFormatterContext.HttpContext.Response.Body)
-            {
-                Assert.NotNull(body);
-                body.Position = 0;
-                var expectedOutput = JsonSerializer.NonGeneric.Utf8.Serialize<TResolver>(model);
-                var content = new byte[body.Length];
-                var length = await body.ReadAsync(content, 0, content.Length).ConfigureAwait(false);
-                Assert.Equal(expectedOutput.Length, length);
-                Assert.Equal(expectedOutput, content);
-            }
+            using var body = outputFormatterContext.HttpContext.Response.Body;
+            Assert.NotNull(body);
+            body.Position = 0;
+            var expectedOutput = JsonSerializer.NonGeneric.Utf8.Serialize<TResolver>(model);
+            var content = new byte[body.Length];
+            var length = await body.ReadAsync(content, 0, content.Length).ConfigureAwait(false);
+            Assert.Equal(expectedOutput.Length, length);
+            Assert.Equal(expectedOutput, content);
         }
 
         [Theory]

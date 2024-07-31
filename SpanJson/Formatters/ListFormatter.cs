@@ -13,7 +13,7 @@ namespace SpanJson.Formatters
 
     {
         private static readonly Func<TList> CreateFunctor = StandardResolvers.GetResolver<TSymbol, TResolver>().GetCreateFunctor<TList>();
-        public static readonly ListFormatter<TList, T, TSymbol, TResolver> Default = new ListFormatter<TList, T, TSymbol, TResolver>();
+        public static readonly ListFormatter<TList, T, TSymbol, TResolver> Default = new();
 
         private static readonly IJsonFormatter<T, TSymbol> ElementFormatter = StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();
 

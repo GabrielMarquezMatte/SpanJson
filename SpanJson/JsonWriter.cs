@@ -36,10 +36,9 @@ namespace SpanJson
             }
         }
 
-        public int Position => _pos;
+        public readonly int Position => _pos;
 
         public TSymbol[] Data { get; private set; }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Dispose()
@@ -51,7 +50,6 @@ namespace SpanJson
                 ArrayPool<TSymbol>.Shared.Return(toReturn);
             }
         }
-
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void Grow(int requiredAdditionalCapacity)
@@ -78,7 +76,6 @@ namespace SpanJson
                 Data = poolArray;
             }
 
-
             if (toReturn != null)
             {
                 ArrayPool<TSymbol>.Shared.Return(toReturn);
@@ -102,7 +99,6 @@ namespace SpanJson
             }
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteBeginArray()
         {
@@ -120,7 +116,6 @@ namespace SpanJson
             }
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteBeginObject()
         {
@@ -137,7 +132,6 @@ namespace SpanJson
                 ThrowNotSupportedException();
             }
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteEndObject()
@@ -223,7 +217,6 @@ namespace SpanJson
                 ThrowNotSupportedException();
             }
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteVerbatim(in ReadOnlySpan<TSymbol> values)
@@ -409,7 +402,7 @@ namespace SpanJson
 
         public void DecrementDepth() => _depth--;
 
-        public void AssertDepth()
+        public readonly void AssertDepth()
         {
             if (_depth > JsonSharedConstant.NestingLimit)
             {
@@ -418,7 +411,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private void ThrowArgumentException(string message, string paramName)
+        private static void ThrowArgumentException(string message, string paramName)
         {
             throw new ArgumentException(message, paramName);
         }

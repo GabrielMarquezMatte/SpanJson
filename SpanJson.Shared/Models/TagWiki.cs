@@ -6,21 +6,15 @@ namespace SpanJson.Shared.Models
     {
         public string tag_name { get; set; }
 
-
         public string body { get; set; }
-
 
         public string excerpt { get; set; }
 
-
         public DateTime? body_last_edit_date { get; set; }
-
 
         public DateTime? excerpt_last_edit_date { get; set; }
 
-
         public ShallowUser last_body_editor { get; set; }
-
 
         public ShallowUser last_excerpt_editor { get; set; }
 

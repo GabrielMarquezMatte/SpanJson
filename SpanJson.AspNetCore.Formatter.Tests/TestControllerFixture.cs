@@ -13,7 +13,6 @@ namespace SpanJson.AspNetCore.Formatter.Tests
         private readonly IHost _host;
         private readonly TestServer _testServer;
 
-
         public TestControllerFixture()
         {
             var builder = Host.CreateDefaultBuilder()
@@ -29,7 +28,6 @@ namespace SpanJson.AspNetCore.Formatter.Tests
 
         public HttpClient Client { get; private set; }
 
-
         public Uri BaseAddress { get; }
 
         public async Task InitializeAsync()
@@ -37,7 +35,6 @@ namespace SpanJson.AspNetCore.Formatter.Tests
             await _host.StartAsync();
             Client = _testServer.CreateClient();
         }
-
 
         public async Task DisposeAsync()
         {

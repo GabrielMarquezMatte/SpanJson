@@ -9,293 +9,284 @@ namespace SpanJson.Tests
 {
     public partial class DictionaryTests
     {
-        
         [Fact]
         public void SerializeDeserializeSByteKeysUtf16()
         {
-            var input = new Dictionary<SByte, string>();
-            for(SByte i = 0;i<10;i++)
+            var input = new Dictionary<sbyte, string>();
+            for(sbyte i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(SByte i = 0;i<10;i++)
+            for(sbyte i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<SByte, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<sbyte, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeSByteKeysUtf8()
         {
-            var input = new Dictionary<SByte, string>();
-            for(SByte i = 0;i<10;i++)
+            var input = new Dictionary<sbyte, string>();
+            for(sbyte i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(SByte i = 0;i<10;i++)
+            for(sbyte i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<SByte, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<sbyte, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeInt16KeysUtf16()
         {
-            var input = new Dictionary<Int16, string>();
-            for(Int16 i = 0;i<10;i++)
+            var input = new Dictionary<short, string>();
+            for(short i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(Int16 i = 0;i<10;i++)
+            for(short i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<Int16, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<short, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeInt16KeysUtf8()
         {
-            var input = new Dictionary<Int16, string>();
-            for(Int16 i = 0;i<10;i++)
+            var input = new Dictionary<short, string>();
+            for(short i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(Int16 i = 0;i<10;i++)
+            for(short i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<Int16, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<short, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeInt32KeysUtf16()
         {
-            var input = new Dictionary<Int32, string>();
-            for(Int32 i = 0;i<10;i++)
+            var input = new Dictionary<int, string>();
+            for(int i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(Int32 i = 0;i<10;i++)
+            for(int i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<Int32, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<int, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeInt32KeysUtf8()
         {
-            var input = new Dictionary<Int32, string>();
-            for(Int32 i = 0;i<10;i++)
+            var input = new Dictionary<int, string>();
+            for(int i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(Int32 i = 0;i<10;i++)
+            for(int i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<Int32, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<int, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeInt64KeysUtf16()
         {
-            var input = new Dictionary<Int64, string>();
-            for(Int64 i = 0;i<10;i++)
+            var input = new Dictionary<long, string>();
+            for(long i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(Int64 i = 0;i<10;i++)
+            for(long i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<Int64, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<long, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeInt64KeysUtf8()
         {
-            var input = new Dictionary<Int64, string>();
-            for(Int64 i = 0;i<10;i++)
+            var input = new Dictionary<long, string>();
+            for(long i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(Int64 i = 0;i<10;i++)
+            for(long i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<Int64, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<long, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeByteKeysUtf16()
         {
-            var input = new Dictionary<Byte, string>();
-            for(Byte i = 0;i<10;i++)
+            var input = new Dictionary<byte, string>();
+            for(byte i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(Byte i = 0;i<10;i++)
+            for(byte i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<Byte, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<byte, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeByteKeysUtf8()
         {
-            var input = new Dictionary<Byte, string>();
-            for(Byte i = 0;i<10;i++)
+            var input = new Dictionary<byte, string>();
+            for(byte i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(Byte i = 0;i<10;i++)
+            for(byte i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<Byte, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<byte, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeUInt16KeysUtf16()
         {
-            var input = new Dictionary<UInt16, string>();
-            for(UInt16 i = 0;i<10;i++)
+            var input = new Dictionary<ushort, string>();
+            for(ushort i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(UInt16 i = 0;i<10;i++)
+            for(ushort i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<UInt16, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<ushort, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeUInt16KeysUtf8()
         {
-            var input = new Dictionary<UInt16, string>();
-            for(UInt16 i = 0;i<10;i++)
+            var input = new Dictionary<ushort, string>();
+            for(ushort i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(UInt16 i = 0;i<10;i++)
+            for(ushort i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<UInt16, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<ushort, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeUInt32KeysUtf16()
         {
-            var input = new Dictionary<UInt32, string>();
-            for(UInt32 i = 0;i<10;i++)
+            var input = new Dictionary<uint, string>();
+            for(uint i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(UInt32 i = 0;i<10;i++)
+            for(uint i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<UInt32, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<uint, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeUInt32KeysUtf8()
         {
-            var input = new Dictionary<UInt32, string>();
-            for(UInt32 i = 0;i<10;i++)
+            var input = new Dictionary<uint, string>();
+            for(uint i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(UInt32 i = 0;i<10;i++)
+            for(uint i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<UInt32, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<uint, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
 
-        
         [Fact]
         public void SerializeDeserializeUInt64KeysUtf16()
         {
-            var input = new Dictionary<UInt64, string>();
-            for(UInt64 i = 0;i<10;i++)
+            var input = new Dictionary<ulong, string>();
+            for(ulong i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            for(UInt64 i = 0;i<10;i++)
+            for(ulong i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", serialized, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<UInt64, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<ulong, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-                
+
         [Fact]
         public void SerializeDeserializeUInt64KeysUtf8()
         {
-            var input = new Dictionary<UInt64, string>();
-            for(UInt64 i = 0;i<10;i++)
+            var input = new Dictionary<ulong, string>();
+            for(ulong i = 0;i<10;i++)
             {
                 input.Add(i, "Hello World"+i);
             }
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             var encodedString = Encoding.UTF8.GetString(serialized);
-            for(UInt64 i = 0;i<10;i++)
+            for(ulong i = 0;i<10;i++)
             {
-                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString);
+                Assert.Contains($"\"{i}\":\"Hello World{i}\"", encodedString, StringComparison.Ordinal);
             }
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<UInt64, string>>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Dictionary<ulong, string>>(serialized);
             Assert.Equal(input, deserialized);
         }
-
     }
 }

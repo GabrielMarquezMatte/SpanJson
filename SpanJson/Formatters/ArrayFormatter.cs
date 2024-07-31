@@ -11,7 +11,7 @@ namespace SpanJson.Formatters
     public sealed class ArrayFormatter<T, TSymbol, TResolver> : BaseFormatter, IJsonFormatter<T[], TSymbol>
         where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        public static readonly ArrayFormatter<T, TSymbol, TResolver> Default = new ArrayFormatter<T, TSymbol, TResolver>();
+        public static readonly ArrayFormatter<T, TSymbol, TResolver> Default = new();
 
         private static readonly IJsonFormatter<T, TSymbol> ElementFormatter =
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();
@@ -27,7 +27,7 @@ namespace SpanJson.Formatters
                 temp = ArrayPool<T>.Shared.Rent(4);
                 if (reader.ReadIsNull())
                 {
-                    return null;
+                    return [];
                 }
                 reader.ReadBeginArrayOrThrow();
                 var count = 0;
@@ -41,7 +41,7 @@ namespace SpanJson.Formatters
                     temp[count - 1] = ElementFormatter.Deserialize(ref reader);
                 }
 
-                result = count == 0 ? Array.Empty<T>() : FormatterUtils.CopyArray(temp, count);
+                result = count == 0 ? [] : FormatterUtils.CopyArray(temp, count);
             }
             finally
             {
@@ -71,11 +71,13 @@ namespace SpanJson.Formatters
             if (valueLength > 0)
             {
                 SerializeRuntimeDecisionInternal<T, TSymbol, TResolver>(ref writer, value[0], ElementFormatter);
+#pragma warning disable HLQ013 // Consider using 'foreach' instead of 'for' for iterating over arrays or spans
                 for (var i = 1; i < valueLength; i++)
                 {
                     writer.WriteValueSeparator();
                     SerializeRuntimeDecisionInternal<T, TSymbol, TResolver>(ref writer, value[i], ElementFormatter);
                 }
+#pragma warning restore HLQ013 // Consider using 'foreach' instead of 'for' for iterating over arrays or spans
             }
             if (IsRecursionCandidate)
             {

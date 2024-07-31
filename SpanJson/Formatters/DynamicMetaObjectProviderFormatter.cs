@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.CSharp.RuntimeBinder;
 using SpanJson.Formatters.Dynamic;
@@ -24,14 +25,13 @@ namespace SpanJson.Formatters
         private static readonly Func<T> CreateFunctor = StandardResolvers.GetResolver<TSymbol, TResolver>().GetCreateFunctor<T>();
 
         public static readonly DynamicMetaObjectProviderFormatter<T, TSymbol, TResolver> Default =
-            new DynamicMetaObjectProviderFormatter<T, TSymbol, TResolver>();
+            new();
 
         private static readonly IJsonFormatterResolver<TSymbol, TResolver> Resolver = StandardResolvers.GetResolver<TSymbol, TResolver>();
         private static readonly Dictionary<string, DeserializeDelegate> KnownMembersDictionary = BuildKnownMembers();
-        private static readonly ConcurrentDictionary<string, Func<T, object>> GetMemberCache = new ConcurrentDictionary<string, Func<T, object>>();
+        private static readonly ConcurrentDictionary<string, Func<T, object>> GetMemberCache = new(StringComparer.Ordinal);
 
-
-        private static readonly ConcurrentDictionary<string, Action<T, object>> SetMemberCache = new ConcurrentDictionary<string, Action<T, object>>();
+        private static readonly ConcurrentDictionary<string, Action<T, object>> SetMemberCache = new(StringComparer.Ordinal);
 
         public T Deserialize(ref JsonReader<TSymbol> reader)
         {
@@ -90,7 +90,6 @@ namespace SpanJson.Formatters
                         ArrayPool<char>.Shared.Return(buffer);
                     }
                 }
-
             }
             else if (value is ISpanJsonDynamicValue<char> cValue)
             {
@@ -175,7 +174,7 @@ namespace SpanJson.Formatters
             var readerParameter = Expression.Parameter(typeof(JsonReader<TSymbol>).MakeByRefType(), "reader");
             var result = new Dictionary<string, DeserializeDelegate>(StringComparer.InvariantCulture);
             // can't deserialize abstract or interface
-            foreach (var memberInfo in memberInfos)
+            foreach (ref readonly var memberInfo in CollectionsMarshal.AsSpan(memberInfos))
             {
                 if (!memberInfo.CanWrite)
                 {
@@ -219,13 +218,12 @@ namespace SpanJson.Formatters
             });
         }
 
-
         private static Func<T, object> GetOrAddGetMember(string memberName)
         {
             return GetMemberCache.GetOrAdd(memberName, s =>
             {
                 var binder = (GetMemberBinder) Binder.GetMember(CSharpBinderFlags.None, s, typeof(T),
-                    new[] {CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)});
+                    [CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)]);
                 var callSite = CallSite<Func<CallSite, object, object>>.Create(binder);
                 return target => callSite.Target(callSite, target);
             });
@@ -236,11 +234,10 @@ namespace SpanJson.Formatters
             return SetMemberCache.GetOrAdd(memberName, s =>
             {
                 var binder = Binder.SetMember(CSharpBinderFlags.None, memberName, null,
-                    new[]
-                    {
+                    [
                         CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
                         CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)
-                    });
+                    ]);
                 var callsite = CallSite<Func<CallSite, object, object, object>>.Create(binder);
                 return (target, value) => callsite.Target(callsite, target, value);
             });

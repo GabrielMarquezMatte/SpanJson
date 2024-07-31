@@ -2,91 +2,67 @@
 
 namespace SpanJson.Shared.Models
 {
-    public class User : IGenericEquality<User>
+    public sealed class User : IGenericEquality<User>, IEquatable<User>
     {
         public int? user_id { get; set; }
 
-
         public UserType? user_type { get; set; }
-
 
         public DateTime? creation_date { get; set; }
 
-
         public string display_name { get; set; }
-
 
         public string profile_image { get; set; }
 
-
         public int? reputation { get; set; }
-
 
         public int? reputation_change_day { get; set; }
 
-
         public int? reputation_change_week { get; set; }
-
 
         public int? reputation_change_month { get; set; }
 
-
         public int? reputation_change_quarter { get; set; }
-
 
         public int? reputation_change_year { get; set; }
 
-
         public int? age { get; set; }
-
 
         public DateTime? last_access_date { get; set; }
 
-
         public DateTime? last_modified_date { get; set; }
-
 
         public bool? is_employee { get; set; }
 
-
         public string link { get; set; }
-
 
         public string website_url { get; set; }
 
-
         public string location { get; set; }
-
 
         public int? account_id { get; set; }
 
-
         public DateTime? timed_penalty_date { get; set; }
-
 
         public BadgeCount badge_counts { get; set; }
 
-
         public int? question_count { get; set; }
-
 
         public int? answer_count { get; set; }
 
-
         public int? up_vote_count { get; set; }
-
 
         public int? down_vote_count { get; set; }
 
-
         public string about_me { get; set; }
-
 
         public int? view_count { get; set; }
 
-
         public int? accept_rate { get; set; }
-
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as User);
+        }
         public bool Equals(User obj)
         {
             return
@@ -153,14 +129,11 @@ namespace SpanJson.Shared.Models
                 website_url.TrueEqualsString((string) obj.website_url);
         }
 
-
-        public class BadgeCount : IGenericEquality<BadgeCount>
+        public sealed class BadgeCount : IGenericEquality<BadgeCount>, IEquatable<BadgeCount>
         {
             public int? gold { get; set; }
 
-
             public int? silver { get; set; }
-
 
             public int? bronze { get; set; }
 
@@ -171,7 +144,10 @@ namespace SpanJson.Shared.Models
                     silver.TrueEquals(obj.silver) &&
                     gold.TrueEquals(obj.gold);
             }
-
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as BadgeCount);
+            }
             public bool EqualsDynamic(dynamic obj)
             {
                 return
@@ -179,6 +155,20 @@ namespace SpanJson.Shared.Models
                     silver.TrueEquals((int?) obj.silver) &&
                     gold.TrueEquals((int?) obj.gold);
             }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(bronze, silver, gold);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(HashCode.Combine(about_me, accept_rate, account_id, age, answer_count, badge_counts, creation_date),
+                                    HashCode.Combine(display_name, down_vote_count, is_employee, last_access_date, last_modified_date, link),
+                                    HashCode.Combine(location, profile_image, question_count, reputation, reputation_change_day, reputation_change_month),
+                                    HashCode.Combine(reputation_change_quarter, reputation_change_week, reputation_change_year, timed_penalty_date, up_vote_count, user_id),
+                                    HashCode.Combine(user_type, view_count, website_url));
         }
     }
 }

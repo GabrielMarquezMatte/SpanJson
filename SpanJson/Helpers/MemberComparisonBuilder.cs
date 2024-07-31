@@ -87,7 +87,7 @@ namespace SpanJson.Helpers
                     var ifExpression = Expression.AndAlso(Expression.GreaterThanOrEqual(lengthParameter, Expression.Constant(nextLength)),
                         Expression.Equal(GetReadMethod(nameSpanExpression, group.Key.intType, Expression.Constant(index * symbolSize)),
                             GetConstantExpressionForGroupKey(group.Key.Key, group.Key.intType)));
-                    var subBlock = Build<TSymbol>(group.ToList(), nextLength, lengthParameter, nameSpanExpression,
+                    var subBlock = Build<TSymbol>([.. group], nextLength, lengthParameter, nameSpanExpression,
                         endOfBlockLabel, matchExpressionFunctor);
                     expressions.Add(Expression.IfThen(ifExpression, subBlock));
                 }
@@ -143,17 +143,14 @@ namespace SpanJson.Helpers
             {
                 methodName = nameof(SpanHelper.ReadByte);
             }
-
             else if (intType == typeof(ushort))
             {
                 methodName = nameof(SpanHelper.ReadUInt16);
             }
-
             else if (intType == typeof(uint))
             {
                 methodName = nameof(SpanHelper.ReadUInt32);
             }
-
             else if (intType == typeof(ulong))
             {
                 methodName = nameof(SpanHelper.ReadUInt64);

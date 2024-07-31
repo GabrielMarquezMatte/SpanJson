@@ -8,7 +8,7 @@ namespace SpanJson.Tests
     {
         public static string NonAsciiEscape(string serialized)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             int from = 0;
             int index = 0;
             while (index < serialized.Length)
@@ -29,10 +29,9 @@ namespace SpanJson.Tests
             return sb.ToString();
         }
 
-
         public static string EscapeMore(string serialized)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             int from = 0;
             int index = 0;
             while (index < serialized.Length)

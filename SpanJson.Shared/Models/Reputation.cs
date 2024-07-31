@@ -6,24 +6,17 @@ namespace SpanJson.Shared.Models
     {
         public int? user_id { get; set; }
 
-
         public int? post_id { get; set; }
-
 
         public PostType? post_type { get; set; }
 
-
         public VoteType? vote_type { get; set; }
-
 
         public string title { get; set; }
 
-
         public string link { get; set; }
 
-
         public int? reputation_change { get; set; }
-
 
         public DateTime? on_date { get; set; }
 

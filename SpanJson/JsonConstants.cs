@@ -35,8 +35,8 @@ namespace SpanJson
         public const byte True = (byte) 't';
         public const byte ValueSeparator = (byte) ',';
 
-        public static ReadOnlySpan<byte> NewLine => new[] {(byte) '\r', (byte) '\n'};
-        public static ReadOnlySpan<byte> NullTerminator => new byte[] {0};
+        public static ReadOnlySpan<byte> NewLine => [(byte) '\r', (byte) '\n'];
+        public static ReadOnlySpan<byte> NullTerminator => [0];
     }
 
     public static class JsonUtf16Constant
@@ -55,7 +55,7 @@ namespace SpanJson
         public const char True = 't';
         public const char ValueSeparator = ',';
 
-        public static ReadOnlySpan<char> NewLine => new[] {'\r', '\n'};
-        public static ReadOnlySpan<char> NullTerminator => new[] {'\0'};
+        public static ReadOnlySpan<char> NewLine => ['\r', '\n'];
+        public static ReadOnlySpan<char> NullTerminator => ['\0'];
     }
 }

@@ -19,12 +19,12 @@ namespace SpanJson.Tests
             while (!reader.TryReadUtf16IsEndObjectOrValueSeparator(ref count))
             {
                 var name = reader.ReadUtf16EscapedNameSpan();
-                if (name.ToString() == "Test")
+                if (string.Equals(name.ToString(), "Test", StringComparison.Ordinal))
                 {
                     var value = reader.ReadUtf16String();
                     Assert.Equal(expected, value);
                 }
-                else if (name.ToString() == "Name")
+                else if (string.Equals(name.ToString(), "Name", StringComparison.Ordinal))
                 {
                     reader.SkipNextUtf16Segment();
                 }
@@ -46,12 +46,12 @@ namespace SpanJson.Tests
             while (!reader.TryReadUtf8IsEndObjectOrValueSeparator(ref count))
             {
                 var name = Encoding.UTF8.GetString(reader.ReadUtf8EscapedNameSpan());
-                if (name == "Test")
+                if (string.Equals(name, "Test", StringComparison.Ordinal))
                 {
                     var value = reader.ReadUtf8String();
                     Assert.Equal(expected, value);
                 }
-                else if (name == "Name")
+                else if (string.Equals(name, "Name", StringComparison.Ordinal))
                 {
                     reader.SkipNextUtf8Segment();
                 }
@@ -144,7 +144,6 @@ namespace SpanJson.Tests
             }
         }
 
-
         [Fact]
         public void ReadCharsUtf8()
         {
@@ -172,7 +171,7 @@ namespace SpanJson.Tests
             for (var i = 0x1F601; i < 0x1F64F; i++)
             {
                 yield return new object[]
-                    {i, "\"" + string.Concat(Char.ConvertFromUtf32(i).ToCharArray().Select(a => string.Format(@"\u{0:x4}", (int) a))) + "\""};
+                    {i, "\"" + string.Concat(char.ConvertFromUtf32(i).ToCharArray().Select(a => string.Format(@"\u{0:x4}", (int) a))) + "\""};
             }
         }
 

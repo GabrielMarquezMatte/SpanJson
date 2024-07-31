@@ -7,7 +7,6 @@ namespace SpanJson.Shared.Fixture
         private readonly Random _prng;
         public Type Type { get; } = typeof(ulong);
 
-
         public UlongValueFixture(int? seed = null)
         {
             _prng = seed != null ? new Random(seed.Value) : new Random();

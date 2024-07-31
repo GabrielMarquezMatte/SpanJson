@@ -32,9 +32,9 @@ namespace SpanJson
             WriteUtf8Int64Internal(value);
         }
 
-        public byte[] ToByteArray()
+        public readonly byte[] ToByteArray()
         {
-            return _bytes.Slice(0, _pos).ToArray();
+            return _bytes[.._pos].ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -122,10 +122,9 @@ namespace SpanJson
             {
                 Grow(written);
             }
-
-            for (var i = 0; i < written; i++)
+            foreach(ref readonly var c in span[..written])
             {
-                _bytes[pos++] = (byte)span[i];
+                _bytes[pos++] = (byte)c;
             }
         }
 
@@ -144,10 +143,9 @@ namespace SpanJson
             {
                 Grow(written);
             }
-
-            for (var i = 0; i < written; i++)
+            foreach(ref readonly var c in span[..written])
             {
-                _bytes[pos++] = (byte)span[i];
+                _bytes[pos++] = (byte)c;
             }
         }
 
@@ -161,7 +159,7 @@ namespace SpanJson
                 Grow(bytesWritten);
             }
 
-            span.Slice(0, bytesWritten).CopyTo(_bytes.Slice(pos));
+            span[..bytesWritten].CopyTo(_bytes[pos..]);
             pos += bytesWritten;
         }
 
@@ -202,7 +200,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            DateTimeFormatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -217,7 +215,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            DateTimeFormatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -232,7 +230,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            Utf8Formatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            Utf8Formatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -247,7 +245,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            DateTimeFormatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -262,7 +260,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            DateTimeFormatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -277,7 +275,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            Utf8Formatter.TryFormat(value, _bytes.Slice(pos), out var bytesWritten);
+            Utf8Formatter.TryFormat(value, _bytes[pos..], out var bytesWritten);
             pos += bytesWritten;
             WriteUtf8DoubleQuote();
         }
@@ -308,7 +306,7 @@ namespace SpanJson
                     // instead of checking the buffer size here to get atleast the 7 extra bytes in, we do it after writing the initial buffer (which works due to Grow above)
                     // in the assumption that it's a rare case that the buffer needs to be grown
                     // do the check here as this code path is only taken for chars which need to be escaped
-                    WriteUtf8ReadonlySpan(value.Slice(from, index - from), 0);
+                    WriteUtf8ReadonlySpan(value[from..index], 0);
                     if (pos > _bytes.Length - 7) // The EscapedUtf8Char takes at most 6 bytes + 1 for double quote
                     {
                         Grow(7);
@@ -324,7 +322,7 @@ namespace SpanJson
             // Still chars to encode
             if (from < value.Length)
             {
-                WriteUtf8ReadonlySpan(value.Slice(from), 1); // make sure we have place for doublequote
+                WriteUtf8ReadonlySpan(value[from..], 1); // make sure we have place for doublequote
             }
 
             WriteUtf8DoubleQuote();
@@ -346,7 +344,7 @@ namespace SpanJson
                 if (opStatus == OperationStatus.DestinationTooSmall)
                 {
                     Grow(toWrite.Length - charsRead);
-                    toWrite = toWrite.Slice(charsRead);
+                    toWrite = toWrite[charsRead..];
                 }
             } while (opStatus != OperationStatus.Done);
         }
@@ -471,7 +469,6 @@ namespace SpanJson
             {
                 WriteEscapedUtf8CharInternal(value);
             }
-
             else if (value < 0x80)
             {
                 _bytes[pos++] = (byte)value;
@@ -488,7 +485,6 @@ namespace SpanJson
             WriteUtf8Verbatim(value.AsSpan());
         }
 
-
         public void WriteUtf8Verbatim(in ReadOnlySpan<byte> value)
         {
             ref var pos = ref _pos;
@@ -498,7 +494,7 @@ namespace SpanJson
                 Grow(sLength);
             }
 
-            value.CopyTo(_bytes.Slice(pos));
+            value.CopyTo(_bytes[pos..]);
             pos += value.Length;
         }
 
@@ -521,12 +517,11 @@ namespace SpanJson
             _bytes[pos++] = JsonUtf8Constant.NameSeparator;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void WriteUtf8SingleEscapedChar(char toEscape)
         {
             ref var pos = ref _pos;
-            var span = _bytes.Slice(pos);
+            var span = _bytes[pos..];
             span[1] = (byte)toEscape;
             span[0] = JsonUtf8Constant.ReverseSolidus;
             pos += 2;
@@ -536,7 +531,7 @@ namespace SpanJson
         private void WriteUtf8DoubleEscapedChar(char firstToEscape, char secondToEscape)
         {
             ref var pos = ref _pos;
-            var span = _bytes.Slice(pos);
+            var span = _bytes[pos..];
             span[5] = (byte)secondToEscape;
             span[4] = (byte)firstToEscape;
             span[3] = (byte)'0';
@@ -624,7 +619,6 @@ namespace SpanJson
             _bytes[_pos++] = JsonUtf8Constant.NameSeparator;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteUtf8Version(Version value)
         {
@@ -637,10 +631,9 @@ namespace SpanJson
             WriteUtf8DoubleQuote();
             Span<char> tempSpan = stackalloc char[JsonSharedConstant.MaxVersionLength];
             value.TryFormat(tempSpan, out var written);
-            pos += Encoding.UTF8.GetBytes(tempSpan.Slice(0, written), _bytes.Slice(pos));
+            pos += Encoding.UTF8.GetBytes(tempSpan[..written], _bytes[pos..]);
             WriteUtf8DoubleQuote();
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteUtf8Uri(Uri value)
@@ -658,7 +651,7 @@ namespace SpanJson
             }
 
             WriteUtf8DoubleQuote();
-            if (Base64.EncodeToUtf8(value, _bytes.Slice(pos), out _, out var written) != OperationStatus.Done)
+            if (Base64.EncodeToUtf8(value, _bytes[pos..], out _, out var written) != OperationStatus.Done)
             {
                 ThrowArgumentException("Can't encode Base64 array.", nameof(value));
             }

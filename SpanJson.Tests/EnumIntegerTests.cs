@@ -35,7 +35,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeUtf16(TestEnum value)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestEnum, ExcludeNullCamelCaseIntegerEnumResolver<char>>(value);
-            Assert.Contains(((int) value).ToString(CultureInfo.InvariantCulture), serialized);
+            Assert.Contains(((int) value).ToString(CultureInfo.InvariantCulture), serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestEnum, ExcludeNullCamelCaseIntegerEnumResolver<char>>(serialized);
             Assert.Equal(value, deserialized);
         }
@@ -47,7 +47,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeUtf8(TestEnum value)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize<TestEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(value);
-            Assert.Contains(((int) value).ToString(CultureInfo.InvariantCulture), Encoding.UTF8.GetString(serialized));
+            Assert.Contains(((int) value).ToString(CultureInfo.InvariantCulture), Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(serialized);
             Assert.Equal(value, deserialized);
         }
@@ -59,7 +59,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeLongUtf16(TestLongEnum value)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestLongEnum, ExcludeNullCamelCaseIntegerEnumResolver<char>>(value);
-            Assert.Contains(((long) value).ToString(CultureInfo.InvariantCulture), serialized);
+            Assert.Contains(((long) value).ToString(CultureInfo.InvariantCulture), serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestLongEnum, ExcludeNullCamelCaseIntegerEnumResolver<char>>(serialized);
             Assert.Equal(value, deserialized);
         }
@@ -71,12 +71,10 @@ namespace SpanJson.Tests
         public void SerializeDeserializeLongUtf8(TestLongEnum value)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize<TestLongEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(value);
-            Assert.Contains(((long) value).ToString(CultureInfo.InvariantCulture), Encoding.UTF8.GetString(serialized));
+            Assert.Contains(((long) value).ToString(CultureInfo.InvariantCulture), Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestLongEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(serialized);
             Assert.Equal(value, deserialized);
         }
-
-
 
         [Theory]
         [InlineData(DuplicateEnum.First)]
@@ -108,7 +106,6 @@ namespace SpanJson.Tests
             Third = 4
         }
 
-
         [Flags]
         public enum DuplicateFlagsEnum
         {
@@ -116,7 +113,6 @@ namespace SpanJson.Tests
             Second = 2,
             Third = 2
         }
-
 
         [Theory]
         [InlineData(DuplicateFlagsEnum.First)]
@@ -129,7 +125,6 @@ namespace SpanJson.Tests
             Assert.Equal(value, deserialized);
         }
 
-
         [Theory]
         [InlineData(DuplicateFlagsEnum.First)]
         [InlineData(DuplicateFlagsEnum.First | DuplicateFlagsEnum.Second)]
@@ -140,7 +135,6 @@ namespace SpanJson.Tests
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<DuplicateFlagsEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(serialized);
             Assert.Equal(value, deserialized);
         }
-
 
         [Theory]
         [InlineData(FlagsEnum.First)]
@@ -154,7 +148,6 @@ namespace SpanJson.Tests
             Assert.Equal(value, deserialized);
         }
 
-
         [Theory]
         [InlineData(FlagsEnum.First)]
         [InlineData(FlagsEnum.First | FlagsEnum.Second)]
@@ -165,7 +158,6 @@ namespace SpanJson.Tests
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<FlagsEnum, ExcludeNullCamelCaseIntegerEnumResolver<byte>>(serialized);
             Assert.Equal(value, deserialized);
-
         }
 
         [Fact]

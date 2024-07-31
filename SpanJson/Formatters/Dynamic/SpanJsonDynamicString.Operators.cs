@@ -5,19 +5,19 @@ namespace SpanJson.Formatters.Dynamic
 {
     public partial class SpanJsonDynamicString<TSymbol> : SpanJsonDynamic<TSymbol> where TSymbol : struct
     {
-        public static explicit operator Char(SpanJsonDynamicString<TSymbol> input)
+        public static explicit operator char(SpanJsonDynamicString<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Char), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(char), input.Symbols, out var value))
             {
-                return (Char) value;
+                return (char) value;
             }
             throw new InvalidCastException();
         }
-        public static explicit operator Char?(SpanJsonDynamicString<TSymbol> input)
+        public static explicit operator char?(SpanJsonDynamicString<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(Char?), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(char?), input.Symbols, out var value))
             {
-                return (Char?) value;
+                return (char?) value;
             }
             throw new InvalidCastException();
         }
@@ -117,11 +117,11 @@ namespace SpanJson.Formatters.Dynamic
             }
             throw new InvalidCastException();
         }
-        public static explicit operator String(SpanJsonDynamicString<TSymbol> input)
+        public static explicit operator string(SpanJsonDynamicString<TSymbol> input)
         {
-            if (DynamicConverter.TryConvertTo(typeof(String), input.Symbols, out var value))
+            if (DynamicConverter.TryConvertTo(typeof(string), input.Symbols, out var value))
             {
-                return (String) value;
+                return (string) value;
             }
             throw new InvalidCastException();
         }

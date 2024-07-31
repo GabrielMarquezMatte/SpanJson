@@ -7,7 +7,7 @@ namespace SpanJson.Shared
 {
     public class GenericEqualityComparer<T> : IEqualityComparer<T> where T : class, IGenericEquality<T>
     {
-        public static readonly GenericEqualityComparer<T> Default = new GenericEqualityComparer<T>();
+        public static readonly GenericEqualityComparer<T> Default = new();
 
         public bool Equals(T x, T y)
         {
@@ -29,7 +29,7 @@ namespace SpanJson.Shared
                 return true;
             }
 
-            return a.SequenceEqual(b);
+            return a.SequenceEqual(b, StringComparer.Ordinal);
         }
 
         public static bool TrueEqualsString(this string a, string b)
@@ -39,9 +39,8 @@ namespace SpanJson.Shared
                 return true;
             }
 
-            return a == b;
+            return string.Equals(a, b, StringComparison.Ordinal);
         }
-
 
         public static bool TrueEquals<T>(this T? a, T? b)
             where T : struct
@@ -104,54 +103,49 @@ namespace SpanJson.Shared
                 return true;
             }
 
-            using (var e1 = a.GetEnumerator())
+            using var e1 = a.GetEnumerator();
+            using var e2 = b.GetEnumerator();
+            while (true)
             {
-                using (var e2 = b.GetEnumerator())
+                var e1Next = e1.MoveNext();
+                var e2Next = e2.MoveNext();
+                if (e1Next != e2Next)
                 {
-                    while (true)
-                    {
-                        var e1Next = e1.MoveNext();
-                        var e2Next = e2.MoveNext();
-                        if (e1Next != e2Next)
-                        {
-                            return false;
-                        }
+                    return false;
+                }
 
-                        if (!e1Next && !e2Next)
-                        {
-                            break;
-                        }
+                if (!e1Next && !e2Next)
+                {
+                    break;
+                }
 
-                        var c1 = e1.Current;
-                        var c2 = e2.Current;
+                var c1 = e1.Current;
+                var c2 = e2.Current;
 
-                        if (c1 is null && !(c2 is null))
-                        {
-                            return false;
-                        }
+                if (c1 is null && c2 is not null)
+                {
+                    return false;
+                }
 
-                        if (c2 is null && !(c1 is null))
-                        {
-                            return false;
-                        }
+                if (c2 is null && c1 is not null)
+                {
+                    return false;
+                }
 
-                        if (!c1.EqualsDynamic(c2))
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
+                if (!c1.EqualsDynamic(c2))
+                {
+                    return false;
                 }
             }
+
+            return true;
         }
 
         public static bool IsTypedList(this Type type)
         {
             return
                 type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>) ||
-                type.GetTypeInfo().GetInterfaces().Any(i =>
-                    i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>));
+                Array.Exists(type.GetTypeInfo().GetInterfaces(), i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>));
         }
     }
 }

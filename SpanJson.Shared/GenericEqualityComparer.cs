@@ -8,9 +8,9 @@ namespace SpanJson.Shared
     public sealed class GenericEqualityComparer : IEqualityComparer<object>
     {
         private static readonly ConcurrentDictionary<Type, TypedEqualityComparerDelegate> Comparers =
-            new ConcurrentDictionary<Type, TypedEqualityComparerDelegate>();
+            new();
 
-        public static readonly GenericEqualityComparer Default = new GenericEqualityComparer();
+        public static readonly GenericEqualityComparer Default = new();
 
         public new bool Equals(object x, object y)
         {
@@ -47,7 +47,7 @@ namespace SpanJson.Shared
             return 0;
         }
 
-        private TypedEqualityComparerDelegate BuildTypedComparer(Type type)
+        private static TypedEqualityComparerDelegate BuildTypedComparer(Type type)
         {
             var xParameter = Expression.Parameter(typeof(object), "x");
             var yParameter = Expression.Parameter(typeof(object), "y");
@@ -65,9 +65,9 @@ namespace SpanJson.Shared
     public sealed class DynamicEqualityComparer : IEqualityComparer<object>
     {
         private static readonly ConcurrentDictionary<Type, DynamicEqualityComparerDelegate> Comparers =
-            new ConcurrentDictionary<Type, DynamicEqualityComparerDelegate>();
+            new();
 
-        public static readonly DynamicEqualityComparer Default = new DynamicEqualityComparer();
+        public static readonly DynamicEqualityComparer Default = new();
 
         public new bool Equals(object x, object y)
         {
@@ -99,7 +99,7 @@ namespace SpanJson.Shared
             return 0;
         }
 
-        private DynamicEqualityComparerDelegate BuildTypedComparer(Type type)
+        private static DynamicEqualityComparerDelegate BuildTypedComparer(Type type)
         {
             var xParameter = Expression.Parameter(typeof(object), "x");
             var yParameter = Expression.Parameter(typeof(object), "y");

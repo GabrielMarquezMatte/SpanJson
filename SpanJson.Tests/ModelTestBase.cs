@@ -10,12 +10,10 @@ namespace SpanJson.Tests
         {
             var models = typeof(AccessToken).Assembly
                 .GetTypes()
-                .Where(t => t.Namespace == typeof(AccessToken).Namespace && !t.IsEnum && !t.IsInterface &&
+                .Where(t => string.Equals(t.Namespace, typeof(AccessToken).Namespace, System.StringComparison.Ordinal) && !t.IsEnum && !t.IsInterface &&
                             !t.IsAbstract)
                 .ToList();
             return models.Where(a => a != null).Select(a => new object[] {a});
         }
-
-
     }
 }

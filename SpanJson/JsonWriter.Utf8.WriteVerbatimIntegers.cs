@@ -33,7 +33,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), a);
             pos += 4;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,7 +67,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -97,7 +97,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), a);
             pos += 8;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -131,7 +131,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +165,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
             pos += 4;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -203,7 +203,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -237,7 +237,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), b);
             pos += 8;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -275,7 +275,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -313,7 +313,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
             pos += 4;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -355,7 +355,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), e);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -393,7 +393,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), c);
             pos += 8;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -435,7 +435,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), e);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -477,7 +477,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
             pos += 4;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), e);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -523,7 +523,7 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), e);
             pos += 2;
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), f);
-            pos += 1;
+            pos++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -545,6 +545,5 @@ namespace SpanJson
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref bStart, pos), d);
             pos += 8;
         }
-
     }
 }

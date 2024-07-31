@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SpanJson.Resolvers
@@ -26,7 +27,7 @@ namespace SpanJson.Resolvers
                     }
 
                     var xIsCtorMapping = ConstructorMapping.TryGetValue(x.MemberName, out var xElement);
-                    var yIsCtorMapping = ConstructorMapping.TryGetValue(y.MemberName, out var yElement); 
+                    var yIsCtorMapping = ConstructorMapping.TryGetValue(y.MemberName, out var yElement);
                     if (!xIsCtorMapping && !yIsCtorMapping) // both are not in, it doesn't matter
                     {
                         return StringComparer.Ordinal.Compare(x.MemberName, y.MemberName);
@@ -64,9 +65,9 @@ namespace SpanJson.Resolvers
 
         public IEnumerator<JsonMemberInfo> GetEnumerator()
         {
-            for (var i = 0; i < Members.Length; i++)
+            foreach (var member in Members)
             {
-                yield return Members[i];
+                yield return member;
             }
         }
 
@@ -81,9 +82,9 @@ namespace SpanJson.Resolvers
             var constructorValueIndexDictionary = new Dictionary<string, (Type Type, int Index)>(StringComparer.OrdinalIgnoreCase);
             var constructorParameters = Constructor.GetParameters();
             var index = 0;
-            foreach (var constructorParameter in constructorParameters)
+            foreach (var name in constructorParameters.Select(x => x.Name))
             {
-                if (memberInfoDictionary.TryGetValue(constructorParameter.Name, out var memberInfo) ||
+                if (memberInfoDictionary.TryGetValue(name, out var memberInfo) ||
                     Attribute.ParameterNames != null && index < Attribute.ParameterNames.Length &&
                     memberInfoDictionary.TryGetValue(Attribute.ParameterNames[index], out memberInfo))
                 {
@@ -92,7 +93,7 @@ namespace SpanJson.Resolvers
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Can't map constructor parameter {constructorParameter.Name} to any member.");
+                    throw new InvalidOperationException($"Can't map constructor parameter {name} to any member.");
                 }
             }
 

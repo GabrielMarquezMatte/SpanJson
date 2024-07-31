@@ -10,6 +10,5 @@ namespace SpanJson
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class JsonExtensionDataAttribute : Attribute
     {
-
     }
 }

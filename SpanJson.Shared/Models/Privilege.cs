@@ -4,9 +4,7 @@
     {
         public string short_description { get; set; }
 
-
         public string description { get; set; }
-
 
         public int? reputation { get; set; }
 

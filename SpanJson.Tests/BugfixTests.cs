@@ -4,7 +4,6 @@ namespace SpanJson.Tests
 {
 	public class BugfixTests
 	{
-
 		/// <summary>
 		/// This crashed with ArgumentOutOfRange exception in a previous release
 		/// </summary>

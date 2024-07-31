@@ -6,9 +6,8 @@ namespace SpanJson
 {
     public ref partial struct JsonWriter<TSymbol> where TSymbol : struct
     {
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteSByte(SByte value)
+        public void WriteSByte(sbyte value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -25,7 +24,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteInt16(Int16 value)
+        public void WriteInt16(short value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -42,7 +41,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteInt32(Int32 value)
+        public void WriteInt32(int value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -59,7 +58,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteInt64(Int64 value)
+        public void WriteInt64(long value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -76,7 +75,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteByte(Byte value)
+        public void WriteByte(byte value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -93,7 +92,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteUInt16(UInt16 value)
+        public void WriteUInt16(ushort value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -110,7 +109,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteUInt32(UInt32 value)
+        public void WriteUInt32(uint value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -127,7 +126,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteUInt64(UInt64 value)
+        public void WriteUInt64(ulong value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -144,7 +143,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteSingle(Single value)
+        public void WriteSingle(float value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -161,7 +160,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteDouble(Double value)
+        public void WriteDouble(double value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -178,7 +177,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteDecimal(Decimal value)
+        public void WriteDecimal(decimal value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -195,7 +194,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteBoolean(Boolean value)
+        public void WriteBoolean(bool value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -212,7 +211,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteChar(Char value)
+        public void WriteChar(char value)
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -331,7 +330,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteString(String value)
+        public void WriteString(string value)
         {
             if (typeof(TSymbol) == typeof(char))
             {

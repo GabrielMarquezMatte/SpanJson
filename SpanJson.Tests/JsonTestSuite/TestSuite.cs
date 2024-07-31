@@ -15,7 +15,7 @@ namespace SpanJson.Tests.JsonTestSuite
     ///     See THIRD_PARTY_NOTICES for license
     ///     The json files are zipped, VS/Resharper wants to analyze the json content too much and half of them are invalid
     /// </summary>
-    public class JsonTestSuite
+    public class TestSuite(ITestOutputHelper outputHelper)
     {
         public enum Result
         {
@@ -37,7 +37,7 @@ namespace SpanJson.Tests.JsonTestSuite
         /// Mostly trailing invalid/unused values, invalid numbers and rare unescape cases (for performance reasons)
         /// </summary>
         private static readonly string[] IgnoredErrors =
-        {
+        [
             "n_array_comma_after_close.json",
             "n_array_extra_close.json",
             "n_array_just_minus.json",
@@ -72,14 +72,7 @@ namespace SpanJson.Tests.JsonTestSuite
             "n_structure_object_followed_by_closing_object.json",
             "n_structure_object_with_trailing_garbage.json",
             "n_structure_trailing_#.json"
-        };
-
-        private readonly ITestOutputHelper _outputHelper;
-
-        public JsonTestSuite(ITestOutputHelper outputHelper)
-        {
-            _outputHelper = outputHelper;
-        }
+        ];
 
         [Theory]
         [MemberData(nameof(GetTestCases))]
@@ -89,26 +82,26 @@ namespace SpanJson.Tests.JsonTestSuite
             {
                 case Result.Accepted:
                 {
-                    Deserialize(input, type, symbolType);
-                    _outputHelper.WriteLine($"{name} was accepted.");
+                        Deserialize(input, type, symbolType);
+                    outputHelper.WriteLine($"{name} was accepted.");
                     break;
                 }
                 case Result.Rejected:
                 {
                     Assert.ThrowsAny<Exception>(() => Deserialize(input, type, symbolType));
-                    _outputHelper.WriteLine($"{name} was rejected.");
+                    outputHelper.WriteLine($"{name} was rejected.");
                     break;
                 }
                 case Result.Both:
                 {
                     try
                     {
-                        Deserialize(input, type, symbolType);
-                        _outputHelper.WriteLine($"{name} was accepted.");
+                            Deserialize(input, type, symbolType);
+                        outputHelper.WriteLine($"{name} was accepted.");
                     }
                     catch
                     {
-                        _outputHelper.WriteLine($"{name} was rejected.");
+                        outputHelper.WriteLine($"{name} was rejected.");
                     }
 
                     break;
@@ -116,42 +109,40 @@ namespace SpanJson.Tests.JsonTestSuite
             }
         }
 
-        public static IEnumerable<object[]> GetTestCases()
+        public static IReadOnlyList<object[]> GetTestCases()
         {
             var result = new List<object[]>();
-            using (var zip = new ZipArchive(typeof(JsonTestSuite).Assembly.GetManifestResourceStream(typeof(JsonTestSuite), "test_parsing.zip"),
-                ZipArchiveMode.Read))
+            using var resource = typeof(TestSuite).Assembly.GetManifestResourceStream(typeof(TestSuite), "test_parsing.zip");
+            using (var zip = new ZipArchive(resource, ZipArchiveMode.Read))
             {
                 foreach (var zipArchiveEntry in zip.Entries)
                 {
-                    using (var reader = new StreamReader(zipArchiveEntry.Open()))
+                    using var reader = new StreamReader(zipArchiveEntry.Open());
+                    var name = zipArchiveEntry.Name;
+                    var text = reader.ReadToEnd();
+                    var type = GetTestType(name);
+                    foreach (var symbolType in Enum.GetValues(typeof(SymbolType)))
                     {
-                        var name = zipArchiveEntry.Name;
-                        var text = reader.ReadToEnd();
-                        var type = GetTestType(name);
-                        foreach (var symbolType in Enum.GetValues(typeof(SymbolType)))
+                        if (name.StartsWith("y_", StringComparison.Ordinal))
                         {
-                            if (name.StartsWith("y_"))
-                            {
-                                result.Add(new object[] {name, text, Result.Accepted, type, symbolType});
-                            }
+                            result.Add([name, text, Result.Accepted, type, symbolType]);
+                        }
 
-                            if (name.StartsWith("n_"))
+                        if (name.StartsWith("n_", StringComparison.Ordinal))
+                        {
+                            // We have a specific list of errors we currently do not parse as errors
+                            if (IgnoredErrors.Contains(name, StringComparer.Ordinal))
                             {
-                                // We have a specific list of errors we currently do not parse as errors
-                                if (IgnoredErrors.Contains(name))
-                                {
-                                    result.Add(new object[] {name, text, Result.Accepted, type, symbolType});
-                                }
-                                else
-                                {
-                                    result.Add(new object[] {name, text, Result.Rejected, type, symbolType});
-                                }
+                                result.Add([name, text, Result.Accepted, type, symbolType]);
                             }
-                            else if (name.StartsWith("i_"))
+                            else
                             {
-                                result.Add(new object[] {name, text, Result.Both, type, symbolType});
+                                result.Add([name, text, Result.Rejected, type, symbolType]);
                             }
+                        }
+                        else if (name.StartsWith("i_", StringComparison.Ordinal))
+                        {
+                            result.Add([name, text, Result.Both, type, symbolType]);
                         }
                     }
                 }
@@ -160,7 +151,7 @@ namespace SpanJson.Tests.JsonTestSuite
             return result;
         }
 
-        private object Deserialize(string input, TestType type, SymbolType symbolType)
+        private static object Deserialize(string input, TestType type, SymbolType symbolType)
         {
             var array = input[0] == JsonUtf16Constant.BeginArray;
             switch (type)
@@ -198,41 +189,38 @@ namespace SpanJson.Tests.JsonTestSuite
                     return DeserializeBySymbolType<object>(input, symbolType);
                 }
                 default:
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
             }
         }
 
         private static T DeserializeBySymbolType<T>(string input, SymbolType symbolType)
         {
-            switch (symbolType)
+            return symbolType switch
             {
-                case SymbolType.Utf8:
-                    return JsonSerializer.Generic.Utf8.Deserialize<T>(Encoding.UTF8.GetBytes(input));
-                case SymbolType.Utf16:
-                    return JsonSerializer.Generic.Utf16.Deserialize<T>(input);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(symbolType), symbolType, null);
-            }
+                SymbolType.Utf8 => JsonSerializer.Generic.Utf8.Deserialize<T>(Encoding.UTF8.GetBytes(input)),
+                SymbolType.Utf16 => JsonSerializer.Generic.Utf16.Deserialize<T>(input),
+                _ => throw new ArgumentOutOfRangeException(nameof(symbolType), symbolType, null),
+            };
         }
 
         private static TestType GetTestType(string name)
         {
-            if (name.Contains("object"))
+            if (name.Contains("object", StringComparison.Ordinal))
             {
                 return TestType.Object;
             }
 
-            if (name.Contains("string_"))
+            if (name.Contains("string_", StringComparison.Ordinal))
             {
                 return TestType.String;
             }
 
-            if (name.Contains("number_"))
+            if (name.Contains("number_", StringComparison.Ordinal))
             {
                 return TestType.Number;
             }
 
-            if (name.Contains("array_"))
+            if (name.Contains("array_", StringComparison.Ordinal))
             {
                 return TestType.Array;
             }

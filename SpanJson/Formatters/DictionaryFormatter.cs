@@ -26,7 +26,7 @@ namespace SpanJson.Formatters
         private static readonly AssignKvpDelegate AssignKvpFunctor = BuildAssignKvpFunctor();
 
         public static readonly DictionaryFormatter<TDictionary, TWritableDictionary, TKey, TValue, TSymbol, TResolver> Default =
-            new DictionaryFormatter<TDictionary, TWritableDictionary, TKey, TValue, TSymbol, TResolver>();
+            new();
 
         private static readonly IJsonFormatter<TKey, TSymbol> KeyFormatter = GetKeyFormatter();
 
@@ -36,7 +36,6 @@ namespace SpanJson.Formatters
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetEnumerableConvertFunctor<TWritableDictionary, TDictionary>();
 
         private static readonly bool IsRecursionCandidate = RecursionCandidate<TValue>.IsRecursionCandidate;
-
 
         private static IJsonFormatter<TKey, TSymbol> GetKeyFormatter()
         {
@@ -49,11 +48,10 @@ namespace SpanJson.Formatters
             return StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<TKey>();
         }
 
-
         private static Func<TDictionary, int> BuildCountFunctor()
         {
             var paramExpression = Expression.Parameter(typeof(TDictionary), "input");
-            var propertyInfo = paramExpression.Type.GetPublicProperties().First(x => x.Name == nameof(ICollection.Count));
+            var propertyInfo = paramExpression.Type.GetPublicProperties().First(x => string.Equals(x.Name, nameof(ICollection.Count), StringComparison.Ordinal));
             var propertyExpression = Expression.Property(paramExpression, propertyInfo);
             return Expression.Lambda<Func<TDictionary, int>>(propertyExpression, paramExpression).Compile();
         }
@@ -64,7 +62,7 @@ namespace SpanJson.Formatters
             var keyParameterExpression = Expression.Parameter(typeof(TKey), "key");
             var valueParameterExpression = Expression.Parameter(typeof(TValue), "value");
 
-            var indexerProperty = dictionaryParameterExpression.Type.GetProperty("Item", valueParameterExpression.Type, new[] {keyParameterExpression.Type});
+            var indexerProperty = dictionaryParameterExpression.Type.GetProperty("Item", valueParameterExpression.Type, [keyParameterExpression.Type]);
 
             var lambda = Expression.Lambda<AssignKvpDelegate>(
                 Expression.Assign(Expression.Property(dictionaryParameterExpression, indexerProperty, keyParameterExpression), valueParameterExpression),

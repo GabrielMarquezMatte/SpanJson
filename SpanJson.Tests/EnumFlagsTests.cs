@@ -7,17 +7,15 @@ namespace SpanJson.Tests
 {
     public class EnumFlagsTests
     {
-
         [Flags]
-        public enum SByteEnum : SByte
+        public enum SByteEnum : sbyte
         {
-            MinValue = SByte.MinValue,
+            MinValue = sbyte.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = SByte.MaxValue
+            MaxValue = sbyte.MaxValue
         }
-
 
         [Theory]
         [InlineData(SByteEnum.MinValue)]
@@ -76,15 +74,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum Int16Enum : Int16
+        public enum Int16Enum : short
         {
-            MinValue = Int16.MinValue,
+            MinValue = short.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = Int16.MaxValue
+            MaxValue = short.MaxValue
         }
-
 
         [Theory]
         [InlineData(Int16Enum.MinValue)]
@@ -143,15 +140,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum Int32Enum : Int32
+        public enum Int32Enum : int
         {
-            MinValue = Int32.MinValue,
+            MinValue = int.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = Int32.MaxValue
+            MaxValue = int.MaxValue
         }
-
 
         [Theory]
         [InlineData(Int32Enum.MinValue)]
@@ -210,15 +206,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum Int64Enum : Int64
+        public enum Int64Enum : long
         {
-            MinValue = Int64.MinValue,
+            MinValue = long.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = Int64.MaxValue
+            MaxValue = long.MaxValue
         }
-
 
         [Theory]
         [InlineData(Int64Enum.MinValue)]
@@ -277,15 +272,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum ByteEnum : Byte
+        public enum ByteEnum : byte
         {
-            MinValue = Byte.MinValue,
+            MinValue = byte.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = Byte.MaxValue
+            MaxValue = byte.MaxValue
         }
-
 
         [Theory]
         [InlineData(ByteEnum.MinValue)]
@@ -340,15 +334,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum UInt16Enum : UInt16
+        public enum UInt16Enum : ushort
         {
-            MinValue = UInt16.MinValue,
+            MinValue = ushort.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = UInt16.MaxValue
+            MaxValue = ushort.MaxValue
         }
-
 
         [Theory]
         [InlineData(UInt16Enum.MinValue)]
@@ -403,15 +396,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum UInt32Enum : UInt32
+        public enum UInt32Enum : uint
         {
-            MinValue = UInt32.MinValue,
+            MinValue = uint.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = UInt32.MaxValue
+            MaxValue = uint.MaxValue
         }
-
 
         [Theory]
         [InlineData(UInt32Enum.MinValue)]
@@ -466,15 +458,14 @@ namespace SpanJson.Tests
         }
 
         [Flags]
-        public enum UInt64Enum : UInt64
+        public enum UInt64Enum : ulong
         {
-            MinValue = UInt64.MinValue,
+            MinValue = ulong.MinValue,
             Two = 2,
             Four = 4,
             Eight = 8,
-            MaxValue = UInt64.MaxValue
+            MaxValue = ulong.MaxValue
         }
-
 
         [Theory]
         [InlineData(UInt64Enum.MinValue)]

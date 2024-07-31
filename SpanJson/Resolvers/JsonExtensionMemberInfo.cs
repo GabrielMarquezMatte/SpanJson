@@ -2,19 +2,11 @@
 
 namespace SpanJson.Resolvers
 {
-    public class JsonExtensionMemberInfo
+    public class JsonExtensionMemberInfo(string memberName, Type memberType, NamingConventions namingConvention, bool excludeNulls)
     {
-        public JsonExtensionMemberInfo(string memberName, Type memberType, NamingConventions namingConvention, bool excludeNulls)
-        {
-            MemberName = memberName;
-            MemberType = memberType;
-            NamingConvention = namingConvention;
-            ExcludeNulls = excludeNulls;
-        }
-
-        public string MemberName { get; }
-        public Type MemberType { get; }
-        public NamingConventions NamingConvention { get; }
-        public bool ExcludeNulls { get; }
+        public string MemberName { get; } = memberName;
+        public Type MemberType { get; } = memberType;
+        public NamingConventions NamingConvention { get; } = namingConvention;
+        public bool ExcludeNulls { get; } = excludeNulls;
     }
 }

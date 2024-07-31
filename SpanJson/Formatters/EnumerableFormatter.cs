@@ -15,7 +15,7 @@ namespace SpanJson.Formatters
         private static readonly Func<T[], TEnumerable> Converter =
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetEnumerableConvertFunctor<T[], TEnumerable>();
 
-        public static readonly EnumerableFormatter<TEnumerable, T, TSymbol, TResolver> Default = new EnumerableFormatter<TEnumerable, T, TSymbol, TResolver>();
+        public static readonly EnumerableFormatter<TEnumerable, T, TSymbol, TResolver> Default = new();
 
         private static readonly IJsonFormatter<T, TSymbol> ElementFormatter =
             StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();

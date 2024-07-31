@@ -8,7 +8,7 @@ namespace SpanJson.Tests
 {
     public class Base64ArrayFormatterTests
     {
-        private readonly Random _random = new Random(666);
+        private readonly Random _random = new(666);
 
         [Theory]
         [InlineData(0)]
@@ -36,7 +36,7 @@ namespace SpanJson.Tests
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestDTO, ExcludeNullCamelCaseBase64ArrayResolver<char>>(test);
             if (length % 3 != 0)
             {
-                Assert.Contains("=", serialized);
+                Assert.Contains("=", serialized, StringComparison.Ordinal);
             }
 
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestDTO, ExcludeNullCamelCaseBase64ArrayResolver<char>>(serialized);
@@ -133,7 +133,6 @@ namespace SpanJson.Tests
             Assert.Equal(expected.Bytes, result.Bytes);
         }
 
-
         public class SimpleData
         {
             public int Id { get; set; }
@@ -152,7 +151,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return Name == other.Name && Value.AsSpan().SequenceEqual(other.Value) && ValueString == other.ValueString;
+                return string.Equals(Name, other.Name, StringComparison.Ordinal) && Value.AsSpan().SequenceEqual(other.Value) && string.Equals(ValueString, other.ValueString, StringComparison.Ordinal);
             }
 
             public override bool Equals(object obj)

@@ -22,7 +22,7 @@ namespace SpanJson
             private static class Inner<TSymbol, TResolver> where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
             {
                 private static readonly ConcurrentDictionary<Type, Invoker> Invokers =
-                    new ConcurrentDictionary<Type, Invoker>();
+                    new();
 
                 public static string InnerSerializeToString(object input)
                 {
@@ -32,7 +32,7 @@ namespace SpanJson
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToStringSerializer(input);
                 }
@@ -41,11 +41,11 @@ namespace SpanJson
                 {
                     if (input == null)
                     {
-                        return null;
+                        return [];
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToCharArrayPoolSerializer(input);
                 }
@@ -54,11 +54,11 @@ namespace SpanJson
                 {
                     if (input == null)
                     {
-                        return null;
+                        return [];
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToByteArraySerializer(input);
                 }
@@ -67,24 +67,24 @@ namespace SpanJson
                 {
                     if (input == null)
                     {
-                        return null;
+                        return [];
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToByteArrayPoolSerializer(input);
                 }
 
                 public static object InnerDeserialize(in ReadOnlySpan<TSymbol> input, Type type)
                 {
-                    if (input == null)
+                    if (input == default)
                     {
                         return null;
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(type, x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(type, BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.Deserializer(input);
                 }
@@ -97,7 +97,7 @@ namespace SpanJson
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToTextWriterSerializerAsync(input, writer, cancellationToken);
                 }
@@ -110,7 +110,7 @@ namespace SpanJson
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(type, x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(type, BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.FromTextReaderDeserializerAsync(reader, cancellationToken);
                 }
@@ -123,7 +123,7 @@ namespace SpanJson
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(input.GetType(), x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(input.GetType(), BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.ToStreamSerializerAsync(input, stream, cancellationToken);
                 }
@@ -136,7 +136,7 @@ namespace SpanJson
                     }
 
                     // ReSharper disable ConvertClosureToMethodGroup
-                    var invoker = Invokers.GetOrAdd(type, x => BuildInvoker(x));
+                    var invoker = Invokers.GetOrAdd(type, BuildInvoker);
                     // ReSharper restore ConvertClosureToMethodGroup
                     return invoker.FromStreamDeserializerAsync(stream, cancellationToken);
                 }
@@ -169,7 +169,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToByteArrayDelegate>(
                             Expression.Call(typeof(Generic.Utf8), nameof(Generic.Utf8.Serialize),
-                                new[] {type, typeof(TResolver)}, typedInputParam),
+                                [type, typeof(TResolver)], typedInputParam),
                             inputParam);
                     return lambdaExpression.Compile();
                 }
@@ -181,7 +181,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToStringDelegate>(
                             Expression.Call(typeof(Generic.Utf16), nameof(Generic.Utf16.Serialize),
-                                new[] {type, typeof(TResolver)}, typedInputParam),
+                                [type, typeof(TResolver)], typedInputParam),
                             inputParam);
                     return lambdaExpression.Compile();
                 }
@@ -193,7 +193,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToByteArrayPoolDelegate>(
                             Expression.Call(typeof(Generic.Utf8), nameof(Generic.Utf8.SerializeToArrayPool),
-                                new[] {type, typeof(TResolver)}, typedInputParam),
+                                [type, typeof(TResolver)], typedInputParam),
                             inputParam);
                     return lambdaExpression.Compile();
                 }
@@ -205,7 +205,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToCharArrayPoolDelegate>(
                             Expression.Call(typeof(Generic.Utf16), nameof(Generic.Utf16.SerializeToArrayPool),
-                                new[] {type, typeof(TResolver)}, typedInputParam),
+                                [type, typeof(TResolver)], typedInputParam),
                             inputParam);
                     return lambdaExpression.Compile();
                 }
@@ -214,7 +214,7 @@ namespace SpanJson
                 {
                     var inputParam = Expression.Parameter(typeof(ReadOnlySpan<TSymbol>).MakeByRefType(), "input");
                     Expression genericCall = Expression.Call(typeof(Generic), nameof(Generic.DeserializeInternal),
-                        new[] {type, typeof(TSymbol), typeof(TResolver)}, inputParam);
+                        [type, typeof(TSymbol), typeof(TResolver)], inputParam);
                     if (type.IsValueType)
                     {
                         genericCall = Expression.Convert(genericCall, typeof(object));
@@ -233,7 +233,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToTextWriterDelegateAsync>(
                             Expression.Call(typeof(Generic.Utf16), nameof(Generic.Utf16.SerializeAsync),
-                                new[] {type, typeof(TResolver)}, typedInputParam, textWriterParam, cancellationTokenParam),
+                                [type, typeof(TResolver)], typedInputParam, textWriterParam, cancellationTokenParam),
                             inputParam, textWriterParam, cancellationTokenParam);
                     return lambdaExpression.Compile();
                 }
@@ -247,7 +247,7 @@ namespace SpanJson
                     var lambdaExpression =
                         Expression.Lambda<SerializeToStreamDelegateAsync>(
                             Expression.Call(typeof(Generic.Utf8), nameof(Generic.Utf8.SerializeAsync),
-                                new[] {type, typeof(TResolver)}, typedInputParam, textWriterParam, cancellationTokenParam),
+                                [type, typeof(TResolver)], typedInputParam, textWriterParam, cancellationTokenParam),
                             inputParam, textWriterParam, cancellationTokenParam);
                     return lambdaExpression.Compile();
                 }
@@ -257,7 +257,7 @@ namespace SpanJson
                     var inputParam = Expression.Parameter(typeof(TextReader), "tr");
                     var cancellationTokenParam = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
                     Expression genericCall = Expression.Call(typeof(Utf16), nameof(Utf16.GenericTextReaderObjectWrapper),
-                        new[] {type, typeof(TResolver)}, inputParam, cancellationTokenParam);
+                        [type, typeof(TResolver)], inputParam, cancellationTokenParam);
                     var lambdaExpression = Expression.Lambda<DeserializeFromTextReaderDelegateAsync>(genericCall, inputParam, cancellationTokenParam);
                     return lambdaExpression.Compile();
                 }
@@ -267,11 +267,10 @@ namespace SpanJson
                     var inputParam = Expression.Parameter(typeof(Stream), "stream");
                     var cancellationTokenParam = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
                     Expression genericCall = Expression.Call(typeof(Utf8), nameof(Utf8.GenericStreamObjectWrapper),
-                        new[] {type, typeof(TResolver)}, inputParam, cancellationTokenParam);
+                        [type, typeof(TResolver)], inputParam, cancellationTokenParam);
                     var lambdaExpression = Expression.Lambda<DeserializeFromStreamDelegateAsync>(genericCall, inputParam, cancellationTokenParam);
                     return lambdaExpression.Compile();
                 }
-
 
                 private delegate object DeserializeDelegate(in ReadOnlySpan<TSymbol> input);
 
@@ -279,34 +278,25 @@ namespace SpanJson
 
                 private delegate ValueTask<object> DeserializeFromTextReaderDelegateAsync(TextReader textReader, CancellationToken cancellationToken = default);
 
-                private class Invoker
+                private sealed class Invoker(SerializeToStringDelegate toStringSerializer,
+                                             SerializeToByteArrayDelegate toByteArraySerializer,
+                                             SerializeToCharArrayPoolDelegate toCharArrayPoolSerializer,
+                                             SerializeToByteArrayPoolDelegate toByteArrayPoolSerializer,
+                                             DeserializeDelegate deserializer,
+                                             SerializeToTextWriterDelegateAsync serializeToTextWriterDelegateAsync,
+                                             DeserializeFromTextReaderDelegateAsync deserializeFromTextReaderDelegateAsync,
+                                             SerializeToStreamDelegateAsync toStreamSerializerAsync,
+                                             DeserializeFromStreamDelegateAsync fromStreamDeserializerAsync)
                 {
-                    public Invoker(SerializeToStringDelegate toStringSerializer, SerializeToByteArrayDelegate toByteArraySerializer,
-                        SerializeToCharArrayPoolDelegate toCharArrayPoolSerializer, SerializeToByteArrayPoolDelegate toByteArrayPoolSerializer,
-                        DeserializeDelegate deserializer, SerializeToTextWriterDelegateAsync serializeToTextWriterDelegateAsync,
-                        DeserializeFromTextReaderDelegateAsync deserializeFromTextReaderDelegateAsync, SerializeToStreamDelegateAsync toStreamSerializerAsync,
-                        DeserializeFromStreamDelegateAsync fromStreamDeserializerAsync)
-                    {
-                        ToCharArrayPoolSerializer = toCharArrayPoolSerializer;
-                        ToByteArrayPoolSerializer = toByteArrayPoolSerializer;
-                        ToByteArraySerializer = toByteArraySerializer;
-                        ToStringSerializer = toStringSerializer;
-                        ToTextWriterSerializerAsync = serializeToTextWriterDelegateAsync;
-                        Deserializer = deserializer;
-                        FromTextReaderDeserializerAsync = deserializeFromTextReaderDelegateAsync;
-                        ToStreamSerializerAsync = toStreamSerializerAsync;
-                        FromStreamDeserializerAsync = fromStreamDeserializerAsync;
-                    }
-
-                    public readonly SerializeToStringDelegate ToStringSerializer;
-                    public readonly SerializeToByteArrayDelegate ToByteArraySerializer;
-                    public readonly SerializeToCharArrayPoolDelegate ToCharArrayPoolSerializer;
-                    public readonly SerializeToByteArrayPoolDelegate ToByteArrayPoolSerializer;
-                    public readonly DeserializeDelegate Deserializer;
-                    public readonly SerializeToTextWriterDelegateAsync ToTextWriterSerializerAsync;
-                    public readonly DeserializeFromTextReaderDelegateAsync FromTextReaderDeserializerAsync;
-                    public readonly SerializeToStreamDelegateAsync ToStreamSerializerAsync;
-                    public readonly DeserializeFromStreamDelegateAsync FromStreamDeserializerAsync;
+                    public readonly SerializeToStringDelegate ToStringSerializer = toStringSerializer;
+                    public readonly SerializeToByteArrayDelegate ToByteArraySerializer = toByteArraySerializer;
+                    public readonly SerializeToCharArrayPoolDelegate ToCharArrayPoolSerializer = toCharArrayPoolSerializer;
+                    public readonly SerializeToByteArrayPoolDelegate ToByteArrayPoolSerializer = toByteArrayPoolSerializer;
+                    public readonly DeserializeDelegate Deserializer = deserializer;
+                    public readonly SerializeToTextWriterDelegateAsync ToTextWriterSerializerAsync = serializeToTextWriterDelegateAsync;
+                    public readonly DeserializeFromTextReaderDelegateAsync FromTextReaderDeserializerAsync = deserializeFromTextReaderDelegateAsync;
+                    public readonly SerializeToStreamDelegateAsync ToStreamSerializerAsync = toStreamSerializerAsync;
+                    public readonly DeserializeFromStreamDelegateAsync FromStreamDeserializerAsync = fromStreamDeserializerAsync;
                 }
 
                 private delegate byte[] SerializeToByteArrayDelegate(object input);

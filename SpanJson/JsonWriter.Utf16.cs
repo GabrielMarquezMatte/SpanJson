@@ -28,11 +28,10 @@ namespace SpanJson
             WriteUtf16Int64Internal(value);
         }
 
-        public override string ToString()
+        public override readonly string ToString()
         {
-            return _chars.Slice(0, _pos).ToString();
+            return _chars[.._pos].ToString();
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void WriteUtf16Int64Internal(long value)
@@ -120,7 +119,7 @@ namespace SpanJson
                 Grow(written);
             }
 
-            span.Slice(0, written).CopyTo(_chars.Slice(pos));
+            span[..written].CopyTo(_chars[pos..]);
             pos += written;
         }
 
@@ -140,7 +139,7 @@ namespace SpanJson
                 Grow(written);
             }
 
-            span.Slice(0, written).CopyTo(_chars.Slice(pos));
+            span[..written].CopyTo(_chars[pos..]);
             pos += written;
         }
 
@@ -154,7 +153,7 @@ namespace SpanJson
                 Grow(written);
             }
 
-            span.Slice(0, written).CopyTo(_chars.Slice(pos));
+            span[..written].CopyTo(_chars[pos..]);
             pos += written;
         }
 
@@ -167,7 +166,7 @@ namespace SpanJson
                 Grow(falseLength);
             }
 
-            var span = _chars.Slice(_pos);
+            var span = _chars[_pos..];
             if (value)
             {
                 span[3] = 'e';
@@ -331,7 +330,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _chars.Slice(pos), out var written);
+            DateTimeFormatter.TryFormat(value, _chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
@@ -346,7 +345,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _chars.Slice(pos), out var written);
+            DateTimeFormatter.TryFormat(value, _chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
@@ -382,7 +381,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _chars.Slice(pos), out var written);
+            DateTimeFormatter.TryFormat(value, _chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
@@ -397,7 +396,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            DateTimeFormatter.TryFormat(value, _chars.Slice(pos), out var written);
+            DateTimeFormatter.TryFormat(value, _chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
@@ -412,7 +411,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            value.TryFormat(_chars.Slice(pos), out var written);
+            value.TryFormat(_chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
@@ -467,7 +466,7 @@ namespace SpanJson
                 Grow(sLength);
             }
 
-            value.CopyTo(_chars.Slice(pos));
+            value.CopyTo(_chars[pos..]);
             pos += value.Length;
         }
 
@@ -485,7 +484,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            value.CopyTo(_chars.Slice(pos));
+            value.CopyTo(_chars[pos..]);
             pos += value.Length;
             WriteUtf16DoubleQuote();
             _chars[pos++] = JsonUtf16Constant.NameSeparator;
@@ -495,18 +494,17 @@ namespace SpanJson
         private void WriteUtf16SingleEscapedChar(char toEscape)
         {
             ref var pos = ref _pos;
-            var span = _chars.Slice(pos);
+            var span = _chars[pos..];
             span[1] = toEscape;
             span[0] = JsonUtf16Constant.ReverseSolidus;
             pos += 2;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void WriteUtf16DoubleEscapedChar(char firstToEscape, char secondToEscape)
         {
             ref var pos = ref _pos;
-            var span = _chars.Slice(pos);
+            var span = _chars[pos..];
             span[5] = secondToEscape;
             span[4] = firstToEscape;
             span[3] = '0';
@@ -552,7 +550,6 @@ namespace SpanJson
             _chars[pos++] = JsonUtf16Constant.BeginArray;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteUtf16EndArray()
         {
@@ -587,7 +584,7 @@ namespace SpanJson
                 Grow(nullLength);
             }
 
-            var span = _chars.Slice(pos);
+            var span = _chars[pos..];
             span[3] = 'l';
             span[2] = 'l';
             span[1] = 'u';
@@ -607,7 +604,6 @@ namespace SpanJson
             _chars[_pos++] = JsonUtf16Constant.NameSeparator;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteUtf16Version(Version value)
         {
@@ -619,11 +615,10 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            value.TryFormat(_chars.Slice(pos), out var written);
+            value.TryFormat(_chars[pos..], out var written);
             pos += written;
             WriteUtf16DoubleQuote();
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteUtf16Uri(Uri value)
@@ -641,7 +636,7 @@ namespace SpanJson
             }
 
             WriteUtf16DoubleQuote();
-            if (!Convert.TryToBase64Chars(value, _chars.Slice(pos), out var written) || written != expectedLength)
+            if (!Convert.TryToBase64Chars(value, _chars[pos..], out var written) || written != expectedLength)
             {
                 ThrowArgumentException("Can't encode Base64 array.", nameof(value));
             }

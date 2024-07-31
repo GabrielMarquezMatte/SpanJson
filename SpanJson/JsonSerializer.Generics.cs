@@ -29,7 +29,6 @@ namespace SpanJson
                 return Inner<T, TSymbol, TResolver>.InnerDeserialize(input);
             }
 
-
             private static class Inner<T, TSymbol, TResolver> where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
             {
                 private static readonly IJsonFormatter<T, TSymbol> Formatter = StandardResolvers.GetResolver<TSymbol, TResolver>().GetFormatter<T>();
@@ -179,12 +178,6 @@ namespace SpanJson
                     var input = stream.CanSeek
                         ? ReadStreamFullAsync(stream, cancellationToken)
                         : ReadStreamAsync(stream, _lastDeserializationSizeEstimate, cancellationToken);
-                    if (input.IsCompletedSuccessfully)
-                    {
-                        var memory = input.Result;
-                        return new ValueTask<T>(InnerDeserialize(memory));
-                    }
-
                     return AwaitDeserializeAsync(input);
                 }
 
@@ -193,7 +186,6 @@ namespace SpanJson
                     var buffer = ArrayPool<byte>.Shared.Rent((int) stream.Length);
                     try
                     {
-
                         var read = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
                         return new Memory<byte>(buffer, 0, read);
                     }
@@ -318,7 +310,6 @@ namespace SpanJson
                     return Inner<T, char, TResolver>.InnerSerializeToString(input);
                 }
 
-
                 /// <summary>
                 ///     Serialize to string with specific resolver.
                 ///     The returned ArraySegment's Array needs to be returned to the ArrayPool
@@ -369,7 +360,6 @@ namespace SpanJson
                 {
                     return Deserialize<T, ExcludeNullsOriginalCaseResolver<char>>(input);
                 }
-
 
                 /// <summary>
                 ///     Deserialize from string with specific resolver.

@@ -23,7 +23,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Value, other.Value) && Date.Equals(other.Date) &&
+                return string.Equals(Value, other.Value, StringComparison.Ordinal) && Date.Equals(other.Date) &&
                        NullableDate.Equals(other.NullableDate) && NullableDateArray.SequenceEqual(other.NullableDateArray) &&
                        DateArray.SequenceEqual(other.DateArray) && DateList.SequenceEqual(other.DateList);
             }
@@ -40,7 +40,7 @@ namespace SpanJson.Tests
             {
                 unchecked
                 {
-                    var hashCode = (Value != null ? Value.GetHashCode() : 0);
+                    var hashCode = (Value != null ? Value.GetHashCode(StringComparison.Ordinal) : 0);
                     hashCode = (hashCode * 397) ^ Date.GetHashCode();
                     hashCode = (hashCode * 397) ^ NullableDate.GetHashCode();
                     hashCode = (hashCode * 397) ^ (DateArray != null ? DateArray.GetHashCode() : 0);
@@ -51,7 +51,7 @@ namespace SpanJson.Tests
             }
         }
 
-        private readonly ExpressionTreeFixture _fixture = new ExpressionTreeFixture();
+        private readonly ExpressionTreeFixture _fixture = new();
 
         public sealed class CustomResolver<TSymbol> : ResolverBase<TSymbol, CustomResolver<TSymbol>> where TSymbol : struct
         {
@@ -66,7 +66,7 @@ namespace SpanJson.Tests
             private static readonly long MinUnixTimeSeconds = DateTimeOffset.MinValue.ToUnixTimeSeconds();
             private static readonly DateTime MinValueDateTime = DateTimeOffset.MinValue.UtcDateTime;
 
-            public static readonly DateTimeToLongFormatter Default = new DateTimeToLongFormatter();
+            public static readonly DateTimeToLongFormatter Default = new();
 
             public object Arguments { get; set; }
 
@@ -95,7 +95,6 @@ namespace SpanJson.Tests
             }
         }
 
-
         [Fact]
         public void SerializeDeserializeUtf8()
         {
@@ -107,11 +106,11 @@ namespace SpanJson.Tests
             model.NullableDate = model.Date;
             var serialized = JsonSerializer.Generic.Utf8.Serialize<TestDTO, CustomResolver<byte>>(model);
             Assert.NotNull(serialized);
-            Assert.Contains("\"Date\":1", Encoding.UTF8.GetString(serialized));
-            Assert.Contains("\"DateArray\":[1", Encoding.UTF8.GetString(serialized));
-            Assert.Contains("\"NullableDateArray\":[1", Encoding.UTF8.GetString(serialized));
-            Assert.Contains("\"DateList\":[1", Encoding.UTF8.GetString(serialized));
-            Assert.Contains("\"NullableDate\":1", Encoding.UTF8.GetString(serialized));
+            Assert.Contains("\"Date\":1", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
+            Assert.Contains("\"DateArray\":[1", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
+            Assert.Contains("\"NullableDateArray\":[1", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
+            Assert.Contains("\"DateList\":[1", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
+            Assert.Contains("\"NullableDate\":1", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestDTO, CustomResolver<byte>>(serialized);
             Assert.Equal(model, deserialized);
         }
@@ -127,11 +126,11 @@ namespace SpanJson.Tests
             model.NullableDate = model.Date;
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestDTO, CustomResolver<char>>(model);
             Assert.NotNull(serialized);
-            Assert.Contains("\"Date\":1", serialized);
-            Assert.Contains("\"DateArray\":[1", serialized);
-            Assert.Contains("\"NullableDateArray\":[1", serialized);
-            Assert.Contains("\"DateList\":[1", serialized);
-            Assert.Contains("\"NullableDate\":1", serialized);
+            Assert.Contains("\"Date\":1", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"DateArray\":[1", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"NullableDateArray\":[1", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"DateList\":[1", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"NullableDate\":1", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestDTO, CustomResolver<char>>(serialized);
             Assert.Equal(model, deserialized);
         }

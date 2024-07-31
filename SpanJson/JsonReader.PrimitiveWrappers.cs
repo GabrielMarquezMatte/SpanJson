@@ -6,9 +6,8 @@ namespace SpanJson
 {
     public ref partial struct JsonReader<TSymbol> where TSymbol : struct
     {
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SByte ReadSByte()
+        public sbyte ReadSByte()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -25,7 +24,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Int16 ReadInt16()
+        public short ReadInt16()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -42,7 +41,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Int32 ReadInt32()
+        public int ReadInt32()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -59,7 +58,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Int64 ReadInt64()
+        public long ReadInt64()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -76,7 +75,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Byte ReadByte()
+        public byte ReadByte()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -93,7 +92,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public UInt16 ReadUInt16()
+        public ushort ReadUInt16()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -110,7 +109,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public UInt32 ReadUInt32()
+        public uint ReadUInt32()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -127,7 +126,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public UInt64 ReadUInt64()
+        public ulong ReadUInt64()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -144,7 +143,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Single ReadSingle()
+        public float ReadSingle()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -161,7 +160,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Double ReadDouble()
+        public double ReadDouble()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -178,7 +177,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Decimal ReadDecimal()
+        public decimal ReadDecimal()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -195,7 +194,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Boolean ReadBoolean()
+        public bool ReadBoolean()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -212,7 +211,7 @@ namespace SpanJson
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Char ReadChar()
+        public char ReadChar()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -327,11 +326,11 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return Guid.Empty;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public String ReadString()
+        public string ReadString()
         {
             if (typeof(TSymbol) == typeof(char))
             {
@@ -344,7 +343,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -361,7 +360,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -378,7 +377,7 @@ namespace SpanJson
             }
 
             ThrowNotSupportedException();
-            return default;
+            return null;
         }
     }
 }

@@ -24,7 +24,6 @@ namespace SpanJson.Formatters.Dynamic
             return true;
         }
 
-
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             return IsSupported(destinationType);
@@ -57,7 +56,7 @@ namespace SpanJson.Formatters.Dynamic
 
         public abstract bool IsSupported(Type destinationType);
 
-        protected static Dictionary<Type, ConvertDelegate> BuildDelegates(Type[] allowedTypes)
+        protected static Dictionary<Type, ConvertDelegate> BuildDelegates(Span<Type> allowedTypes)
         {
             var result = new Dictionary<Type, ConvertDelegate>();
             string utfType;
@@ -65,7 +64,6 @@ namespace SpanJson.Formatters.Dynamic
             {
                 utfType = "Utf16";
             }
-
             else if (typeof(TSymbol) == typeof(byte))
             {
                 utfType = "Utf8";
@@ -75,7 +73,7 @@ namespace SpanJson.Formatters.Dynamic
                 throw new NotSupportedException();
             }
 
-            foreach (var allowedType in allowedTypes)
+            foreach (ref readonly var allowedType in allowedTypes)
             {
                 var method = typeof(JsonReader<TSymbol>).GetMethod($"Read{utfType}{allowedType.Name}");
                 if (method != null)
@@ -95,7 +93,6 @@ namespace SpanJson.Formatters.Dynamic
                         result.Add(typeof(Nullable<>).MakeGenericType(allowedType), lambda.Compile());
                     }
                 }
-
             }
 
             return result;

@@ -35,7 +35,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Name, other.Name) && Value == other.Value && Enum == other.Enum;
+                return string.Equals(Name, other.Name, StringComparison.Ordinal) && Value == other.Value && Enum == other.Enum;
             }
 
             public override bool Equals(object obj)
@@ -50,7 +50,7 @@ namespace SpanJson.Tests
             {
                 unchecked
                 {
-                    var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                    var hashCode = (Name != null ? Name.GetHashCode(StringComparison.Ordinal) : 0);
                     hashCode = (hashCode * 397) ^ Value.GetHashCode();
                     hashCode = (hashCode * 397) ^ (int) Enum;
                     return hashCode;
@@ -63,9 +63,9 @@ namespace SpanJson.Tests
         {
             var test = new TestDTO {Enum = TestDTO.TestEnum.First, Name = "Hello World", Value = 12345678, Multiplied = 100};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(test);
-            Assert.Contains("\"Value\":\"12345678\"", serialized);
-            Assert.Contains("\"Enum\":1", serialized);
-            Assert.Contains("\"Multiplied\":200", serialized);
+            Assert.Contains("\"Value\":\"12345678\"", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"Enum\":1", serialized, StringComparison.Ordinal);
+            Assert.Contains("\"Multiplied\":200", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestDTO>(serialized);
             Assert.Equal(test, deserialized);
         }
@@ -76,17 +76,16 @@ namespace SpanJson.Tests
             var test = new TestDTO {Enum = TestDTO.TestEnum.First, Name = "Hello World", Value = 12345678, Multiplied = 200};
             var serialized = JsonSerializer.Generic.Utf8.Serialize(test);
             var stringEncoded = Encoding.UTF8.GetString(serialized);
-            Assert.Contains("\"Value\":\"12345678\"", stringEncoded);
-            Assert.Contains("\"Enum\":1", stringEncoded);
-            Assert.Contains("\"Multiplied\":400", stringEncoded);
+            Assert.Contains("\"Value\":\"12345678\"", stringEncoded, StringComparison.Ordinal);
+            Assert.Contains("\"Enum\":1", stringEncoded, StringComparison.Ordinal);
+            Assert.Contains("\"Multiplied\":400", stringEncoded, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestDTO>(serialized);
             Assert.Equal(test, deserialized);
         }
 
-
         public sealed class LongAsStringFormatter : ICustomJsonFormatter<long>
         {
-            public static readonly LongAsStringFormatter Default = new LongAsStringFormatter();
+            public static readonly LongAsStringFormatter Default = new();
 
             public object Arguments { get; set; }
 
@@ -125,7 +124,7 @@ namespace SpanJson.Tests
 
         public sealed class EnumAsIntFormatter : ICustomJsonFormatter<TestDTO.TestEnum>
         {
-            public static readonly EnumAsIntFormatter Default = new EnumAsIntFormatter();
+            public static readonly EnumAsIntFormatter Default = new();
 
             public object Arguments { get; set; }
 
@@ -152,7 +151,7 @@ namespace SpanJson.Tests
 
         public sealed class MultiplyFormatter : ICustomJsonFormatter<long>
         {
-            public static readonly MultiplyFormatter Default = new MultiplyFormatter();
+            public static readonly MultiplyFormatter Default = new();
 
             public object Arguments { get; set; }
 
@@ -180,7 +179,6 @@ namespace SpanJson.Tests
         [JsonCustomSerializer(typeof(TwcsCustomSerializer), "SpecialName")]
         public class TypeWithCustomSerializer : IEquatable<TypeWithCustomSerializer>
         {
-
             public long Value { get; set; }
 
             public bool Equals(TypeWithCustomSerializer other)
@@ -206,7 +204,7 @@ namespace SpanJson.Tests
 
         public sealed class TwcsCustomSerializer : ICustomJsonFormatter<TypeWithCustomSerializer>
         {
-            public static readonly TwcsCustomSerializer Default = new TwcsCustomSerializer();
+            public static readonly TwcsCustomSerializer Default = new();
 
             public object Arguments { get; set; }
 
@@ -248,7 +246,7 @@ namespace SpanJson.Tests
 
                 reader.ReadBeginObjectOrThrow();
                 var name = reader.ReadEscapedName();
-                if (Arguments == null || name != (string) Arguments)
+                if (Arguments == null || !string.Equals(name, (string)Arguments, StringComparison.Ordinal))
                 {
                     throw new InvalidDataException();
                 }
@@ -279,7 +277,7 @@ namespace SpanJson.Tests
         {
             var test = new TypeWithCustomSerializer {Value = 100};
             var serialized = JsonSerializer.Generic.Utf16.Serialize(test);
-            Assert.Contains("\"SpecialName\":100", serialized);
+            Assert.Contains("\"SpecialName\":100", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TypeWithCustomSerializer>(serialized);
             Assert.Equal(test, deserialized);
         }
@@ -290,7 +288,7 @@ namespace SpanJson.Tests
             var test = new TypeWithCustomSerializer {Value = 100};
             var serialized = JsonSerializer.Generic.Utf8.Serialize(test);
             var stringEncoded = Encoding.UTF8.GetString(serialized);
-            Assert.Contains("\"SpecialName\":100", stringEncoded);
+            Assert.Contains("\"SpecialName\":100", stringEncoded, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TypeWithCustomSerializer>(serialized);
             Assert.Equal(test, deserialized);
         }
@@ -367,7 +365,6 @@ namespace SpanJson.Tests
             Assert.Equal(input.S, deserialized.S);
         }
 
-
         [Fact]
         public void EnclosingNullableFormatterNullValueExcludeNullsUtf16()
         {
@@ -428,8 +425,6 @@ namespace SpanJson.Tests
             Assert.Equal(input.S, deserialized.S);
         }
 
-
-
         public class EnclosingNullable
         {
             [JsonCustomSerializer(typeof(NullableCustomStructFormatter))]
@@ -443,7 +438,7 @@ namespace SpanJson.Tests
 
         public sealed class NullableCustomStructFormatter : ICustomJsonFormatter<CustomStruct?>
         {
-            public static readonly NullableCustomStructFormatter Default = new NullableCustomStructFormatter();
+            public static readonly NullableCustomStructFormatter Default = new();
 
             public void Serialize(ref JsonWriter<byte> writer, CustomStruct? value)
             {
@@ -491,8 +486,6 @@ namespace SpanJson.Tests
 
             public object Arguments { get; set; }
         }
-
-
 
         public class AnnotatedCustomStructHelper
         {
@@ -628,7 +621,6 @@ namespace SpanJson.Tests
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<AnnotatedCustomStructHelper, IncludeNullsOriginalCaseResolver<byte>>(serialized);
             Assert.Equal(input.S, deserialized.S);
         }
-
     }
 
     [JsonCustomSerializer(typeof(AnnotatedCustomStructFormatter))]
@@ -639,7 +631,7 @@ namespace SpanJson.Tests
 
     public sealed class AnnotatedCustomStructFormatter : ICustomJsonFormatter<CustomSerializerTests.AnnotatedCustomStruct>
     {
-        public static readonly AnnotatedCustomStructFormatter Default = new AnnotatedCustomStructFormatter();
+        public static readonly AnnotatedCustomStructFormatter Default = new();
 
         private static CustomSerializerTests.AnnotatedCustomStruct DeserializeInternal<TSymbol>(ref JsonReader<TSymbol> reader) where TSymbol : struct
         {
@@ -650,7 +642,6 @@ namespace SpanJson.Tests
         {
             writer.WriteInt32(value.Value);
         }
-
 
         public void Serialize(ref JsonWriter<byte> writer, CustomSerializerTests.AnnotatedCustomStruct value)
         {

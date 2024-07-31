@@ -9,8 +9,7 @@ namespace SpanJson.Formatters
     {
         private static readonly SerializeDelegate Serializer = BuildSerializeDelegate();
         private static readonly DeserializeDelegate Deserializer = BuildDeserializeDelegate();
-        public static readonly EnumIntegerFormatter<T, TSymbol, TResolver> Default = new EnumIntegerFormatter<T, TSymbol, TResolver>();
-
+        public static readonly EnumIntegerFormatter<T, TSymbol, TResolver> Default = new();
 
         public T Deserialize(ref JsonReader<TSymbol> reader)
         {
@@ -21,7 +20,6 @@ namespace SpanJson.Formatters
         {
             Serializer(ref writer, value);
         }
-
 
         private static SerializeDelegate BuildSerializeDelegate()
         {
@@ -48,7 +46,6 @@ namespace SpanJson.Formatters
             return lambda.Compile();
         }
 
-
         private static DeserializeDelegate BuildDeserializeDelegate()
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
@@ -72,7 +69,6 @@ namespace SpanJson.Formatters
                 readerParameter);
             return lambda.Compile();
         }
-
 
         private delegate T DeserializeDelegate(ref JsonReader<TSymbol> reader);
 

@@ -9,7 +9,7 @@ namespace SpanJson.Tests.Generated
     public abstract class TestBase
     {
         // ReSharper disable StaticMemberInGenericType
-        protected static readonly ExpressionTreeFixture Fixture = new ExpressionTreeFixture();
+        protected static readonly ExpressionTreeFixture Fixture = new();
         // ReSharper restore StaticMemberInGenericType
     }
 
@@ -47,7 +47,7 @@ namespace SpanJson.Tests.Generated
             var randomData = new HashSet<T>(Fixture.CreateMany<T>(10));
             foreach (var data in randomData)
             {
-                result.Add(new object[] {data});
+                result.Add([data]);
             }
 
             return result;
@@ -57,7 +57,6 @@ namespace SpanJson.Tests.Generated
         {
             return Encoding.UTF8.GetBytes(EscapeMore(Encoding.UTF8.GetString(input)));
         }
-
 
         protected static string EscapeMore(string input)
         {
@@ -305,7 +304,6 @@ namespace SpanJson.Tests.Generated
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<T?>(serialized);
             Assert.Null(deserialized);
         }
-
 
         [Fact]
         public void DynamicCastNullableNullUtf8()

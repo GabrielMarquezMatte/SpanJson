@@ -56,7 +56,7 @@ namespace SpanJson.Formatters
             }
 
             var switchExpression = Expression.Switch(valueParameter,
-                Expression.Throw(Expression.Constant(new InvalidOperationException())), cases.ToArray());
+                Expression.Throw(Expression.Constant(new InvalidOperationException())), [.. cases]);
 
             var lambdaExpression =
                 Expression.Lambda<SerializeDelegate>(switchExpression, writerParameter, valueParameter);
@@ -92,7 +92,7 @@ namespace SpanJson.Formatters
             }
 
             var memberInfos = new List<JsonMemberInfo>();
-            var dict = new Dictionary<string, TReturn>();
+            var dict = new Dictionary<string, TReturn>(StringComparer.Ordinal);
             foreach (var name in Enum.GetNames(typeof(T)))
             {
                 var formattedValue = GetFormattedValue(name);
@@ -123,8 +123,6 @@ namespace SpanJson.Formatters
                 Expression.Lambda<TDelegate>(blockExpression, inputExpression);
             return lambdaExpression.Compile();
         }
-
-
 
         protected delegate void SerializeDelegate(ref JsonWriter<TSymbol> writer, T value);
     }

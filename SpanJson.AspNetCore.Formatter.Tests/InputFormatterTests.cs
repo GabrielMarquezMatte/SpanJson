@@ -18,7 +18,7 @@ namespace SpanJson.AspNetCore.Formatter.Tests
     /// </summary>
     public class InputFormatterTests : TestBase
     {
-        private readonly ExpressionTreeFixture _fixture = new ExpressionTreeFixture();
+        private readonly ExpressionTreeFixture _fixture = new();
 
         [Theory]
         [MemberData(nameof(GetModels))]
@@ -79,7 +79,6 @@ namespace SpanJson.AspNetCore.Formatter.Tests
                 Assert.Equal(model, result.Model, GenericEqualityComparer.Default);
             }
         }
-
 
         [Theory]
         [InlineData("application/json")]

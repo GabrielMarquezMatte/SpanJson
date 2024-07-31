@@ -5,13 +5,9 @@ using System.Text;
 
 namespace SpanJson.Formatters.Dynamic
 {
-    public abstract partial class SpanJsonDynamicString<TSymbol> : SpanJsonDynamic<TSymbol> where TSymbol : struct
+    public abstract partial class SpanJsonDynamicString<TSymbol>(in ReadOnlySpan<TSymbol> span) : SpanJsonDynamic<TSymbol>(span) where TSymbol : struct
     {
-        private static readonly DynamicTypeConverter DynamicConverter = new DynamicTypeConverter();
-
-        protected SpanJsonDynamicString(in ReadOnlySpan<TSymbol> span) : base(span)
-        {
-        }
+        private static readonly DynamicTypeConverter DynamicConverter = new();
 
         protected override BaseDynamicTypeConverter<TSymbol> Converter => DynamicConverter;
 
@@ -50,7 +46,7 @@ namespace SpanJson.Formatters.Dynamic
                 {
                 }
 
-                value = default;
+                value = null;
                 return false;
             }
 
@@ -71,8 +67,8 @@ namespace SpanJson.Formatters.Dynamic
 
             private static Dictionary<Type, ConvertDelegate> BuildDelegates()
             {
-                var allowedTypes = new[]
-                {
+                Span<Type> allowedTypes =
+                [
                     typeof(char),
                     typeof(DateTime),
                     typeof(DateTimeOffset),
@@ -83,11 +79,10 @@ namespace SpanJson.Formatters.Dynamic
                     typeof(string),
                     typeof(Version),
                     typeof(Uri)
-                };
+                ];
                 return BuildDelegates(allowedTypes);
             }
         }
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()

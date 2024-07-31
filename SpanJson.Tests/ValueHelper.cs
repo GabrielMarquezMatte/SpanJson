@@ -7,8 +7,8 @@ namespace SpanJson.Tests
     {
         public static void RandomlySetValuesToNull(object input, int modValue)
         {
-            Random prng = new Random();
-            Queue<object> values = new Queue<object>();
+            Random prng = new();
+            Queue<object> values = new();
             values.Enqueue(input);
             while (values.Count > 0)
             {

@@ -112,7 +112,6 @@ namespace SpanJson.Tests
             Assert.Equal(input, output);
         }
 
-
         [Fact]
         public void EmoticonsUtf8()
         {

@@ -15,7 +15,6 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(input, deserialized);
         }
 
-
         [Theory]
         [MemberData(nameof(GetDecimalTestData))]
         public void SerializeDeserializeMinMaxUtf16(decimal input)

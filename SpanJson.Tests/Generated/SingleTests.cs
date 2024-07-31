@@ -8,33 +8,31 @@ namespace SpanJson.Tests.Generated
     public partial class SingleTests
     {
         [Theory]
-        [InlineData(Single.MinValue)]
-        [InlineData(Single.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Single input)
+        [InlineData(float.MinValue)]
+        [InlineData(float.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(float input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Single>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<float>(serialized);
             Assert.Equal(input.ToString(CultureInfo.InvariantCulture), deserialized.ToString(CultureInfo.InvariantCulture));
         }
-
 
         [Theory]
-        [InlineData(Single.MinValue)]
-        [InlineData(Single.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Single input)
+        [InlineData(float.MinValue)]
+        [InlineData(float.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(float input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Single>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<float>(serialized);
             Assert.Equal(input.ToString(CultureInfo.InvariantCulture), deserialized.ToString(CultureInfo.InvariantCulture));
         }
-
 
         [Fact]
         public void SerializeDeserializeZeroUtf8()
         {
             var singleValue = 0.0f;
             var serialized = JsonSerializer.Generic.Utf8.Serialize(singleValue);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Single>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<float>(serialized);
             Assert.Equal(singleValue, deserialized);
         }
 
@@ -43,7 +41,7 @@ namespace SpanJson.Tests.Generated
         {
             var singleValue = 0.0f;
             var serialized = JsonSerializer.Generic.Utf8.Serialize(singleValue);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Single>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<float>(serialized);
             Assert.Equal(singleValue, deserialized);
         }
 
@@ -55,7 +53,6 @@ namespace SpanJson.Tests.Generated
         {
             Assert.Throws<ArgumentException>(() => JsonSerializer.Generic.Utf8.Serialize(input));
         }
-
 
         [Theory]
         [InlineData(float.NaN)]

@@ -16,13 +16,10 @@ namespace SpanJson
             /// <returns>String</returns>
             public static string Print(in ReadOnlySpan<char> input)
             {
-#if NET7_0_OR_GREATER
-                scoped var reader = new JsonReader<char>(input);
-                scoped var writer = new JsonWriter<char>(input.Length);
-#else
-                var reader = new JsonReader<char>(input);
-                var writer = new JsonWriter<char>(input.Length);
-#endif
+                scoped JsonReader<char> reader = new(input);
+#pragma warning disable IDISP001 // Dispose created
+                scoped JsonWriter<char> writer = new(input.Length);
+#pragma warning restore IDISP001 // Dispose created
                 try
                 {
                     Print(ref reader, ref writer, 0);
@@ -41,13 +38,10 @@ namespace SpanJson
             /// <returns>Byte array</returns>
             public static byte[] Print(in ReadOnlySpan<byte> input)
             {
-#if NET7_0_OR_GREATER
-                scoped var reader = new JsonReader<byte>(input);
-                scoped var writer = new JsonWriter<byte>(input.Length);
-#else
-                var reader = new JsonReader<byte>(input);
-                var writer = new JsonWriter<byte>(input.Length);
-#endif
+                scoped JsonReader<byte> reader = new(input);
+#pragma warning disable IDISP001 // Dispose created
+                scoped JsonWriter<byte> writer = new(input.Length);
+#pragma warning restore IDISP001 // Dispose created
                 try
                 {
                     Print(ref reader, ref writer, 0);
@@ -59,86 +53,85 @@ namespace SpanJson
                 }
             }
 
-            private static void Print<TSymbol>(ref JsonReader<TSymbol> reader, ref JsonWriter<TSymbol> writer, int indent) where TSymbol : struct
+            private static void Print<TSymbol>(ref JsonReader<TSymbol> reader, scoped ref JsonWriter<TSymbol> writer, int indent) where TSymbol : struct
             {
-                var token = reader.ReadNextToken();
-                switch (token)
+                switch (reader.ReadNextToken())
                 {
                     case JsonToken.BeginObject:
-                    {
-                        reader.ReadBeginObjectOrThrow();
-                        writer.WriteBeginObject();
-                        writer.WriteNewLine();
-                        var c = 0;
-                        while (!reader.TryReadIsEndObjectOrValueSeparator(ref c))
                         {
-                            if (c != 1)
+                            reader.ReadBeginObjectOrThrow();
+                            writer.WriteBeginObject();
+                            writer.WriteNewLine();
+                            var c = 0;
+                            while (!reader.TryReadIsEndObjectOrValueSeparator(ref c))
                             {
-                                writer.WriteValueSeparator();
-                                writer.WriteNewLine();
+                                if (c != 1)
+                                {
+                                    writer.WriteValueSeparator();
+                                    writer.WriteNewLine();
+                                }
+
+                                writer.WriteIndentation(indent + 2);
+                                writer.WriteVerbatimNameSpan(reader.ReadVerbatimNameSpan());
+                                writer.WriteIndentation(1);
+                                Print(ref reader, ref writer, indent + 2);
                             }
 
-                            writer.WriteIndentation(indent + 2);
-                            writer.WriteVerbatimNameSpan(reader.ReadVerbatimNameSpan());
-                            writer.WriteIndentation(1);
-                            Print(ref reader, ref writer, indent + 2);
+                            writer.WriteNewLine();
+                            writer.WriteIndentation(indent);
+                            writer.WriteEndObject();
+                            break;
                         }
-
-                        writer.WriteNewLine();
-                        writer.WriteIndentation(indent);
-                        writer.WriteEndObject();
-                        break;
-                    }
                     case JsonToken.BeginArray:
-                    {
-                        reader.ReadBeginArrayOrThrow();
-                        writer.WriteBeginArray();
-                        writer.WriteNewLine();
-                        var c = 0;
-                        while (!reader.TryReadIsEndArrayOrValueSeparator(ref c))
                         {
-                            if (c != 1)
+                            reader.ReadBeginArrayOrThrow();
+                            writer.WriteBeginArray();
+                            writer.WriteNewLine();
+                            var c = 0;
+                            while (!reader.TryReadIsEndArrayOrValueSeparator(ref c))
                             {
-                                writer.WriteValueSeparator();
-                                writer.WriteNewLine();
+                                if (c != 1)
+                                {
+                                    writer.WriteValueSeparator();
+                                    writer.WriteNewLine();
+                                }
+
+                                writer.WriteIndentation(indent + 2);
+                                Print(ref reader, ref writer, indent + 2);
                             }
 
-                            writer.WriteIndentation(indent + 2);
-                            Print(ref reader, ref writer, indent + 2);
+                            writer.WriteNewLine();
+                            writer.WriteIndentation(indent);
+                            writer.WriteEndArray();
+                            break;
                         }
-
-                        writer.WriteNewLine();
-                        writer.WriteIndentation(indent);
-                        writer.WriteEndArray();
-                        break;
-                    }
                     case JsonToken.Number:
-                    {
-                        var span = reader.ReadNumberSpan();
-                        writer.WriteVerbatim(span);
-                        break;
-                    }
+                        {
+                            var span = reader.ReadNumberSpan();
+                            writer.WriteVerbatim(span);
+                            break;
+                        }
                     case JsonToken.String:
-                    {
-                        var span = reader.ReadVerbatimStringSpan();
-                        writer.WriteDoubleQuote();
-                        writer.WriteVerbatim(span);
-                        writer.WriteDoubleQuote();
-                        break;
-                    }
+                        {
+                            var span = reader.ReadVerbatimStringSpan();
+                            writer.WriteDoubleQuote();
+                            writer.WriteVerbatim(span);
+                            writer.WriteDoubleQuote();
+                            break;
+                        }
                     case JsonToken.True:
                     case JsonToken.False:
-                    {
-                        var value = reader.ReadBoolean();
-                        writer.WriteBoolean(value);
-                        break;
-                    }
+                        {
+                            var value = reader.ReadBoolean();
+                            writer.WriteBoolean(value);
+                            break;
+                        }
                     case JsonToken.Null:
-                    {
-                        reader.ReadIsNull();
-                        writer.WriteNull();
-                        break;
-                    }
+                        {
+                            reader.ReadIsNull();
+                            writer.WriteNull();
+                            break;
+                        }
                 }
             }
         }
@@ -155,13 +148,10 @@ namespace SpanJson
             /// <returns>String</returns>
             public static string Minify(in ReadOnlySpan<char> input)
             {
-#if NET7_0_OR_GREATER
-                scoped var reader = new JsonReader<char>(input);
-                scoped var writer = new JsonWriter<char>(input.Length); // less but shouldn't matter here
-#else
-                var reader = new JsonReader<char>(input);
-                var writer = new JsonWriter<char>(input.Length);
-#endif
+                scoped JsonReader<char> reader = new(input);
+#pragma warning disable IDISP001 // Dispose created
+                scoped JsonWriter<char> writer = new(input.Length); // less but shouldn't matter here
+#pragma warning restore IDISP001 // Dispose created
                 try
                 {
                     Minify(ref reader, ref writer);
@@ -180,13 +170,8 @@ namespace SpanJson
             /// <returns>Byte array</returns>
             public static byte[] Minify(in ReadOnlySpan<byte> input)
             {
-#if NET7_0_OR_GREATER
-                scoped var reader = new JsonReader<byte>(input);
-                scoped var writer = new JsonWriter<byte>();
-#else
-                var reader = new JsonReader<byte>(input);
-                var writer = new JsonWriter<byte>(input.Length);
-#endif
+                scoped JsonReader<byte> reader = new(input);
+                scoped JsonWriter<byte> writer = new();
                 try
                 {
                     Minify(ref reader, ref writer);
@@ -200,8 +185,7 @@ namespace SpanJson
 
             private static void Minify<TSymbol>(ref JsonReader<TSymbol> reader, ref JsonWriter<TSymbol> writer) where TSymbol : struct
             {
-                var token = reader.ReadNextToken();
-                switch (token)
+                switch (reader.ReadNextToken())
                 {
                     case JsonToken.BeginObject:
                         {

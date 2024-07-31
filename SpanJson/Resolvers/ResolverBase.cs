@@ -36,8 +36,7 @@ namespace SpanJson.Resolvers
 
         private static Dictionary<Type, JsonConstructorAttribute> BuildMap()
         {
-            // TODO: what to do with the 8 args constructor with TRest?
-            var result = new Dictionary<Type, JsonConstructorAttribute>
+            return new Dictionary<Type, JsonConstructorAttribute>
             {
                 {typeof(KeyValuePair<,>), new JsonConstructorAttribute()},
                 {typeof(Tuple<,>), new JsonConstructorAttribute()},
@@ -53,8 +52,6 @@ namespace SpanJson.Resolvers
                 {typeof(ValueTuple<,,,,,>), new JsonConstructorAttribute()},
                 {typeof(ValueTuple<,,,,,,>), new JsonConstructorAttribute()}
             };
-
-            return result;
         }
 
         public static IJsonFormatter GetDefaultOrCreate(Type type)
@@ -64,26 +61,18 @@ namespace SpanJson.Resolvers
         }
     }
 
-    public abstract class ResolverBase<TSymbol, TResolver> : ResolverBase, IJsonFormatterResolver<TSymbol, TResolver>
+    public abstract class ResolverBase<TSymbol, TResolver>(SpanJsonOptions spanJsonOptions) : ResolverBase, IJsonFormatterResolver<TSymbol, TResolver>
         where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        private readonly SpanJsonOptions _spanJsonOptions;
 
         // ReSharper disable StaticMemberInGenericType
         private static readonly ConcurrentDictionary<Type, IJsonFormatter> Formatters =
-            new ConcurrentDictionary<Type, IJsonFormatter>();
-        // ReSharper restore StaticMemberInGenericType
-
-
-        protected ResolverBase(SpanJsonOptions spanJsonOptions)
-        {
-            _spanJsonOptions = spanJsonOptions;
-        }
+            new();
 
         public virtual IJsonFormatter GetFormatter(Type type)
         {
             // ReSharper disable ConvertClosureToMethodGroup
-            return Formatters.GetOrAdd(type, x => BuildFormatter(x));
+            return Formatters.GetOrAdd(type, BuildFormatter);
             // ReSharper restore ConvertClosureToMethodGroup
         }
 
@@ -104,20 +93,20 @@ namespace SpanJson.Resolvers
             Formatters.AddOrUpdate(type, GetDefaultOrCreate(formatterType), (t, formatter) => GetDefaultOrCreate(formatterType));
         }
 
-        public virtual IJsonFormatter GetFormatter(JsonMemberInfo memberInfo, Type overrideMemberType = null)
+        public virtual IJsonFormatter GetFormatter(JsonMemberInfo info, Type overrideMemberType = null)
         {
             // ReSharper disable ConvertClosureToMethodGroup
-            if (memberInfo.CustomSerializer != null)
+            if (info.CustomSerializer != null)
             {
-                var formatter = GetDefaultOrCreate(memberInfo.CustomSerializer);
-                if (formatter is ICustomJsonFormatter csf && memberInfo.CustomSerializerArguments != null)
+                var formatter = GetDefaultOrCreate(info.CustomSerializer);
+                if (formatter is ICustomJsonFormatter csf && info.CustomSerializerArguments != null)
                 {
-                    csf.Arguments = memberInfo.CustomSerializerArguments;
+                    csf.Arguments = info.CustomSerializerArguments;
                 }
                 return formatter;
             }
 
-            var type = overrideMemberType ?? memberInfo.MemberType;
+            var type = overrideMemberType ?? info.MemberType;
             return GetFormatter(type);
             // ReSharper restore ConvertClosureToMethodGroup
         }
@@ -130,16 +119,16 @@ namespace SpanJson.Resolvers
             foreach (var memberInfoName in members)
             {
                 var name = Escape(memberInfoName);
-                if (_spanJsonOptions.NamingConvention == NamingConventions.CamelCase)
+                if (spanJsonOptions.NamingConvention == NamingConventions.CamelCase)
                 {
                     name = MakeCamelCase(name);
                 }
 
                 result.Add(new JsonMemberInfo(memberInfoName, typeof(object), null, name,
-                    _spanJsonOptions.NullOption == NullOptions.ExcludeNulls, true, true, null, null));
+                    spanJsonOptions.NullOption == NullOptions.ExcludeNulls, true, true, null, null));
             }
 
-            return new JsonObjectDescription(null, null, true, result.ToArray(), null);
+            return new JsonObjectDescription(null, null, true, [.. result], null);
         }
 
         public virtual IJsonFormatter<T, TSymbol> GetFormatter<T>()
@@ -159,7 +148,7 @@ namespace SpanJson.Resolvers
                 return name;
             }
 
-            return string.Concat(char.ToLowerInvariant(name[0]), name.Substring(1));
+            return string.Concat(char.ToLowerInvariant(name[0]), name[1..]);
         }
 
         protected virtual JsonObjectDescription BuildMembers(Type type)
@@ -167,13 +156,13 @@ namespace SpanJson.Resolvers
             var publicMembers = type.SerializableMembers();
             var result = new List<JsonMemberInfo>();
             JsonExtensionMemberInfo extensionMemberInfo = null;
-            var excludeNulls = _spanJsonOptions.NullOption == NullOptions.ExcludeNulls;
+            var excludeNulls = spanJsonOptions.NullOption == NullOptions.ExcludeNulls;
             foreach (var memberInfo in publicMembers)
             {
                 var memberType = memberInfo is FieldInfo fi ? fi.FieldType :
                     memberInfo is PropertyInfo pi ? pi.PropertyType : null;
                 var name = Escape(GetAttributeName(memberInfo) ?? memberInfo.Name);
-                if (_spanJsonOptions.NamingConvention == NamingConventions.CamelCase)
+                if (spanJsonOptions.NamingConvention == NamingConventions.CamelCase)
                 {
                     name = MakeCamelCase(name);
                 }
@@ -188,7 +177,7 @@ namespace SpanJson.Resolvers
 
                 if (memberInfo.GetCustomAttribute<JsonExtensionDataAttribute>() != null && typeof(IDictionary<string, object>).IsAssignableFrom(memberType) && canRead && canWrite)
                 {
-                    extensionMemberInfo = new JsonExtensionMemberInfo(memberInfo.Name, memberType, _spanJsonOptions.NamingConvention, excludeNulls);
+                    extensionMemberInfo = new JsonExtensionMemberInfo(memberInfo.Name, memberType, spanJsonOptions.NamingConvention, excludeNulls);
                 }
                 else if (!IsIgnored(memberInfo))
                 {
@@ -199,7 +188,7 @@ namespace SpanJson.Resolvers
             }
 
             GetConstructorInfo(type, out var constructor, out var attribute, out var hasDefaultConstructor);
-            return new JsonObjectDescription(constructor, attribute, hasDefaultConstructor, result.ToArray(), extensionMemberInfo);
+            return new JsonObjectDescription(constructor, attribute, hasDefaultConstructor, [.. result], extensionMemberInfo);
         }
 
         protected virtual void GetConstructorInfo(Type type, out ConstructorInfo constructor, out JsonConstructorAttribute attribute, out bool hasDefaultConstructor)
@@ -229,13 +218,13 @@ namespace SpanJson.Resolvers
                 return;
             }
 
-            constructor = default;
-            attribute = default;
+            constructor = null;
+            attribute = null;
         }
 
         private static string Escape(string input)
         {
-            return input; // TODO: Find out if necessary
+            return input;
         }
 
         private static bool IsIgnored(MemberInfo memberInfo)
@@ -250,7 +239,7 @@ namespace SpanJson.Resolvers
 
         protected virtual IJsonFormatter BuildFormatter(Type type)
         {
-            if (type == typeof(byte[]) && _spanJsonOptions.ByteArrayOption == ByteArrayOptions.Base64)
+            if (type == typeof(byte[]) && spanJsonOptions.ByteArrayOption == ByteArrayOptions.Base64)
             {
                 return GetDefaultOrCreate(typeof(ByteArrayBase64Formatter<TSymbol, TResolver>));
             }
@@ -280,24 +269,19 @@ namespace SpanJson.Resolvers
             if (type.IsArray)
             {
                 var rank = type.GetArrayRank();
-                switch (rank)
+                return rank switch
                 {
-                    case 1:
-                        return GetDefaultOrCreate(typeof(ArrayFormatter<,,>).MakeGenericType(type.GetElementType(),
-                            typeof(TSymbol), typeof(TResolver)));
-                    case 2:
-                        return GetDefaultOrCreate(typeof(TwoDimensionalArrayFormatter<,,>).MakeGenericType(type.GetElementType(),
-                            typeof(TSymbol), typeof(TResolver)));
-                    default:
-                        throw new NotSupportedException("Only One- and Two-dimensional arrrays are supported.");
-                }
-
-
+                    1 => GetDefaultOrCreate(typeof(ArrayFormatter<,,>).MakeGenericType(type.GetElementType(),
+                                                typeof(TSymbol), typeof(TResolver))),
+                    2 => GetDefaultOrCreate(typeof(TwoDimensionalArrayFormatter<,,>).MakeGenericType(type.GetElementType(),
+                                                typeof(TSymbol), typeof(TResolver))),
+                    _ => throw new NotSupportedException("Only One- and Two-dimensional arrrays are supported."),
+                };
             }
 
             if (type.IsEnum)
             {
-                switch (_spanJsonOptions.EnumOption)
+                switch (spanJsonOptions.EnumOption)
                 {
                     case EnumOptions.String:
                     {
@@ -390,19 +374,19 @@ namespace SpanJson.Resolvers
                     continue; // if it's a custom formatter, we skip it
                 }
 
-                if (candidate.TryGetTypeOfGenericInterface(typeof(IJsonFormatter<,>), out var argumentTypes) && argumentTypes.Length == 2)
+                if (candidate.TryGetTypeOfGenericInterface(typeof(IJsonFormatter<,>), out var argumentTypes)
+                    && argumentTypes.Length == 2
+                    && argumentTypes[0] == type
+                    && argumentTypes[1] == typeof(TSymbol))
                 {
-                    if (argumentTypes[0] == type && argumentTypes[1] == typeof(TSymbol))
+                    // if it has a custom formatter for a base type (i.e. nullable base type, array element, list element)
+                    // we need to ignore the integrated types for this
+                    if (HasCustomFormatterForRelatedType(type))
                     {
-                        // if it has a custom formatter for a base type (i.e. nullable base type, array element, list element)
-                        // we need to ignore the integrated types for this
-                        if (HasCustomFormatterForRelatedType(type))
-                        {
-                            continue;
-                        }
-
-                        return GetDefaultOrCreate(candidate);
+                        continue;
                     }
+
+                    return GetDefaultOrCreate(candidate);
                 }
             }
 
@@ -479,7 +463,6 @@ namespace SpanJson.Resolvers
             return null;
         }
 
-
         public virtual Func<T, TConverted> GetEnumerableConvertFunctor<T, TConverted>()
         {
             var inputType = typeof(T);
@@ -501,11 +484,10 @@ namespace SpanJson.Resolvers
 
             // not a nice way, but I don't find another good way to solve this, without adding either a dependency to immutable collection
             // or another nuget package and plugin code.
-            if (convertedType.Namespace == "System.Collections.Immutable")
+            if (string.Equals(convertedType.Namespace, "System.Collections.Immutable", StringComparison.Ordinal))
             {
                 var emptyField = convertedType.GetField("Empty", BindingFlags.Public | BindingFlags.Static);
-                var addRangeMethod = convertedType.GetMethods(BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(a =>
-                    a.Name == "AddRange" && a.GetParameters().Length == 1 && a.GetParameters().Single().ParameterType.IsAssignableFrom(paramExpression.Type));
+                var addRangeMethod = convertedType.GetMethods(BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(a => string.Equals(a.Name, "AddRange", StringComparison.Ordinal) && a.GetParameters().Length == 1 && a.GetParameters().Single().ParameterType.IsAssignableFrom(paramExpression.Type));
                 if (emptyField == null || addRangeMethod == null)
                 {
                     return _ => throw new NotSupportedException($"{typeof(TConverted).Name} has no supported Immutable Collections (Immutable.Empty.AddRange) pattern.");
@@ -523,9 +505,8 @@ namespace SpanJson.Resolvers
                     return _ => throw new NotSupportedException($"Can't convert {typeof(T).Name} to {typeof(TConverted).Name}.");
                 }
             }
-
-            var ci = convertedType.GetConstructors().FirstOrDefault(a =>
-                a.GetParameters().Length == 1 && a.GetParameters().Single().ParameterType.IsAssignableFrom(paramExpression.Type));
+            var ci = Array.Find(convertedType.GetConstructors(), a => a.GetParameters().Length == 1
+                                                                      && a.GetParameters()[0].ParameterType.IsAssignableFrom(paramExpression.Type));
             if (ci == null)
             {
                 return _ => throw new NotSupportedException($"No constructor of {convertedType.Name} accepts {paramExpression.Type.Name}.");
@@ -541,12 +522,7 @@ namespace SpanJson.Resolvers
         protected virtual bool IsUnsupportedEnumerable(Type type)
         {
             // TODO: Stack/ConcurrentStack require that the order of the elements is reversed on deserialization, block it for now
-            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Stack<>) || type.GetGenericTypeDefinition() == typeof(ConcurrentStack<>)))
-            {
-                return true;
-            }
-
-            return false;
+            return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Stack<>) || type.GetGenericTypeDefinition() == typeof(ConcurrentStack<>));
         }
     }
 }

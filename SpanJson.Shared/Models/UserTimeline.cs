@@ -6,33 +6,23 @@ namespace SpanJson.Shared.Models
     {
         public DateTime? creation_date { get; set; }
 
-
         public PostType? post_type { get; set; }
-
 
         public UserTimelineType? timeline_type { get; set; }
 
-
         public int? user_id { get; set; }
-
 
         public int? post_id { get; set; }
 
-
         public int? comment_id { get; set; }
-
 
         public int? suggested_edit_id { get; set; }
 
-
         public int? badge_id { get; set; }
-
 
         public string title { get; set; }
 
-
         public string detail { get; set; }
-
 
         public string link { get; set; }
 

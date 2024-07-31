@@ -174,7 +174,7 @@ namespace SpanJson.Tests
         {
             var test = new TestDO {Value = null, AnotherValue = 1, Flags = FlagsEnum.Fourth | FlagsEnum.First};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestDO, IncludeNullsOriginalCaseResolver<char>>(test);
-            Assert.Contains("null", serialized);
+            Assert.Contains("null", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestDO, IncludeNullsOriginalCaseResolver<char>>(serialized);
             Assert.NotNull(deserialized);
             Assert.Null(deserialized.Value);
@@ -185,7 +185,7 @@ namespace SpanJson.Tests
         {
             var test = new TestDO {Value = null, AnotherValue = 1, Flags = null};
             var serialized = JsonSerializer.Generic.Utf8.Serialize<TestDO, IncludeNullsOriginalCaseResolver<byte>>(test);
-            Assert.Contains("null", Encoding.UTF8.GetString(serialized));
+            Assert.Contains("null", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestDO, IncludeNullsOriginalCaseResolver<byte>>(serialized);
             Assert.NotNull(deserialized);
             Assert.Null(deserialized.Value);

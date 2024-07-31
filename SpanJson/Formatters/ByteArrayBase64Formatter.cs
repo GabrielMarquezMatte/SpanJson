@@ -3,7 +3,7 @@
     public sealed class ByteArrayBase64Formatter<TSymbol, TResolver> : IJsonFormatter<byte[], TSymbol>
         where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        public static readonly ByteArrayBase64Formatter<TSymbol, TResolver> Default = new ByteArrayBase64Formatter<TSymbol, TResolver>();
+        public static readonly ByteArrayBase64Formatter<TSymbol, TResolver> Default = new();
 
         public void Serialize(ref JsonWriter<TSymbol> writer, byte[] value)
         {

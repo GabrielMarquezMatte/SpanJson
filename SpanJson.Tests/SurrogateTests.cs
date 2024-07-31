@@ -11,12 +11,12 @@ namespace SpanJson.Tests
         [InlineData(0x1F3BC)]
         public void SurrogatePairsUtf8FromInt(int input)
         {
-            string surrogate = Char.ConvertFromUtf32(input);
+            string surrogate = char.ConvertFromUtf32(input);
             var utf8Bytes = Encoding.UTF8.GetBytes(surrogate);
             var serialized = JsonSerializer.Generic.Utf8.Serialize(surrogate);
             Assert.True(serialized.AsSpan().Slice(1, utf8Bytes.Length).SequenceEqual(utf8Bytes));
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<string>(serialized);
-            var utf32 = Char.ConvertToUtf32(deserialized, 0);
+            var utf32 = char.ConvertToUtf32(deserialized, 0);
             Assert.Equal(input, utf32);
         }
 
@@ -50,10 +50,10 @@ namespace SpanJson.Tests
         [InlineData(0x1F3BC)]
         public void SurrogatePairsUtf16(int input)
         {
-            string surrogate = Char.ConvertFromUtf32(input);
+            string surrogate = char.ConvertFromUtf32(input);
             var serialized = JsonSerializer.Generic.Utf16.Serialize(surrogate);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<string>(serialized);
-            var utf32 = Char.ConvertToUtf32(deserialized, 0);
+            var utf32 = char.ConvertToUtf32(deserialized, 0);
             Assert.Equal(input, utf32);
         }
 

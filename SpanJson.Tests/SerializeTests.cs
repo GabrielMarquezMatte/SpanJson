@@ -8,7 +8,7 @@ using Xunit;
 
 namespace SpanJson.Tests
 {
-    public class Tests : ModelTestBase
+    public class SerializeTests : ModelTestBase
     {
         [Theory]
         [MemberData(nameof(GetModels))]
@@ -68,7 +68,6 @@ namespace SpanJson.Tests
             Assert.IsType(modelType, deserialized);
             Assert.Equal(model, deserialized, GenericEqualityComparer.Default);
         }
-
 
         [Theory]
         [MemberData(nameof(GetModels))]
@@ -185,12 +184,12 @@ namespace SpanJson.Tests
             var model = fixture.Create(modelType);
             var serialized = JsonSerializer.NonGeneric.Utf16.Serialize(model);
             serialized = JsonSerializer.PrettyPrinter.Print(serialized);
-            Assert.Contains("\r\n", serialized);
-            Assert.Contains(": ", serialized);
-            serialized = serialized.Replace(": ", " : "); // make sure we have even more whitespaces in
-            serialized = serialized.Replace(",", " ,");
-            serialized = serialized.Replace("]", " ]");
-            serialized = serialized.Replace("[", " [");
+            Assert.Contains("\r\n", serialized, StringComparison.Ordinal);
+            Assert.Contains(": ", serialized, StringComparison.Ordinal);
+            serialized = serialized.Replace(": ", " : ", StringComparison.Ordinal); // make sure we have even more whitespaces in
+            serialized = serialized.Replace(",", " ,", StringComparison.Ordinal);
+            serialized = serialized.Replace("]", " ]", StringComparison.Ordinal);
+            serialized = serialized.Replace("[", " [", StringComparison.Ordinal);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.NonGeneric.Utf16.Deserialize(serialized, modelType);
             Assert.NotNull(deserialized);
@@ -208,19 +207,18 @@ namespace SpanJson.Tests
             serialized = JsonSerializer.PrettyPrinter.Print(serialized);
             Assert.NotNull(serialized);
             var serializedAsString = Encoding.UTF8.GetString(serialized);
-            Assert.Contains("\r\n", serializedAsString);
-            Assert.Contains(": ", serializedAsString);
-            serializedAsString = serializedAsString.Replace(": ", " : ");
-            serializedAsString = serializedAsString.Replace(",", " ,");
-            serializedAsString = serializedAsString.Replace("]", " ]");
-            serializedAsString = serializedAsString.Replace("[", " [");
+            Assert.Contains("\r\n", serializedAsString, StringComparison.Ordinal);
+            Assert.Contains(": ", serializedAsString, StringComparison.Ordinal);
+            serializedAsString = serializedAsString.Replace(": ", " : ", StringComparison.Ordinal);
+            serializedAsString = serializedAsString.Replace(",", " ,", StringComparison.Ordinal);
+            serializedAsString = serializedAsString.Replace("]", " ]", StringComparison.Ordinal);
+            serializedAsString = serializedAsString.Replace("[", " [", StringComparison.Ordinal);
             serialized = Encoding.UTF8.GetBytes(serializedAsString);
             var deserialized = JsonSerializer.NonGeneric.Utf8.Deserialize(serialized, modelType);
             Assert.NotNull(deserialized);
             Assert.IsType(modelType, deserialized);
             Assert.Equal(model, deserialized, GenericEqualityComparer.Default);
         }
-
 
         [Theory]
         [MemberData(nameof(GetModels))]
@@ -233,8 +231,8 @@ namespace SpanJson.Tests
             Assert.NotNull(prettyPrinted);
             var minified = JsonSerializer.Minifier.Minify(prettyPrinted);
             Assert.NotNull(minified);
-            Assert.DoesNotContain("\r\n", minified);
-            Assert.DoesNotContain(": ", minified);
+            Assert.DoesNotContain("\r\n", minified, StringComparison.Ordinal);
+            Assert.DoesNotContain(": ", minified, StringComparison.Ordinal);
             Assert.Equal(serialized, minified);
         }
 
@@ -250,8 +248,8 @@ namespace SpanJson.Tests
             var minified = JsonSerializer.Minifier.Minify(prettyPrinted);
             Assert.NotNull(minified);
             var minifiedAsString = Encoding.UTF8.GetString(minified);
-            Assert.DoesNotContain("\r\n", minifiedAsString);
-            Assert.DoesNotContain(": ", minifiedAsString);
+            Assert.DoesNotContain("\r\n", minifiedAsString, StringComparison.Ordinal);
+            Assert.DoesNotContain(": ", minifiedAsString, StringComparison.Ordinal);
             Assert.Equal(serialized, minified);
         }
     }

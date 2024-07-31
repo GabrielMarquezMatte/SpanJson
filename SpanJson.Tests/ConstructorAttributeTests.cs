@@ -11,15 +11,10 @@ namespace SpanJson.Tests
 {
     public class ConstructorAttributeTests
     {
-        public class InTest
+        [method: JsonConstructor]
+        public class InTest(in int value)
         {
-            public int Value { get; }
-
-            [JsonConstructor]
-            public InTest(in int value)
-            {
-                Value = value;
-            }
+            public int Value { get; } = value;
         }
 
         public readonly struct RefTest
@@ -33,15 +28,10 @@ namespace SpanJson.Tests
             }
         }
 
-        public class InNullableTest
+        [method: JsonConstructor]
+        public class InNullableTest(in int? value)
         {
-            public int? Value { get; }
-
-            [JsonConstructor]
-            public InNullableTest(in int? value)
-            {
-                Value = value;
-            }
+            public int? Value { get; } = value;
         }
 
         public readonly struct RefNullableTest
@@ -55,18 +45,11 @@ namespace SpanJson.Tests
             }
         }
 
-        public class CtorAdditional : IEquatable<CtorAdditional>
+        [method: JsonConstructor]
+        public class CtorAdditional(int value, string key) : IEquatable<CtorAdditional>
         {
-            [JsonConstructor]
-            public CtorAdditional(int value, string key)
-            {
-                Key = key;
-                Value = value;
-            }
-
-            public string Key { get; }
-            public int Value { get; }
-
+            public string Key { get; } = key;
+            public int Value { get; } = value;
 
             public string Additional { get; set; }
 
@@ -74,7 +57,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return Key == other.Key && Value == other.Value && Additional == other.Additional;
+                return string.Equals(Key, other.Key, StringComparison.Ordinal) && Value == other.Value && string.Equals(Additional, other.Additional, StringComparison.Ordinal);
             }
 
             public override bool Equals(object obj)
@@ -91,23 +74,17 @@ namespace SpanJson.Tests
             }
         }
 
-        public class DefaultDO : IEquatable<DefaultDO>
+        [method: JsonConstructor]
+        public class DefaultDO(int value, string key) : IEquatable<DefaultDO>
         {
-            [JsonConstructor]
-            public DefaultDO(int value, string key)
-            {
-                Key = key;
-                Value = value;
-            }
-
-            public string Key { get; }
-            public int Value { get; }
+            public string Key { get; } = key;
+            public int Value { get; } = value;
 
             public bool Equals(DefaultDO other)
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Key, other.Key) && Value == other.Value;
+                return string.Equals(Key, other.Key, StringComparison.Ordinal) && Value == other.Value;
             }
 
             public override bool Equals(object obj)
@@ -122,27 +99,20 @@ namespace SpanJson.Tests
             {
                 unchecked
                 {
-                    return ((Key != null ? Key.GetHashCode() : 0) * 397) ^ Value;
+                    return ((Key != null ? Key.GetHashCode(StringComparison.Ordinal) : 0) * 397) ^ Value;
                 }
             }
         }
 
-        public readonly struct NamedDO : IEquatable<NamedDO>
+        [method: JsonConstructor(nameof(Key), nameof(Value))]
+        public readonly struct NamedDO(string first, int second) : IEquatable<NamedDO>
         {
-            [JsonConstructor(nameof(Key), nameof(Value))]
-            public NamedDO(string first, int second)
-            {
-                Key = first;
-                Value = second;
-            }
-
-
-            public string Key { get; }
-            public int Value { get; }
+            public string Key { get; } = first;
+            public int Value { get; } = second;
 
             public bool Equals(NamedDO other)
             {
-                return string.Equals(Key, other.Key) && Value == other.Value;
+                return string.Equals(Key, other.Key, StringComparison.Ordinal) && Value == other.Value;
             }
 
             public override bool Equals(object obj)
@@ -155,11 +125,10 @@ namespace SpanJson.Tests
             {
                 unchecked
                 {
-                    return ((Key != null ? Key.GetHashCode() : 0) * 397) ^ Value;
+                    return ((Key != null ? Key.GetHashCode(StringComparison.Ordinal) : 0) * 397) ^ Value;
                 }
             }
         }
-
 
         [Fact]
         public void TestCtorAdditionalUtf8()
@@ -332,7 +301,7 @@ namespace SpanJson.Tests
         public static IEnumerable<object[]> CreateBaseClassTestData()
         {
             Type[] types =
-            {
+            [
                 typeof(KeyValuePair<,>),
                 typeof(Tuple<,>),
                 typeof(Tuple<,,>),
@@ -346,14 +315,14 @@ namespace SpanJson.Tests
                 typeof(ValueTuple<,,,,>),
                 typeof(ValueTuple<,,,,,>),
                 typeof(ValueTuple<,,,,,,>),
-            };
+            ];
 
             var fixture = new ExpressionTreeFixture();
 
             Type[] parameterTypes =
-            {
+            [
                 typeof(int), typeof(string)
-            };
+            ];
 
             foreach (var type in types)
             {
@@ -391,7 +360,6 @@ namespace SpanJson.Tests
             Assert.Equal(5, deserialized.Value);
         }
 
-
         [Fact]
         public void TestPrivateConstructorUtf8()
         {
@@ -404,7 +372,6 @@ namespace SpanJson.Tests
         {
             public CustomResolver() : base(new SpanJsonOptions())
             {
-
             }
 
             protected override void GetConstructorInfo(Type type, out ConstructorInfo constructor, out JsonConstructorAttribute attribute, out bool hasDefaultConstructor)
@@ -434,8 +401,8 @@ namespace SpanJson.Tests
                     return;
                 }
 
-                constructor = default;
-                attribute = default;
+                constructor = null;
+                attribute = null;
             }
         }
 

@@ -104,7 +104,7 @@ namespace SpanJson.Formatters
                 MethodInfo propertyNameWriterMethodInfo;
                 if (typeof(TSymbol) == typeof(char))
                 {
-                    writeNameExpressions = new[] {Expression.Constant(formattedMemberInfoName)};
+                    writeNameExpressions = [Expression.Constant(formattedMemberInfoName)];
                     propertyNameWriterMethodInfo =
                         FindPublicInstanceMethod(writerParameter.Type, nameof(JsonWriter<TSymbol>.WriteUtf16Verbatim), typeof(string));
                 }
@@ -114,7 +114,7 @@ namespace SpanJson.Formatters
                     // Everything above a length of 32 is not optimized
                     if (formattedMemberInfoName.Length > 32)
                     {
-                        writeNameExpressions = new[] {Expression.Constant(Encoding.UTF8.GetBytes(formattedMemberInfoName))};
+                        writeNameExpressions = [Expression.Constant(Encoding.UTF8.GetBytes(formattedMemberInfoName))];
                         propertyNameWriterMethodInfo =
                             FindPublicInstanceMethod(writerParameter.Type, nameof(JsonWriter<TSymbol>.WriteUtf8Verbatim), typeof(byte[]));
                     }
@@ -197,7 +197,7 @@ namespace SpanJson.Formatters
 
             if (objectDescription.ExtensionMemberInfo != null)
             {
-                var knownNames = objectDescription.Members.Where(t => t.CanWrite).Select(a => a.Name).ToHashSet();
+                var knownNames = objectDescription.Members.Where(t => t.CanWrite).Select(a => a.Name).ToHashSet(StringComparer.Ordinal);
                 var memberInfo = typeof(ComplexFormatter).GetMethod(nameof(SerializeExtension), BindingFlags.Static | BindingFlags.NonPublic);
                 var closedMemberInfo = memberInfo.MakeGenericMethod(typeof(TSymbol), typeof(TResolver));
                 var valueExpression = Expression.TypeAs(Expression.PropertyOrField(valueParameter, objectDescription.ExtensionMemberInfo.MemberName),
@@ -209,7 +209,7 @@ namespace SpanJson.Formatters
             }
 
             expressions.Add(Expression.Call(writerParameter, writeEndObjectMethodInfo));
-            var blockExpression = Expression.Block(new[] {writeSeparator}, expressions);
+            var blockExpression = Expression.Block([writeSeparator], expressions);
             var lambda =
                 Expression.Lambda<SerializeDelegate<T, TSymbol>>(blockExpression, writerParameter, valueParameter);
             return lambda.Compile();
@@ -227,7 +227,7 @@ namespace SpanJson.Formatters
             var memberInfos = objectDescription.Where(a => a.CanWrite).ToList();
             var readerParameter = Expression.Parameter(typeof(JsonReader<TSymbol>).MakeByRefType(), "reader");
             // can't deserialize abstract and only support interfaces based on IEnumerable<T> (this includes, IList, IReadOnlyList, IDictionary et al.)
-            foreach (var memberInfo in memberInfos)
+            foreach (ref readonly var memberInfo in CollectionsMarshal.AsSpan(memberInfos))
             {
                 var memberType = memberInfo.MemberType;
                 if (memberType.IsAbstract)
@@ -261,11 +261,7 @@ namespace SpanJson.Formatters
                         createExpression = Expression.New(ci);
                     }
                 }
-
-                if (createExpression == null)
-                {
-                    createExpression = Expression.Default(typeof(T));
-                }
+                createExpression ??= Expression.Default(typeof(T));
 
                 return Expression.Lambda<DeserializeDelegate<T, TSymbol>>(createExpression, readerParameter).Compile();
             }
@@ -342,8 +338,8 @@ namespace SpanJson.Formatters
                     return Expression.Block(assignHasVariableExpression, assignVariableExpression);
                 };
 
-                static string ToPascalCase(string name) => char.ToUpperInvariant(name[0]) + name.Substring(1);
-                static string ToCamelCase(string name) => char.ToLowerInvariant(name[0]) + name.Substring(1);
+                static string ToPascalCase(string name) => char.ToUpperInvariant(name[0]) + name[1..];
+                static string ToCamelCase(string name) => char.ToLowerInvariant(name[0]) + name[1..];
             }
             else if (objectDescription.HasDefaultConstructor)
             {
@@ -420,10 +416,8 @@ namespace SpanJson.Formatters
                 var closedMemberInfo = memberInfo.MakeGenericMethod(typeof(TSymbol), typeof(TResolver));
                 extensionExpressions.Add(Expression.Call(null, closedMemberInfo, readerParameter, byteNameSpan, dictExpression,
                     Expression.Constant(objectDescription.ExtensionMemberInfo.ExcludeNulls)));
-                var extensionBlock = Expression.Block(extensionExpressions);
-                skipCall = extensionBlock;
+                skipCall = Expression.Block(extensionExpressions);
             }
-
 
             var expressions = new List<Expression>();
             if (memberInfos.Count > 0)
@@ -463,7 +457,7 @@ namespace SpanJson.Formatters
                     {
                         var parameterType = parameterInfo.ParameterType;
                         var defaultValue = parameterInfo.DefaultValue;
-                        if (!(defaultValue is null) && parameterType.TryGetNullableUnderlyingType(out var notNullType) && notNullType.IsEnum)
+                        if (defaultValue is not null && parameterType.TryGetNullableUnderlyingType(out var notNullType) && notNullType.IsEnum)
                         {
                             // Fix for nullable enums, which come with their integer value.
                             defaultValue = Enum.ToObject(notNullType, defaultValue);
@@ -485,11 +479,11 @@ namespace SpanJson.Formatters
                 }
 
                 blockExpressions.Add(Expression.Label(returnTarget, returnValue));
-                block = Expression.Block(blockParameters, blockExpressions.ToArray());
+                block = Expression.Block(blockParameters, [.. blockExpressions]);
             }
             else
             {
-                block = Expression.Block(new[] {returnValue, countExpression}, readBeginObject,
+                block = Expression.Block([returnValue, countExpression], readBeginObject,
                     Expression.Assign(returnValue, Expression.New(returnValue.Type)),
                     Expression.Loop(
                         Expression.IfThenElse(abortExpression, Expression.Break(loopAbort),
@@ -616,7 +610,7 @@ namespace SpanJson.Formatters
 
             Debug.Assert(remaining == 0);
             Debug.Assert(offset == bytes.Length);
-            return result.ToArray();
+            return [.. result];
         }
 
         /// <summary>
@@ -629,7 +623,6 @@ namespace SpanJson.Formatters
         }
 
         protected delegate T DeserializeDelegate<out T, TSymbol>(ref JsonReader<TSymbol> reader) where TSymbol : struct;
-
 
         protected delegate void SerializeDelegate<in T, TSymbol>(ref JsonWriter<TSymbol> writer, T value) where TSymbol : struct;
     }

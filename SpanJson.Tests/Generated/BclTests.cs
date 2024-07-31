@@ -7,32 +7,32 @@ using Xunit;
 // ReSharper disable BuiltInTypeReferenceStyle
 namespace SpanJson.Tests.Generated
 {
-    public partial class NullableSByteListTests : NullableListTestBase<SByte>
+    public class NullableSByteListTests : NullableListTestBase<sbyte>
     {
     }
 
-    public partial class NullableSByteArrayTests : NullableArrayTestBase<SByte>
+    public class NullableSByteArrayTests : NullableArrayTestBase<sbyte>
     {
     }
-    public partial class SByteTests : StructTestBase<SByte>
+    public partial class SByteTests : StructTestBase<sbyte>
     {
         [Theory]
-        [InlineData(SByte.MinValue)]
-        [InlineData(SByte.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(SByte input)
+        [InlineData(sbyte.MinValue)]
+        [InlineData(sbyte.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(sbyte input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<SByte>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<sbyte>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(SByte.MinValue)]
-        [InlineData(SByte.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(SByte input)
+        [InlineData(sbyte.MinValue)]
+        [InlineData(sbyte.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(sbyte input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<SByte>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<sbyte>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -40,20 +40,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<SByte>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<sbyte>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<SByte>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<sbyte>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<SByte>();
+            var value = Fixture.Create<sbyte>();
             var writer = new JsonWriter<byte>();
             writer.WriteSByte(value);
             var output = writer.ToByteArray();
@@ -66,7 +66,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<SByte>();
+            var value = Fixture.Create<sbyte>();
             var writer = new JsonWriter<char>();
             writer.WriteSByte(value);
             var output = writer.ToString();
@@ -76,39 +76,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class SByteListTests : ListTestBase<SByte>
+    public class SByteListTests : ListTestBase<sbyte>
     {
     }
 
-    public partial class SByteArrayTests : ArrayTestBase<SByte>
+    public class SByteArrayTests : ArrayTestBase<sbyte>
     {
     }
-    public partial class NullableInt16ListTests : NullableListTestBase<Int16>
+    public class NullableInt16ListTests : NullableListTestBase<short>
     {
     }
 
-    public partial class NullableInt16ArrayTests : NullableArrayTestBase<Int16>
+    public class NullableInt16ArrayTests : NullableArrayTestBase<short>
     {
     }
-    public partial class Int16Tests : StructTestBase<Int16>
+    public class Int16Tests : StructTestBase<short>
     {
         [Theory]
-        [InlineData(Int16.MinValue)]
-        [InlineData(Int16.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Int16 input)
+        [InlineData(short.MinValue)]
+        [InlineData(short.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(short input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Int16>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<short>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(Int16.MinValue)]
-        [InlineData(Int16.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Int16 input)
+        [InlineData(short.MinValue)]
+        [InlineData(short.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(short input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Int16>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<short>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -116,20 +116,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<Int16>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<short>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<Int16>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<short>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Int16>();
+            var value = Fixture.Create<short>();
             var writer = new JsonWriter<byte>();
             writer.WriteInt16(value);
             var output = writer.ToByteArray();
@@ -142,7 +142,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Int16>();
+            var value = Fixture.Create<short>();
             var writer = new JsonWriter<char>();
             writer.WriteInt16(value);
             var output = writer.ToString();
@@ -152,39 +152,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class Int16ListTests : ListTestBase<Int16>
+    public class Int16ListTests : ListTestBase<short>
     {
     }
 
-    public partial class Int16ArrayTests : ArrayTestBase<Int16>
+    public class Int16ArrayTests : ArrayTestBase<short>
     {
     }
-    public partial class NullableInt32ListTests : NullableListTestBase<Int32>
+    public class NullableInt32ListTests : NullableListTestBase<int>
     {
     }
 
-    public partial class NullableInt32ArrayTests : NullableArrayTestBase<Int32>
+    public class NullableInt32ArrayTests : NullableArrayTestBase<int>
     {
     }
-    public partial class Int32Tests : StructTestBase<Int32>
+    public class Int32Tests : StructTestBase<int>
     {
         [Theory]
-        [InlineData(Int32.MinValue)]
-        [InlineData(Int32.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Int32 input)
+        [InlineData(int.MinValue)]
+        [InlineData(int.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(int input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Int32>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<int>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(Int32.MinValue)]
-        [InlineData(Int32.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Int32 input)
+        [InlineData(int.MinValue)]
+        [InlineData(int.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(int input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Int32>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<int>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -192,20 +192,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<Int32>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<int>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<Int32>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<int>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Int32>();
+            var value = Fixture.Create<int>();
             var writer = new JsonWriter<byte>();
             writer.WriteInt32(value);
             var output = writer.ToByteArray();
@@ -218,7 +218,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Int32>();
+            var value = Fixture.Create<int>();
             var writer = new JsonWriter<char>();
             writer.WriteInt32(value);
             var output = writer.ToString();
@@ -228,39 +228,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class Int32ListTests : ListTestBase<Int32>
+    public class Int32ListTests : ListTestBase<int>
     {
     }
 
-    public partial class Int32ArrayTests : ArrayTestBase<Int32>
+    public class Int32ArrayTests : ArrayTestBase<int>
     {
     }
-    public partial class NullableInt64ListTests : NullableListTestBase<Int64>
+    public class NullableInt64ListTests : NullableListTestBase<long>
     {
     }
 
-    public partial class NullableInt64ArrayTests : NullableArrayTestBase<Int64>
+    public class NullableInt64ArrayTests : NullableArrayTestBase<long>
     {
     }
-    public partial class Int64Tests : StructTestBase<Int64>
+    public class Int64Tests : StructTestBase<long>
     {
         [Theory]
-        [InlineData(Int64.MinValue)]
-        [InlineData(Int64.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Int64 input)
+        [InlineData(long.MinValue)]
+        [InlineData(long.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(long input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Int64>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<long>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(Int64.MinValue)]
-        [InlineData(Int64.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Int64 input)
+        [InlineData(long.MinValue)]
+        [InlineData(long.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(long input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Int64>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<long>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -268,20 +268,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<Int64>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<long>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<Int64>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<long>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Int64>();
+            var value = Fixture.Create<long>();
             var writer = new JsonWriter<byte>();
             writer.WriteInt64(value);
             var output = writer.ToByteArray();
@@ -294,7 +294,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Int64>();
+            var value = Fixture.Create<long>();
             var writer = new JsonWriter<char>();
             writer.WriteInt64(value);
             var output = writer.ToString();
@@ -304,39 +304,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class Int64ListTests : ListTestBase<Int64>
+    public class Int64ListTests : ListTestBase<long>
     {
     }
 
-    public partial class Int64ArrayTests : ArrayTestBase<Int64>
+    public class Int64ArrayTests : ArrayTestBase<long>
     {
     }
-    public partial class NullableByteListTests : NullableListTestBase<Byte>
+    public class NullableByteListTests : NullableListTestBase<byte>
     {
     }
 
-    public partial class NullableByteArrayTests : NullableArrayTestBase<Byte>
+    public class NullableByteArrayTests : NullableArrayTestBase<byte>
     {
     }
-    public partial class ByteTests : StructTestBase<Byte>
+    public class ByteTests : StructTestBase<byte>
     {
         [Theory]
-        [InlineData(Byte.MinValue)]
-        [InlineData(Byte.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Byte input)
+        [InlineData(byte.MinValue)]
+        [InlineData(byte.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(byte input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Byte>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<byte>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(Byte.MinValue)]
-        [InlineData(Byte.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Byte input)
+        [InlineData(byte.MinValue)]
+        [InlineData(byte.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(byte input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Byte>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<byte>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -344,20 +344,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<Byte>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<byte>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<Byte>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<byte>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Byte>();
+            var value = Fixture.Create<byte>();
             var writer = new JsonWriter<byte>();
             writer.WriteByte(value);
             var output = writer.ToByteArray();
@@ -370,7 +370,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Byte>();
+            var value = Fixture.Create<byte>();
             var writer = new JsonWriter<char>();
             writer.WriteByte(value);
             var output = writer.ToString();
@@ -380,39 +380,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class ByteListTests : ListTestBase<Byte>
+    public class ByteListTests : ListTestBase<byte>
     {
     }
 
-    public partial class ByteArrayTests : ArrayTestBase<Byte>
+    public class ByteArrayTests : ArrayTestBase<byte>
     {
     }
-    public partial class NullableUInt16ListTests : NullableListTestBase<UInt16>
+    public class NullableUInt16ListTests : NullableListTestBase<ushort>
     {
     }
 
-    public partial class NullableUInt16ArrayTests : NullableArrayTestBase<UInt16>
+    public class NullableUInt16ArrayTests : NullableArrayTestBase<ushort>
     {
     }
-    public partial class UInt16Tests : StructTestBase<UInt16>
+    public class UInt16Tests : StructTestBase<ushort>
     {
         [Theory]
-        [InlineData(UInt16.MinValue)]
-        [InlineData(UInt16.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(UInt16 input)
+        [InlineData(ushort.MinValue)]
+        [InlineData(ushort.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(ushort input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<UInt16>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<ushort>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(UInt16.MinValue)]
-        [InlineData(UInt16.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(UInt16 input)
+        [InlineData(ushort.MinValue)]
+        [InlineData(ushort.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(ushort input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<UInt16>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ushort>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -420,20 +420,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<UInt16>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<ushort>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<UInt16>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<ushort>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<UInt16>();
+            var value = Fixture.Create<ushort>();
             var writer = new JsonWriter<byte>();
             writer.WriteUInt16(value);
             var output = writer.ToByteArray();
@@ -446,7 +446,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<UInt16>();
+            var value = Fixture.Create<ushort>();
             var writer = new JsonWriter<char>();
             writer.WriteUInt16(value);
             var output = writer.ToString();
@@ -456,39 +456,39 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class UInt16ListTests : ListTestBase<UInt16>
+    public class UInt16ListTests : ListTestBase<ushort>
     {
     }
 
-    public partial class UInt16ArrayTests : ArrayTestBase<UInt16>
+    public class UInt16ArrayTests : ArrayTestBase<ushort>
     {
     }
-    public partial class NullableUInt32ListTests : NullableListTestBase<UInt32>
+    public class NullableUInt32ListTests : NullableListTestBase<uint>
     {
     }
 
-    public partial class NullableUInt32ArrayTests : NullableArrayTestBase<UInt32>
+    public class NullableUInt32ArrayTests : NullableArrayTestBase<uint>
     {
     }
-    public partial class UInt32Tests : StructTestBase<UInt32>
+    public class UInt32Tests : StructTestBase<uint>
     {
         [Theory]
-        [InlineData(UInt32.MinValue)]
-        [InlineData(UInt32.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(UInt32 input)
+        [InlineData(uint.MinValue)]
+        [InlineData(uint.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(uint input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<UInt32>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<uint>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(UInt32.MinValue)]
-        [InlineData(UInt32.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(UInt32 input)
+        [InlineData(uint.MinValue)]
+        [InlineData(uint.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(uint input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<UInt32>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<uint>(serialized);
             Assert.Equal(input, deserialized);
         }
 
@@ -496,20 +496,20 @@ namespace SpanJson.Tests.Generated
         public void SerializeDeserializeOverflowUtf8()
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<UInt32>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf8.Deserialize<uint>(serialized));
         }
 
         [Fact]
         public void SerializeDeserializeOverflowUtf16()
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(ulong.MaxValue);
-            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<UInt32>(serialized));
+            Assert.Throws<OverflowException>( () => JsonSerializer.Generic.Utf16.Deserialize<uint>(serialized));
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<UInt32>();
+            var value = Fixture.Create<uint>();
             var writer = new JsonWriter<byte>();
             writer.WriteUInt32(value);
             var output = writer.ToByteArray();
@@ -522,7 +522,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<UInt32>();
+            var value = Fixture.Create<uint>();
             var writer = new JsonWriter<char>();
             writer.WriteUInt32(value);
             var output = writer.ToString();
@@ -532,46 +532,46 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class UInt32ListTests : ListTestBase<UInt32>
+    public class UInt32ListTests : ListTestBase<uint>
     {
     }
 
-    public partial class UInt32ArrayTests : ArrayTestBase<UInt32>
+    public class UInt32ArrayTests : ArrayTestBase<uint>
     {
     }
-    public partial class NullableUInt64ListTests : NullableListTestBase<UInt64>
+    public class NullableUInt64ListTests : NullableListTestBase<ulong>
     {
     }
 
-    public partial class NullableUInt64ArrayTests : NullableArrayTestBase<UInt64>
+    public class NullableUInt64ArrayTests : NullableArrayTestBase<ulong>
     {
     }
-    public partial class UInt64Tests : StructTestBase<UInt64>
+    public partial class UInt64Tests : StructTestBase<ulong>
     {
         [Theory]
-        [InlineData(UInt64.MinValue)]
-        [InlineData(UInt64.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(UInt64 input)
+        [InlineData(ulong.MinValue)]
+        [InlineData(ulong.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(ulong input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<UInt64>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<ulong>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(UInt64.MinValue)]
-        [InlineData(UInt64.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(UInt64 input)
+        [InlineData(ulong.MinValue)]
+        [InlineData(ulong.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(ulong input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<UInt64>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<ulong>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<UInt64>();
+            var value = Fixture.Create<ulong>();
             var writer = new JsonWriter<byte>();
             writer.WriteUInt64(value);
             var output = writer.ToByteArray();
@@ -584,7 +584,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<UInt64>();
+            var value = Fixture.Create<ulong>();
             var writer = new JsonWriter<char>();
             writer.WriteUInt64(value);
             var output = writer.ToString();
@@ -594,27 +594,26 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class UInt64ListTests : ListTestBase<UInt64>
+    public class UInt64ListTests : ListTestBase<ulong>
     {
     }
 
-    public partial class UInt64ArrayTests : ArrayTestBase<UInt64>
+    public class UInt64ArrayTests : ArrayTestBase<ulong>
     {
     }
-    public partial class NullableSingleListTests : NullableListTestBase<Single>
+    public class NullableSingleListTests : NullableListTestBase<float>
     {
     }
 
-    public partial class NullableSingleArrayTests : NullableArrayTestBase<Single>
+    public class NullableSingleArrayTests : NullableArrayTestBase<float>
     {
     }
-    public partial class SingleTests : StructTestBase<Single>
+    public partial class SingleTests : StructTestBase<float>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Single>();
+            var value = Fixture.Create<float>();
             var writer = new JsonWriter<byte>();
             writer.WriteSingle(value);
             var output = writer.ToByteArray();
@@ -627,7 +626,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Single>();
+            var value = Fixture.Create<float>();
             var writer = new JsonWriter<char>();
             writer.WriteSingle(value);
             var output = writer.ToString();
@@ -637,27 +636,26 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class SingleListTests : ListTestBase<Single>
+    public class SingleListTests : ListTestBase<float>
     {
     }
 
-    public partial class SingleArrayTests : ArrayTestBase<Single>
+    public class SingleArrayTests : ArrayTestBase<float>
     {
     }
-    public partial class NullableDoubleListTests : NullableListTestBase<Double>
+    public class NullableDoubleListTests : NullableListTestBase<double>
     {
     }
 
-    public partial class NullableDoubleArrayTests : NullableArrayTestBase<Double>
+    public class NullableDoubleArrayTests : NullableArrayTestBase<double>
     {
     }
-    public partial class DoubleTests : StructTestBase<Double>
+    public partial class DoubleTests : StructTestBase<double>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Double>();
+            var value = Fixture.Create<double>();
             var writer = new JsonWriter<byte>();
             writer.WriteDouble(value);
             var output = writer.ToByteArray();
@@ -670,7 +668,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Double>();
+            var value = Fixture.Create<double>();
             var writer = new JsonWriter<char>();
             writer.WriteDouble(value);
             var output = writer.ToString();
@@ -680,27 +678,26 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class DoubleListTests : ListTestBase<Double>
+    public class DoubleListTests : ListTestBase<double>
     {
     }
 
-    public partial class DoubleArrayTests : ArrayTestBase<Double>
+    public class DoubleArrayTests : ArrayTestBase<double>
     {
     }
-    public partial class NullableDecimalListTests : NullableListTestBase<Decimal>
+    public class NullableDecimalListTests : NullableListTestBase<decimal>
     {
     }
 
-    public partial class NullableDecimalArrayTests : NullableArrayTestBase<Decimal>
+    public class NullableDecimalArrayTests : NullableArrayTestBase<decimal>
     {
     }
-    public partial class DecimalTests : StructTestBase<Decimal>
+    public partial class DecimalTests : StructTestBase<decimal>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Decimal>();
+            var value = Fixture.Create<decimal>();
             var writer = new JsonWriter<byte>();
             writer.WriteDecimal(value);
             var output = writer.ToByteArray();
@@ -713,7 +710,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Decimal>();
+            var value = Fixture.Create<decimal>();
             var writer = new JsonWriter<char>();
             writer.WriteDecimal(value);
             var output = writer.ToString();
@@ -723,27 +720,26 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class DecimalListTests : ListTestBase<Decimal>
+    public class DecimalListTests : ListTestBase<decimal>
     {
     }
 
-    public partial class DecimalArrayTests : ArrayTestBase<Decimal>
+    public class DecimalArrayTests : ArrayTestBase<decimal>
     {
     }
-    public partial class NullableBooleanListTests : NullableListTestBase<Boolean>
+    public class NullableBooleanListTests : NullableListTestBase<bool>
     {
     }
 
-    public partial class NullableBooleanArrayTests : NullableArrayTestBase<Boolean>
+    public class NullableBooleanArrayTests : NullableArrayTestBase<bool>
     {
     }
-    public partial class BooleanTests : StructTestBase<Boolean>
+    public class BooleanTests : StructTestBase<bool>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Boolean>();
+            var value = Fixture.Create<bool>();
             var writer = new JsonWriter<byte>();
             writer.WriteBoolean(value);
             var output = writer.ToByteArray();
@@ -756,7 +752,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Boolean>();
+            var value = Fixture.Create<bool>();
             var writer = new JsonWriter<char>();
             writer.WriteBoolean(value);
             var output = writer.ToString();
@@ -766,46 +762,46 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class BooleanListTests : ListTestBase<Boolean>
+    public partial class BooleanListTests : ListTestBase<bool>
     {
     }
 
-    public partial class BooleanArrayTests : ArrayTestBase<Boolean>
+    public class BooleanArrayTests : ArrayTestBase<bool>
     {
     }
-    public partial class NullableCharListTests : NullableListTestBase<Char>
+    public class NullableCharListTests : NullableListTestBase<char>
     {
     }
 
-    public partial class NullableCharArrayTests : NullableArrayTestBase<Char>
+    public class NullableCharArrayTests : NullableArrayTestBase<char>
     {
     }
-    public partial class CharTests : StructTestBase<Char>
+    public class CharTests : StructTestBase<char>
     {
         [Theory]
-        [InlineData(Char.MinValue)]
-        [InlineData(Char.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf8(Char input)
+        [InlineData(char.MinValue)]
+        [InlineData(char.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf8(char input)
         {
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<Char>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf8.Deserialize<char>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Theory]
-        [InlineData(Char.MinValue)]
-        [InlineData(Char.MaxValue)]
-        public void SerializeDeserializeMinMaxUtf16(Char input)
+        [InlineData(char.MinValue)]
+        [InlineData(char.MaxValue)]
+        public void SerializeDeserializeMinMaxUtf16(char input)
         {
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
-            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Char>(serialized);
+            var deserialized = JsonSerializer.Generic.Utf16.Deserialize<char>(serialized);
             Assert.Equal(input, deserialized);
         }
 
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<Char>();
+            var value = Fixture.Create<char>();
             var writer = new JsonWriter<byte>();
             writer.WriteChar(value);
             var output = writer.ToByteArray();
@@ -818,7 +814,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<Char>();
+            var value = Fixture.Create<char>();
             var writer = new JsonWriter<char>();
             writer.WriteChar(value);
             var output = writer.ToString();
@@ -828,23 +824,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class CharListTests : ListTestBase<Char>
+    public class CharListTests : ListTestBase<char>
     {
     }
 
-    public partial class CharArrayTests : ArrayTestBase<Char>
+    public partial class CharArrayTests : ArrayTestBase<char>
     {
     }
-    public partial class NullableDateTimeListTests : NullableListTestBase<DateTime>
+    public class NullableDateTimeListTests : NullableListTestBase<DateTime>
     {
     }
 
-    public partial class NullableDateTimeArrayTests : NullableArrayTestBase<DateTime>
+    public class NullableDateTimeArrayTests : NullableArrayTestBase<DateTime>
     {
     }
-    public partial class DateTimeTests : StructTestBase<DateTime>
+    public class DateTimeTests : StructTestBase<DateTime>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -897,23 +892,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class DateTimeListTests : ListTestBase<DateTime>
+    public class DateTimeListTests : ListTestBase<DateTime>
     {
     }
 
-    public partial class DateTimeArrayTests : ArrayTestBase<DateTime>
+    public class DateTimeArrayTests : ArrayTestBase<DateTime>
     {
     }
-    public partial class NullableDateTimeOffsetListTests : NullableListTestBase<DateTimeOffset>
+    public class NullableDateTimeOffsetListTests : NullableListTestBase<DateTimeOffset>
     {
     }
 
-    public partial class NullableDateTimeOffsetArrayTests : NullableArrayTestBase<DateTimeOffset>
+    public class NullableDateTimeOffsetArrayTests : NullableArrayTestBase<DateTimeOffset>
     {
     }
-    public partial class DateTimeOffsetTests : StructTestBase<DateTimeOffset>
+    public class DateTimeOffsetTests : StructTestBase<DateTimeOffset>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -966,23 +960,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class DateTimeOffsetListTests : ListTestBase<DateTimeOffset>
+    public class DateTimeOffsetListTests : ListTestBase<DateTimeOffset>
     {
     }
 
-    public partial class DateTimeOffsetArrayTests : ArrayTestBase<DateTimeOffset>
+    public class DateTimeOffsetArrayTests : ArrayTestBase<DateTimeOffset>
     {
     }
-    public partial class NullableTimeSpanListTests : NullableListTestBase<TimeSpan>
+    public class NullableTimeSpanListTests : NullableListTestBase<TimeSpan>
     {
     }
 
-    public partial class NullableTimeSpanArrayTests : NullableArrayTestBase<TimeSpan>
+    public class NullableTimeSpanArrayTests : NullableArrayTestBase<TimeSpan>
     {
     }
     public partial class TimeSpanTests : StructTestBase<TimeSpan>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -1035,23 +1028,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class TimeSpanListTests : ListTestBase<TimeSpan>
+    public class TimeSpanListTests : ListTestBase<TimeSpan>
     {
     }
 
-    public partial class TimeSpanArrayTests : ArrayTestBase<TimeSpan>
+    public class TimeSpanArrayTests : ArrayTestBase<TimeSpan>
     {
     }
-    public partial class NullableDateOnlyListTests : NullableListTestBase<DateOnly>
+    public class NullableDateOnlyListTests : NullableListTestBase<DateOnly>
     {
     }
 
-    public partial class NullableDateOnlyArrayTests : NullableArrayTestBase<DateOnly>
+    public class NullableDateOnlyArrayTests : NullableArrayTestBase<DateOnly>
     {
     }
-    public partial class DateOnlyTests : StructTestBase<DateOnly>
+    public class DateOnlyTests : StructTestBase<DateOnly>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -1104,23 +1096,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class DateOnlyListTests : ListTestBase<DateOnly>
+    public class DateOnlyListTests : ListTestBase<DateOnly>
     {
     }
 
-    public partial class DateOnlyArrayTests : ArrayTestBase<DateOnly>
+    public class DateOnlyArrayTests : ArrayTestBase<DateOnly>
     {
     }
-    public partial class NullableTimeOnlyListTests : NullableListTestBase<TimeOnly>
+    public class NullableTimeOnlyListTests : NullableListTestBase<TimeOnly>
     {
     }
 
-    public partial class NullableTimeOnlyArrayTests : NullableArrayTestBase<TimeOnly>
+    public class NullableTimeOnlyArrayTests : NullableArrayTestBase<TimeOnly>
     {
     }
-    public partial class TimeOnlyTests : StructTestBase<TimeOnly>
+    public class TimeOnlyTests : StructTestBase<TimeOnly>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -1173,23 +1164,22 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class TimeOnlyListTests : ListTestBase<TimeOnly>
+    public class TimeOnlyListTests : ListTestBase<TimeOnly>
     {
     }
 
-    public partial class TimeOnlyArrayTests : ArrayTestBase<TimeOnly>
+    public class TimeOnlyArrayTests : ArrayTestBase<TimeOnly>
     {
     }
-    public partial class NullableGuidListTests : NullableListTestBase<Guid>
+    public class NullableGuidListTests : NullableListTestBase<Guid>
     {
     }
 
-    public partial class NullableGuidArrayTests : NullableArrayTestBase<Guid>
+    public class NullableGuidArrayTests : NullableArrayTestBase<Guid>
     {
     }
-    public partial class GuidTests : StructTestBase<Guid>
+    public class GuidTests : StructTestBase<Guid>
     {
-
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
@@ -1242,19 +1232,19 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class GuidListTests : ListTestBase<Guid>
+    public class GuidListTests : ListTestBase<Guid>
     {
     }
 
-    public partial class GuidArrayTests : ArrayTestBase<Guid>
+    public class GuidArrayTests : ArrayTestBase<Guid>
     {
     }
-    public partial class StringTests : ClassTestBase<String>
+    public partial class StringTests : ClassTestBase<string>
     {
         [Fact]
         public void PrimitiveWrapperUtf8()
         {
-            var value = Fixture.Create<String>();
+            var value = Fixture.Create<string>();
             var writer = new JsonWriter<byte>();
             writer.WriteString(value);
             var output = writer.ToByteArray();
@@ -1267,7 +1257,7 @@ namespace SpanJson.Tests.Generated
         [Fact]
         public void PrimitiveWrapperUtf16()
         {
-            var value = Fixture.Create<String>();
+            var value = Fixture.Create<string>();
             var writer = new JsonWriter<char>();
             writer.WriteString(value);
             var output = writer.ToString();
@@ -1277,14 +1267,14 @@ namespace SpanJson.Tests.Generated
             Assert.Equal(value, deserialized);
         }
     }
-    public partial class StringListTests : ListTestBase<String>
+    public class StringListTests : ListTestBase<string>
     {
     }
 
-    public partial class StringArrayTests : ArrayTestBase<String>
+    public class StringArrayTests : ArrayTestBase<string>
     {
     }
-    public partial class VersionTests : ClassTestBase<Version>
+    public class VersionTests : ClassTestBase<Version>
     {
         [Fact]
         public void PrimitiveWrapperUtf8()
@@ -1316,10 +1306,10 @@ namespace SpanJson.Tests.Generated
     {
     }
 
-    public partial class VersionArrayTests : ArrayTestBase<Version>
+    public class VersionArrayTests : ArrayTestBase<Version>
     {
     }
-    public partial class UriTests : ClassTestBase<Uri>
+    public class UriTests : ClassTestBase<Uri>
     {
         [Fact]
         public void PrimitiveWrapperUtf8()
@@ -1351,7 +1341,7 @@ namespace SpanJson.Tests.Generated
     {
     }
 
-    public partial class UriArrayTests : ArrayTestBase<Uri>
+    public class UriArrayTests : ArrayTestBase<Uri>
     {
     }
 }

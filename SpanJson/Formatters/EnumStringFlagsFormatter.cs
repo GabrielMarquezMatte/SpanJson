@@ -19,7 +19,7 @@ namespace SpanJson.Formatters
         private static readonly T? ZeroFlag = GetZeroFlag();
 
         public static readonly EnumStringFlagsFormatter<T, TEnumBase, TSymbol, TResolver> Default =
-            new EnumStringFlagsFormatter<T, TEnumBase, TSymbol, TResolver>();
+            new();
 
         public T Deserialize(ref JsonReader<TSymbol> reader)
         {
@@ -39,9 +39,9 @@ namespace SpanJson.Formatters
 
                 if (index != -1)
                 {
-                    var currentValue = span.Slice(0, index).Trim();
+                    var currentValue = span[..index].Trim();
                     result = EnumFlagHelpers.Combine(result, Deserializer(currentValue));
-                    span = span.Slice(index + 1);
+                    span = span[(index + 1)..];
                 }
                 else
                 {
@@ -84,18 +84,16 @@ namespace SpanJson.Formatters
             }
             else
             {
-                using (var enumerator = GetFlags(value).GetEnumerator())
+                using var enumerator = GetFlags(value).GetEnumerator();
+                if (enumerator.MoveNext())
                 {
-                    if (enumerator.MoveNext())
-                    {
-                        Serializer(ref writer, enumerator.Current);
-                    }
+                    Serializer(ref writer, enumerator.Current);
+                }
 
-                    while (enumerator.MoveNext())
-                    {
-                        writer.WriteValueSeparator();
-                        Serializer(ref writer, enumerator.Current);
-                    }
+                while (enumerator.MoveNext())
+                {
+                    writer.WriteValueSeparator();
+                    Serializer(ref writer, enumerator.Current);
                 }
             }
 
@@ -109,7 +107,6 @@ namespace SpanJson.Formatters
             return BuildDeserializeDelegateExpressions<DeserializeDelegate, TEnumBase>(nameSpan, nameSpanExpression);
         }
 
-
         private static T? GetZeroFlag()
         {
             var array = Enum.GetValues(typeof(T));
@@ -117,7 +114,7 @@ namespace SpanJson.Formatters
             {
                 var arrayValue = (T) array.GetValue(i);
                 if(((TEnumBase) Convert.ChangeType(arrayValue, typeof(TEnumBase))).Equals(0)) // looks so complicated because the enum values might be negative
-                { 
+                {
                     return arrayValue;
                 }
             }
@@ -141,7 +138,7 @@ namespace SpanJson.Formatters
                 result.Add(value);
             }
 
-            return result.ToArray();
+            return [.. result];
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -150,7 +147,7 @@ namespace SpanJson.Formatters
             throw new NotSupportedException();
         }
 
-        private IEnumerable<T> GetFlags(T input)
+        private static IEnumerable<T> GetFlags(T input)
         {
             foreach (var flag in Flags)
             {

@@ -22,10 +22,9 @@ namespace SpanJson.Tests
 
             public bool ShouldSerializeOnlyIfNotDefault()
             {
-                return OnlyIfNotDefault != DefaultValue;
+                return !string.Equals(OnlyIfNotDefault, DefaultValue, StringComparison.Ordinal);
             }
         }
-
 
         public class ShouldDeserializeDO
         {
@@ -33,49 +32,29 @@ namespace SpanJson.Tests
             public string Second { get; set; } = DefaultValue;
         }
 
-        public class ShouldDeserializeCtor
+        [method: JsonConstructor]
+        public class ShouldDeserializeCtor(string first, string second = DefaultValue + "2")
         {
-            [JsonConstructor]
-            public ShouldDeserializeCtor(string first, string second = DefaultValue + "2")
-            {
-                First = first;
-                Second = second;
-            }
-
-            public string First { get; }
-            public string Second { get; set; }
+            public string First { get; } = first;
+            public string Second { get; set; } = second;
             public string Third { get; set; } = DefaultValue + "3";
         }
 
-        public class AllCtor
+        [method: JsonConstructor]
+        public class AllCtor(string @string = "foo", string stringNull = null, int int32 = 42, int? nullableInt32 = 1337, int? nullableInt32Null = null,
+            ConsoleKey @enum = ConsoleKey.Y, ConsoleKey? nullableEnum = ConsoleKey.Z, ConsoleKey? nullableEnumNull = null, AllCtor complex = null,
+            IReadOnlyList<AllCtor> complexes = null)
         {
-            [JsonConstructor]
-            public AllCtor(string @string = "foo", string stringNull = null, int int32 = 42, int? nullableInt32 = 1337, int? nullableInt32Null = null,
-                ConsoleKey @enum = ConsoleKey.Y, ConsoleKey? nullableEnum = ConsoleKey.Z, ConsoleKey? nullableEnumNull = null, AllCtor complex = null,
-                IReadOnlyList<AllCtor> complexes = null)
-            {
-                String = @string;
-                StringNull = stringNull;
-                Int32 = int32;
-                NullableInt32 = nullableInt32;
-                NullableInt32Null = nullableInt32Null;
-                Enum = @enum;
-                NullableEnum = nullableEnum;
-                NullableEnumNull = nullableEnumNull;
-                Complex = complex;
-                Complexes = complexes;
-            }
-
-            public string String { get; }
-            public string StringNull { get; }
-            public int Int32 { get; }
-            public int? NullableInt32 { get; }
-            public int? NullableInt32Null { get; }
-            public ConsoleKey Enum { get; }
-            public ConsoleKey? NullableEnum { get; }
-            public ConsoleKey? NullableEnumNull { get; }
-            public AllCtor Complex { get; }
-            public IReadOnlyList<AllCtor> Complexes { get; }
+            public string String { get; } = @string;
+            public string StringNull { get; } = stringNull;
+            public int Int32 { get; } = int32;
+            public int? NullableInt32 { get; } = nullableInt32;
+            public int? NullableInt32Null { get; } = nullableInt32Null;
+            public ConsoleKey Enum { get; } = @enum;
+            public ConsoleKey? NullableEnum { get; } = nullableEnum;
+            public ConsoleKey? NullableEnumNull { get; } = nullableEnumNull;
+            public AllCtor Complex { get; } = complex;
+            public IReadOnlyList<AllCtor> Complexes { get; } = complexes;
         }
 
         [Fact]

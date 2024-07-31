@@ -12,7 +12,7 @@ namespace SpanJson.Tests
         {
             var input = new TestObject {Text = "Hello World"};
             var serialized = JsonSerializer.Generic.Utf16.Serialize<TestObject, ExcludeNullsCamelCaseResolver<char>>(input);
-            Assert.Contains("\"text\":", serialized);
+            Assert.Contains("\"text\":", serialized, StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<TestObject, ExcludeNullsCamelCaseResolver<char>>(serialized);
             Assert.Equal(input, deserialized);
         }
@@ -22,7 +22,7 @@ namespace SpanJson.Tests
         {
             var input = new TestObject {Text = "Hello World"};
             var serialized = JsonSerializer.Generic.Utf8.Serialize<TestObject, ExcludeNullsCamelCaseResolver<byte>>(input);
-            Assert.Contains("\"text\":", Encoding.UTF8.GetString(serialized));
+            Assert.Contains("\"text\":", Encoding.UTF8.GetString(serialized), StringComparison.Ordinal);
             var deserialized = JsonSerializer.Generic.Utf8.Deserialize<TestObject, ExcludeNullsCamelCaseResolver<byte>>(serialized);
             Assert.Equal(input, deserialized);
         }
@@ -35,7 +35,7 @@ namespace SpanJson.Tests
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Text, other.Text);
+                return string.Equals(Text, other.Text, StringComparison.Ordinal);
             }
 
             public override bool Equals(object obj)
@@ -49,7 +49,7 @@ namespace SpanJson.Tests
             public override int GetHashCode()
             {
                 // ReSharper disable once NonReadonlyMemberInGetHashCode
-                return Text?.GetHashCode() ?? 0;
+                return Text?.GetHashCode(StringComparison.Ordinal) ?? 0;
             }
         }
     }

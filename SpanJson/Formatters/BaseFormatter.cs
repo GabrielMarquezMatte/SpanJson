@@ -16,7 +16,7 @@ namespace SpanJson.Formatters
         {
             var myMethod = type
                 .GetMethods(bindingFlags)
-                .Single(m => m.Name == name && m.IsGenericMethodDefinition && m.GetParameters().Single().ParameterType.GetGenericTypeDefinition() == parameterType);
+                .Single(m => string.Equals(m.Name, name, StringComparison.Ordinal) && m.IsGenericMethodDefinition && m.GetParameters().Single().ParameterType.GetGenericTypeDefinition() == parameterType);
             return myMethod.MakeGenericMethod(genericType);
         }
 

@@ -34,7 +34,7 @@ namespace SpanJson.Helpers
             }
             else if (part < 100)
             {
-                digits += 1;
+                digits++;
             }
             else if (part < 1000)
             {

@@ -4,18 +4,13 @@
     {
         public string site { get; set; }
 
-
         public string title { get; set; }
-
 
         public string link { get; set; }
 
-
         public int? rep_change { get; set; }
 
-
         public int? group_id { get; set; }
-
 
         public long? added_date { get; set; }
 
@@ -24,10 +19,10 @@
             return
                 added_date == obj.added_date &&
                 group_id == obj.group_id &&
-                link == obj.link &&
+string.Equals(link, obj.link, System.StringComparison.Ordinal) &&
                 rep_change == obj.rep_change &&
-                site == obj.site &&
-                title == obj.title;
+string.Equals(site, obj.site, System.StringComparison.Ordinal) &&
+string.Equals(title, obj.title, System.StringComparison.Ordinal);
         }
 
         public bool EqualsDynamic(dynamic obj)
@@ -35,10 +30,10 @@
             return
                 added_date == (long?) obj.added_date &&
                 group_id == (int?) obj.group_id &&
-                link == (string) obj.link &&
+string.Equals(link, (string)obj.link, System.StringComparison.Ordinal) &&
                 rep_change == (int?) obj.rep_change &&
-                site == (string) obj.site &&
-                title == (string) obj.title;
+string.Equals(site, (string)obj.site, System.StringComparison.Ordinal) &&
+string.Equals(title, (string)obj.title, System.StringComparison.Ordinal);
         }
     }
 }

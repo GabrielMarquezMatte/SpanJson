@@ -4,7 +4,7 @@ namespace SpanJson.Shared.Fixture
 {
     public class UriFixture : IValueFixture
     {
-        private readonly StringValueFixture _stringValueFixture = new StringValueFixture();
+        private readonly StringValueFixture _stringValueFixture = new();
         public Type Type { get; } = typeof(Uri);
 
         public object Generate()

@@ -18,7 +18,7 @@ namespace SpanJson.Tests
 
             public bool Equals(DictionaryValue other)
             {
-                return other?.Name == Name;
+                return string.Equals(other?.Name, Name, StringComparison.Ordinal);
             }
 
             public override bool Equals(object other)
@@ -37,31 +37,24 @@ namespace SpanJson.Tests
             }
         }
 
-        public class CustomReadOnlyDictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>, IEquatable<CustomReadOnlyDictionary<TKey, TValue>>
+        public class CustomReadOnlyDictionary<TKey, TValue>(IDictionary<TKey, TValue> input) : IReadOnlyDictionary<TKey, TValue>, IEquatable<CustomReadOnlyDictionary<TKey, TValue>>
         {
-            private readonly IDictionary<TKey, TValue> _internal;
-
-            public CustomReadOnlyDictionary(IDictionary<TKey, TValue> input)
-            {
-                _internal = input;
-            }
-
-            public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _internal.GetEnumerator();
+            public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => input.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();
             }
 
-            public int Count => _internal.Count;
-            public bool ContainsKey(TKey key) => _internal.ContainsKey(key);
+            public int Count => input.Count;
+            public bool ContainsKey(TKey key) => input.ContainsKey(key);
 
-            public bool TryGetValue(TKey key, out TValue value) => _internal.TryGetValue(key, out value);
+            public bool TryGetValue(TKey key, out TValue value) => input.TryGetValue(key, out value);
 
-            public TValue this[TKey key] => _internal[key];
+            public TValue this[TKey key] => input[key];
 
-            public IEnumerable<TKey> Keys => _internal.Keys;
-            public IEnumerable<TValue> Values => _internal.Values;
+            public IEnumerable<TKey> Keys => input.Keys;
+            public IEnumerable<TValue> Values => input.Values;
 
             public bool Equals(CustomReadOnlyDictionary<TKey, TValue> other)
             {
@@ -104,7 +97,7 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeConcurrentDictionary()
         {
-            var dictionary = new ConcurrentDictionary<string, DictionaryValue>();
+            var dictionary = new ConcurrentDictionary<string, DictionaryValue>(StringComparer.Ordinal);
             dictionary.TryAdd("Alice1", new DictionaryValue {Name = "Bob1"});
             dictionary.TryAdd("Alice2", new DictionaryValue {Name = "Bob2"});
             dictionary.TryAdd("Alice3", new DictionaryValue {Name = "Bob3"});
@@ -119,6 +112,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeDictionaryUtf16()
         {
             var dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -131,11 +125,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeDictionaryUtf8()
         {
             var dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -148,11 +142,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeIDictionary()
         {
             IDictionary<string, DictionaryValue> dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -165,11 +159,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeMultiByteKeyDictionaryUtf16()
         {
             var dictionary = new Dictionary<string, int>
+(StringComparer.Ordinal)
             {
                 {"Привет мир!0", 0},
                 {"Привет мир!1", 1},
@@ -191,11 +185,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeMultiByteKeyDictionaryUtf8()
         {
             var dictionary = new Dictionary<string, int>
+(StringComparer.Ordinal)
             {
                 {"Привет мир!0", 0},
                 {"Привет мир!1", 1},
@@ -217,11 +211,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeReadOnlyDictionaryUtf16()
         {
             IReadOnlyDictionary<string, DictionaryValue> dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -234,11 +228,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeReadOnlyDictionaryUtf8()
         {
             IReadOnlyDictionary<string, DictionaryValue> dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -255,6 +249,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeIReadOnlyDictionaryUtf16()
         {
             IReadOnlyDictionary<string, DictionaryValue> dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -267,11 +262,11 @@ namespace SpanJson.Tests
             Assert.Equal(dictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeIReadOnlyDictionaryUtf8()
         {
             IReadOnlyDictionary<string, DictionaryValue> dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -288,6 +283,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeCustomReadOnlyDictionaryUtf16()
         {
             var dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -301,11 +297,11 @@ namespace SpanJson.Tests
             Assert.Equal(customReadOnlyDictionary, deserialized);
         }
 
-
         [Fact]
         public void SerializeDeserializeCustomReadOnlyDictionaryUtf8()
         {
             var dictionary = new Dictionary<string, DictionaryValue>
+(StringComparer.Ordinal)
             {
                 {"Alice1", new DictionaryValue {Name = "Bob1"}},
                 {"Alice2", new DictionaryValue {Name = "Bob2"}},
@@ -343,6 +339,7 @@ namespace SpanJson.Tests
         public void SerializeDeserializeDictionaryDynamicUtf16()
         {
             var dictionary = new Dictionary<string, object>
+(StringComparer.Ordinal)
             {
                 {"Key1", 1},
                 {"Key2", "2"},
@@ -359,11 +356,11 @@ namespace SpanJson.Tests
             Assert.Equal("2", value2.ToString());
         }
 
-
         [Fact]
         public void SerializeDeserializeDictionaryDynamicUtf8()
         {
             var dictionary = new Dictionary<string, object>
+(StringComparer.Ordinal)
             {
                 {"Key1", 1},
                 {"Key2", "2"},
@@ -385,7 +382,6 @@ namespace SpanJson.Tests
             Key1,
             Key2
         }
-
 
         [Fact]
         public void SerializeDeserializeEnumKeyDictionaryUtf8()
@@ -422,11 +418,11 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyConcurrentDictionaryUtf8()
         {
-            var input = new ConcurrentDictionary<DictionaryKey, int>(new[]
-            {
+            var input = new ConcurrentDictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            });
+            ]);
 
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             Assert.NotNull(serialized);
@@ -438,11 +434,11 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyConcurrentDictionaryUtf16()
         {
-            var input = new ConcurrentDictionary<DictionaryKey, int>(new[]
-            {
+            var input = new ConcurrentDictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            });
+            ]);
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<DictionaryKey, int>>(serialized);
@@ -453,11 +449,11 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyIDictionaryDictionaryUtf8()
         {
-            IDictionary<DictionaryKey, int> input = new Dictionary<DictionaryKey, int>(new[]
-            {
+            IDictionary<DictionaryKey, int> input = new Dictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            });
+            ]);
 
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             Assert.NotNull(serialized);
@@ -469,11 +465,11 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyIDictionaryDictionaryUtf16()
         {
-            IDictionary<DictionaryKey, int> input = new Dictionary<DictionaryKey, int>(new[]
-            {
+            IDictionary<DictionaryKey, int> input = new Dictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            });
+            ]);
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<DictionaryKey, int>>(serialized);
@@ -484,11 +480,11 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyReadOnlyDictionaryDictionaryUtf8()
         {
-            ReadOnlyDictionary<DictionaryKey, int> input = new ReadOnlyDictionary<DictionaryKey, int>(new Dictionary<DictionaryKey, int>(new[]
-            {
+            ReadOnlyDictionary<DictionaryKey, int> input = new(new Dictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            }));
+            ]));
 
             var serialized = JsonSerializer.Generic.Utf8.Serialize(input);
             Assert.NotNull(serialized);
@@ -500,18 +496,17 @@ namespace SpanJson.Tests
         [Fact]
         public void SerializeDeserializeEnumKeyReadOnlyDictionaryDictionaryUtf16()
         {
-            ReadOnlyDictionary<DictionaryKey, int> input = new ReadOnlyDictionary<DictionaryKey, int>(new Dictionary<DictionaryKey, int>(new[]
-            {
+            ReadOnlyDictionary<DictionaryKey, int> input = new(new Dictionary<DictionaryKey, int>(
+            [
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key1, 1),
                 new KeyValuePair<DictionaryKey, int>(DictionaryKey.Key2, 2)
-            }));
+            ]));
             var serialized = JsonSerializer.Generic.Utf16.Serialize(input);
             Assert.NotNull(serialized);
             var deserialized = JsonSerializer.Generic.Utf16.Deserialize<Dictionary<DictionaryKey, int>>(serialized);
             Assert.NotNull(deserialized);
             Assert.Equal(input, deserialized);
         }
-
 
         [Fact]
         public void DeserializeDuplicateKeyStringUtf16()
@@ -522,7 +517,6 @@ namespace SpanJson.Tests
             Assert.NotNull(deserialized);
             Assert.Equal(2, deserialized["Key1"]);
         }
-
 
         [Fact]
         public void DeserializeDuplicateKeyStringUtf8()
@@ -543,7 +537,6 @@ namespace SpanJson.Tests
             Assert.NotNull(deserialized);
             Assert.Equal(2, deserialized[DictionaryKey.Key1]);
         }
-
 
         [Fact]
         public void DeserializeDuplicateKeyEnumUtf8()

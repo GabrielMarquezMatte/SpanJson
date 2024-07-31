@@ -9,10 +9,10 @@ namespace SpanJson.Formatters
     public sealed class RuntimeFormatter<TSymbol, TResolver> : BaseFormatter, IJsonFormatter<object, TSymbol>
         where TResolver : IJsonFormatterResolver<TSymbol, TResolver>, new() where TSymbol : struct
     {
-        public static readonly RuntimeFormatter<TSymbol, TResolver> Default = new RuntimeFormatter<TSymbol, TResolver>();
+        public static readonly RuntimeFormatter<TSymbol, TResolver> Default = new();
 
         private static readonly ConcurrentDictionary<Type, SerializeDelegate> RuntimeSerializerDictionary =
-            new ConcurrentDictionary<Type, SerializeDelegate>();
+            new();
 
         public object Deserialize(ref JsonReader<TSymbol> reader)
         {
@@ -27,9 +27,8 @@ namespace SpanJson.Formatters
                 return;
             }
 
-
             // ReSharper disable ConvertClosureToMethodGroup
-            var serializer = RuntimeSerializerDictionary.GetOrAdd(value.GetType(), x => BuildSerializeDelegate(x));
+            var serializer = RuntimeSerializerDictionary.GetOrAdd(value.GetType(), BuildSerializeDelegate);
             serializer(ref writer, value);
             // ReSharper restore ConvertClosureToMethodGroup
         }

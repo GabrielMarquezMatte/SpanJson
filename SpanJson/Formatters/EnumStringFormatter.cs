@@ -10,8 +10,7 @@ namespace SpanJson.Formatters
     {
         private static readonly SerializeDelegate Serializer = BuildSerializeDelegate(s => "\"" + s + "\"");
         private static readonly DeserializeDelegate Deserializer = BuildDeserializeDelegate();
-        public static readonly EnumStringFormatter<T, TSymbol, TResolver> Default = new EnumStringFormatter<T, TSymbol, TResolver>();
-
+        public static readonly EnumStringFormatter<T, TSymbol, TResolver> Default = new();
 
         public T Deserialize(ref JsonReader<TSymbol> reader)
         {
@@ -42,7 +41,6 @@ namespace SpanJson.Formatters
             Expression nameSpanExpression = Expression.Call(readerParameter, nameSpanMethodInfo);
             return BuildDeserializeDelegateExpressions<DeserializeDelegate, T>(readerParameter, nameSpanExpression);
         }
-
 
         private delegate T DeserializeDelegate(ref JsonReader<TSymbol> reader);
     }
