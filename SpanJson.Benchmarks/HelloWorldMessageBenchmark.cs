@@ -7,18 +7,14 @@ using BenchmarkDotNet.Attributes;
 namespace SpanJson.Benchmarks
 {
     [Config(typeof(MyConfig))]
-    [DisassemblyDiagnoser()]
+    [DisassemblyDiagnoser]
     public class HelloWorldMessageBenchmark
     {
-        public struct JsonMessage
-        {
-            public string message { get; set; }
-        }
+        private readonly record struct JsonMessage(string message);
 
         private const string Message = "Hello, World!";
 
-        private static readonly JsonMessage JsonMessageInput = new JsonMessage {message = Message};
-
+        private static readonly JsonMessage JsonMessageInput = new() { message = Message};
 
         [Benchmark]
         public byte[] SerializeUtf8()
@@ -34,7 +30,6 @@ namespace SpanJson.Benchmarks
             var buffer = JsonSerializer.Generic.Utf8.SerializeToArrayPool(message);
             ArrayPool<byte>.Shared.Return(buffer.Array);
         }
-
 
         [Benchmark]
         public Task SerializeUtf8Async()
@@ -64,13 +59,12 @@ namespace SpanJson.Benchmarks
             Utf8Json.JsonSerializer.Serialize(message);
         }
 
-
         private static readonly byte[] NameByteArray = Encoding.UTF8.GetBytes("\"message\":");
 
         [Benchmark]
         public void WriteMessageDirectlyUtf8()
         {
-            var jsonWriter = new JsonWriter<byte>(64);
+            using var jsonWriter = new JsonWriter<byte>(64);
             jsonWriter.WriteUtf8BeginObject();
             jsonWriter.WriteUtf8Verbatim(7306916068917079330UL, 14882);
             jsonWriter.WriteUtf8String(Message);

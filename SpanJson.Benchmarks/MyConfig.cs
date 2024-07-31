@@ -10,8 +10,7 @@ namespace SpanJson.Benchmarks
     {
         public MyConfig()
         {
-            AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core50));
-            AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core60));
+            AddJob(Job.ShortRun.WithRuntime(CoreRuntime.Core80));
             AddDiagnoser(MemoryDiagnoser.Default);
             Orderer = new DefaultOrderer(SummaryOrderPolicy.Default, MethodOrderPolicy.Alphabetical);
         }

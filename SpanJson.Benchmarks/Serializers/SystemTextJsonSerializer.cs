@@ -8,10 +8,10 @@ namespace SpanJson.Benchmarks.Serializers
 {
     public class SystemTextJsonSerializer : SerializerBase<byte[]>
     {
-        private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions Options = new()
         {
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase, 
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = false,
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
